@@ -1,0 +1,4 @@
+{
+  "extends": "@copiloto/agent-ts-config/tsconfig.base.json",
+  "include": ["src/**/*"]
+}

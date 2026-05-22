@@ -1,0 +1,10 @@
+{
+  "extends": "@copiloto/ts-config/tsconfig.node.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "noEmit": false,
+    "types": ["node"]
+  },
+  "include": ["server/**/*", "prisma/**/*", "script/**/*"]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "@copiloto/agent-web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 5500",
+    "build": "next build",
+    "start": "next start -p 5500",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@copiloto/agent-shared": "workspace:*",
+    "@copiloto/ui": "workspace:*",
+    "@tanstack/react-query": "^5.60.5",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.577.0",
+    "next": "^15.3.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "sonner": "^1.7.4",
+    "tailwind-merge": "^2.6.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@copiloto/agent-ts-config": "workspace:*",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.6.0"
+  }
+}

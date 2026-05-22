@@ -1,0 +1,7 @@
+{
+  "name": "@copiloto/agent-ts-config",
+  "version": "0.0.1",
+  "private": true,
+  "main": "tsconfig.base.json",
+  "files": ["tsconfig.base.json"]
+}

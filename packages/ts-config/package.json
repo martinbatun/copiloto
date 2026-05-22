@@ -1,0 +1,11 @@
+{
+  "name": "@copiloto/ts-config",
+  "version": "0.0.1",
+  "private": true,
+  "main": "tsconfig.base.json",
+  "files": [
+    "tsconfig.base.json",
+    "tsconfig.node.json",
+    "tsconfig.next.json"
+  ]
+}

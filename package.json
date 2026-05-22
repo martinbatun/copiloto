@@ -1,0 +1,44 @@
+{
+  "name": "copiloto",
+  "private": true,
+  "description": "Smart Ops Co-pilot — capa de inteligencia operativa con IA para restaurantes en MX/LATAM",
+  "scripts": {
+    "dev": "concurrently --names \"web,api,agent-web,agent-api\" --prefix-colors \"cyan,green,magenta,yellow\" --kill-others-on-fail \"pnpm dev:web\" \"pnpm dev:api\" \"pnpm dev:agent-web\" \"pnpm dev:agent-api\"",
+    "dev:turbo": "turbo run dev",
+    "dev:web": "pnpm --filter @copiloto/web dev",
+    "dev:api": "pnpm --filter @copiloto/api dev",
+    "dev:agent-web": "pnpm --filter @copiloto/agent-web dev",
+    "dev:agent-api": "pnpm --filter @copiloto/agent-api dev",
+    "build": "turbo run build",
+    "build:web": "pnpm --filter @copiloto/web build",
+    "build:api": "pnpm --filter @copiloto/api build",
+    "build:agent-web": "pnpm --filter @copiloto/agent-web build",
+    "build:agent-api": "pnpm --filter @copiloto/agent-api build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean",
+    "db:generate": "pnpm --filter @copiloto/api db:generate",
+    "db:push": "pnpm --filter @copiloto/api db:push",
+    "db:seed": "pnpm --filter @copiloto/api db:seed",
+    "db:studio": "pnpm --filter @copiloto/api db:studio",
+    "agent:db:generate": "pnpm --filter @copiloto/agent-api db:generate",
+    "agent:db:push": "pnpm --filter @copiloto/agent-api db:push",
+    "agent:db:seed": "pnpm --filter @copiloto/agent-api db:seed",
+    "agent:db:studio": "pnpm --filter @copiloto/agent-api db:studio"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "prettier": "^3.2.5",
+    "turbo": "^2.3.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "^19.2.14",
+      "@types/react-dom": "^19.2.3"
+    }
+  }
+}

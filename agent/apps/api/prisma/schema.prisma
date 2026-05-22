@@ -1,0 +1,175 @@
+// Copiloto Agent — Prisma schema
+// ============================================================
+// Modelos para conversaciones de WhatsApp, templates, flows y
+// state machine del agente.
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ConversationStatus {
+  ACTIVE
+  WAITING_HUMAN
+  RESOLVED
+  ABANDONED
+}
+
+enum FlowKind {
+  RESERVATION_NEW
+  RESERVATION_CONFIRM
+  RESERVATION_REMINDER
+  NO_SHOW_RECOVERY
+  MENU_QUESTION
+  POST_VISIT_FEEDBACK
+  GENERIC_INQUIRY
+  MANAGER_COPILOT
+}
+
+enum MessageDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum MessageStatus {
+  QUEUED
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+enum MessageMediaType {
+  TEXT
+  IMAGE
+  AUDIO
+  VIDEO
+  DOCUMENT
+  TEMPLATE
+  INTERACTIVE
+  LOCATION
+}
+
+enum TemplateStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  DISABLED
+}
+
+enum BroadcastStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  SENT
+  PAUSED
+  FAILED
+}
+
+model Conversation {
+  id          String              @id @default(uuid())
+  tenantId    String              @map("tenant_id")    // tenant del core
+  locationId  String              @map("location_id")  // location del core
+  phoneE164   String              @map("phone_e164")
+  // Si el huesped esta enrolado en el CRM del core, este es su id.
+  // No ponemos FK porque la DB es separada.
+  guestId     String?             @map("guest_id")
+  status      ConversationStatus  @default(ACTIVE)
+  currentFlow FlowKind?           @map("current_flow")
+  flowState   Json?               @map("flow_state")
+  lastInboundAt  DateTime?        @map("last_inbound_at")
+  lastOutboundAt DateTime?        @map("last_outbound_at")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+
+  messages Message[]
+
+  @@unique([locationId, phoneE164])
+  @@index([tenantId, status])
+}
+
+model Message {
+  id              String          @id @default(uuid())
+  conversationId  String          @map("conversation_id")
+  externalId      String?         @map("external_id") // id del proveedor (Meta wamid)
+  direction       MessageDirection
+  mediaType       MessageMediaType @map("media_type")
+  body            String?         @db.Text
+  mediaUrl        String?         @map("media_url")
+  templateName    String?         @map("template_name")
+  templateLocale  String?         @map("template_locale")
+  templateVariables Json?         @map("template_variables")
+  status          MessageStatus   @default(QUEUED)
+  rawPayload      Json?           @map("raw_payload")
+  sentAt          DateTime?       @map("sent_at")
+  deliveredAt     DateTime?       @map("delivered_at")
+  readAt          DateTime?       @map("read_at")
+  createdAt       DateTime        @default(now()) @map("created_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([externalId])
+}
+
+model Template {
+  id          String         @id @default(uuid())
+  tenantId    String         @map("tenant_id")
+  name        String
+  locale      String         @default("es_MX")
+  category    String         // MARKETING, UTILITY, AUTHENTICATION
+  body        String         @db.Text
+  variables   Json           @default("[]") // ["nombre", "fecha", "hora"]
+  metaId      String?        @map("meta_id")
+  status      TemplateStatus @default(PENDING_REVIEW)
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  @@unique([tenantId, name, locale])
+}
+
+model Flow {
+  id          String   @id @default(uuid())
+  tenantId    String   @map("tenant_id")
+  kind        FlowKind
+  // Definicion del flow — DSL serializado. Ej:
+  //   { "states": [{"name":"ask_party","prompt":"¿Cuántas personas?","next":"ask_time"}, ...] }
+  definition  Json
+  active      Boolean  @default(true)
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, kind])
+}
+
+model Broadcast {
+  id           String          @id @default(uuid())
+  tenantId     String          @map("tenant_id")
+  campaignId   String          @map("campaign_id") // referencia al core
+  templateName String          @map("template_name")
+  status       BroadcastStatus @default(DRAFT)
+  scheduledAt  DateTime?       @map("scheduled_at")
+  sentCount    Int             @default(0) @map("sent_count")
+  failedCount  Int             @default(0) @map("failed_count")
+  createdAt    DateTime        @default(now()) @map("created_at")
+
+  @@index([tenantId, status])
+}
+
+model AgentSession {
+  // Sesion del LLM (thread) por conversacion. Permite reanudar contexto
+  // sin re-enviar todo el historial cada turn.
+  id             String   @id @default(uuid())
+  conversationId String   @map("conversation_id")
+  threadId       String   @map("thread_id")
+  tokensIn       Int      @default(0) @map("tokens_in")
+  tokensOut      Int      @default(0) @map("tokens_out")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([conversationId])
+}

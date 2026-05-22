@@ -1,0 +1,17 @@
+{
+  "name": "@copiloto/agent-db",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.13.0"
+  },
+  "devDependencies": {
+    "@copiloto/agent-ts-config": "workspace:*",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "@copiloto/ui/theme.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    font-family: var(--font-sans);
+    @apply bg-background text-foreground antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
+}

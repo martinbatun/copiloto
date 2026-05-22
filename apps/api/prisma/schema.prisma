@@ -1,0 +1,739 @@
+// Copiloto — Prisma schema (core)
+// ============================================================
+// Modelos para: tenants/locations, POS ingestion, forecasting,
+// staffing, inventario, recetas, CRM, anomalias y action ledger.
+// Generado como scaffold inicial; se refinara durante la implementacion.
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  // Output local al app — evita conflicto en monorepo donde el agente
+  // tiene su propio Prisma schema con su propio cliente.
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── ENUMS ──────────────────────────────────────────────────
+
+enum Role {
+  OWNER     // duenio del restaurante / firmante del contrato
+  MANAGER   // gerente de turno o multi-sucursal
+  STAFF     // staff de piso (acceso limitado)
+  ADMIN     // staff de Copiloto (soporte / customer success)
+}
+
+enum Country {
+  MX
+  CO
+  CL
+  PE
+  AR
+  OTHER
+}
+
+enum Currency {
+  MXN
+  USD
+  COP
+  CLP
+  PEN
+  ARS
+}
+
+enum PosProvider {
+  SOFT_RESTAURANT
+  ONECORE
+  CLIP
+  SQUARE
+  TOAST
+  MANUAL_CSV
+}
+
+enum Channel {
+  DINE_IN
+  TAKEOUT
+  DELIVERY
+  PICKUP
+}
+
+enum DeliveryProvider {
+  RAPPI
+  UBER_EATS
+  DIDI_FOOD
+  DIRECT
+  OTHER
+}
+
+enum Daypart {
+  BREAKFAST
+  BRUNCH
+  LUNCH
+  AFTERNOON
+  DINNER
+  LATE_NIGHT
+}
+
+enum RecommendationKind {
+  STAFFING_ADJUST
+  PAR_LEVEL_ADJUST
+  PREP_LIST
+  MENU_REPRICE
+  MENU_PROMOTE
+  DISCOUNT_REVIEW
+  GUEST_CAMPAIGN
+  WASTE_ALERT
+  ANOMALY_TRIAGE
+  RECIPE_REFORMULATE
+}
+
+enum RecommendationStatus {
+  PENDING
+  APPROVED
+  EXECUTED
+  REJECTED
+  SNOOZED
+  EXPIRED
+}
+
+enum AnomalyKind {
+  VOID_SPIKE
+  DISCOUNT_SPIKE
+  FOOD_COST_DRIFT
+  LABOR_OVERSHOOT
+  NO_SALE
+  REFUND_BURST
+  INGREDIENT_PRICE_JUMP
+}
+
+enum GuestSegment {
+  VIP
+  BIG_SPENDER
+  REGULAR
+  FIRST_VISIT
+  CHURN_RISK
+  LAPSED
+}
+
+enum CampaignChannel {
+  WHATSAPP
+  EMAIL
+  SMS
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  SENT
+  PAUSED
+  FAILED
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  SEATED
+  COMPLETED
+  NO_SHOW
+  CANCELLED
+  WAITLIST
+}
+
+enum InvoiceStatus {
+  RECEIVED
+  OCR_PENDING
+  OCR_DONE
+  NORMALIZED
+  REJECTED
+  RECONCILED
+}
+
+// ─── TENANCY ────────────────────────────────────────────────
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  country   Country  @default(MX)
+  currency  Currency @default(MXN)
+  timezone  String   @default("America/Mexico_City")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  users          User[]
+  locations      Location[]
+  guests         Guest[]
+  segments       Segment[]
+  campaigns      Campaign[]
+  suppliers      Supplier[]
+  ingredients    Ingredient[]
+  recipes        Recipe[]
+  menuItems      MenuItem[]
+  recommendations Recommendation[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  email        String   @unique
+  name         String
+  passwordHash String   @map("password_hash")
+  phone        String?
+  role         Role     @default(MANAGER)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  locationAccess UserLocation[]
+  actions ActionLog[]
+
+  @@index([tenantId])
+}
+
+// ─── LOCATIONS ──────────────────────────────────────────────
+
+model Location {
+  id          String      @id @default(uuid())
+  tenantId    String      @map("tenant_id")
+  name        String
+  slug        String
+  timezone    String      @default("America/Mexico_City")
+  posProvider PosProvider @default(MANUAL_CSV) @map("pos_provider")
+  active      Boolean     @default(true)
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  tenant       Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  posCredential PosCredential?
+  userAccess   UserLocation[]
+  salesEvents  SalesEvent[]
+  forecasts    ForecastBucket[]
+  shifts       Shift[]
+  parLevels    ParLevel[]
+  prepLists    PrepList[]
+  invoices     Invoice[]
+  anomalies    Anomaly[]
+  recommendations Recommendation[]
+  reservations Reservation[]
+  reviews      Review[]
+  inventoryCounts InventoryCount[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+model UserLocation {
+  userId     String   @map("user_id")
+  locationId String   @map("location_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@id([userId, locationId])
+}
+
+model PosCredential {
+  id            String      @id @default(uuid())
+  locationId    String      @unique @map("location_id")
+  provider      PosProvider
+  apiKey        String?     @map("api_key")
+  apiSecret     String?     @map("api_secret")
+  storeId       String?     @map("store_id")
+  webhookSecret String?     @map("webhook_secret")
+  lastSyncAt    DateTime?   @map("last_sync_at")
+  createdAt     DateTime    @default(now()) @map("created_at")
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+}
+
+// ─── MENU & RECIPES ─────────────────────────────────────────
+
+model MenuCategory {
+  id        String     @id @default(uuid())
+  tenantId  String     @map("tenant_id")
+  name      String
+  sortKey   Int        @default(0) @map("sort_key")
+  items     MenuItem[]
+
+  @@index([tenantId])
+}
+
+model MenuItem {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  categoryId   String?  @map("category_id")
+  sku          String
+  name         String
+  description  String?
+  priceCents   Int      @map("price_cents")
+  taxRate      Decimal  @default(0.16) @map("tax_rate") @db.Decimal(5, 4)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant   Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  category MenuCategory?  @relation(fields: [categoryId], references: [id])
+  recipe   Recipe?
+  saleLines SalesLine[]
+
+  @@unique([tenantId, sku])
+  @@index([tenantId])
+}
+
+model Ingredient {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  sku          String
+  name         String
+  baseUnit     String   @map("base_unit") // g, ml, pza
+  shelfLifeDays Int?    @map("shelf_life_days")
+  perishable   Boolean  @default(false)
+
+  tenant       Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  recipeLines  RecipeLine[]
+  parLevels    ParLevel[]
+  invoiceLines InvoiceLine[]
+  prepLines    PrepLine[]
+  inventoryCountLines InventoryCountLine[]
+
+  @@unique([tenantId, sku])
+  @@index([tenantId])
+}
+
+model Recipe {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  menuItemId   String   @unique @map("menu_item_id")
+  yieldQty     Decimal  @default(1) @map("yield_qty") @db.Decimal(10, 3)
+  yieldUnit    String   @default("pza") @map("yield_unit")
+  // Costo agregado cached para queries rapidas. Se recalcula cuando
+  // cambia el precio de un ingrediente o la receta misma.
+  foodCostCents Int     @default(0) @map("food_cost_cents")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant   Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  menuItem MenuItem     @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  lines    RecipeLine[]
+
+  @@index([tenantId])
+}
+
+model RecipeLine {
+  id           String     @id @default(uuid())
+  recipeId     String     @map("recipe_id")
+  ingredientId String     @map("ingredient_id")
+  qty          Decimal    @db.Decimal(12, 4)
+  unit         String
+
+  recipe     Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@index([recipeId])
+  @@index([ingredientId])
+}
+
+// ─── SUPPLIERS & INVOICES (OCR pipeline) ────────────────────
+
+model Supplier {
+  id        String   @id @default(uuid())
+  tenantId  String   @map("tenant_id")
+  name      String
+  rfc       String?
+  email     String?
+  phone     String?
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  invoices Invoice[]
+
+  @@index([tenantId])
+}
+
+model Invoice {
+  id           String        @id @default(uuid())
+  locationId   String        @map("location_id")
+  supplierId   String?       @map("supplier_id")
+  fileUrl      String        @map("file_url")
+  totalCents   Int?          @map("total_cents")
+  invoicedAt   DateTime?     @map("invoiced_at")
+  status       InvoiceStatus @default(RECEIVED)
+  ocrPayload   Json?         @map("ocr_payload")
+  createdAt    DateTime      @default(now()) @map("created_at")
+
+  location Location      @relation(fields: [locationId], references: [id])
+  supplier Supplier?     @relation(fields: [supplierId], references: [id])
+  lines    InvoiceLine[]
+
+  @@index([locationId])
+  @@index([status])
+}
+
+model InvoiceLine {
+  id           String     @id @default(uuid())
+  invoiceId    String     @map("invoice_id")
+  ingredientId String?    @map("ingredient_id")
+  description  String
+  qty          Decimal    @db.Decimal(12, 4)
+  unit         String
+  unitCostCents Int       @map("unit_cost_cents")
+  totalCents   Int        @map("total_cents")
+
+  invoice    Invoice     @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  ingredient Ingredient? @relation(fields: [ingredientId], references: [id])
+
+  @@index([invoiceId])
+  @@index([ingredientId])
+}
+
+// ─── POS INGESTION (sales events) ───────────────────────────
+
+model SalesEvent {
+  id              String           @id @default(uuid())
+  locationId      String           @map("location_id")
+  posExternalId   String           @map("pos_external_id") // id en el POS original — para idempotencia
+  channel         Channel          @default(DINE_IN)
+  deliveryProvider DeliveryProvider? @map("delivery_provider")
+  openedAt        DateTime         @map("opened_at")
+  closedAt        DateTime?        @map("closed_at")
+  totalCents      Int              @map("total_cents")
+  taxCents        Int              @map("tax_cents")
+  tipCents        Int              @default(0) @map("tip_cents")
+  discountCents   Int              @default(0) @map("discount_cents")
+  voidedCents     Int              @default(0) @map("voided_cents")
+  covers          Int              @default(0)
+  guestExternalId String?          @map("guest_external_id")
+  rawPayload      Json?            @map("raw_payload")
+
+  location Location    @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  lines    SalesLine[]
+  payments SalesPayment[]
+
+  @@unique([locationId, posExternalId])
+  @@index([locationId, openedAt])
+}
+
+model SalesLine {
+  id          String   @id @default(uuid())
+  saleId      String   @map("sale_id")
+  menuItemId  String?  @map("menu_item_id")
+  description String
+  qty         Int      @default(1)
+  unitCents   Int      @map("unit_cents")
+  totalCents  Int      @map("total_cents")
+  voided      Boolean  @default(false)
+  discountCents Int    @default(0) @map("discount_cents")
+
+  sale     SalesEvent @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  menuItem MenuItem?  @relation(fields: [menuItemId], references: [id])
+
+  @@index([saleId])
+}
+
+model SalesPayment {
+  id          String   @id @default(uuid())
+  saleId      String   @map("sale_id")
+  method      String   // CASH, CARD_DEBIT, CARD_CREDIT, SPEI, etc.
+  amountCents Int      @map("amount_cents")
+  processor   String?  // STRIPE, MERCADO_PAGO, CLIP, CASH
+
+  sale SalesEvent @relation(fields: [saleId], references: [id], onDelete: Cascade)
+
+  @@index([saleId])
+}
+
+// ─── FORECASTING & STAFFING ─────────────────────────────────
+
+model ForecastBucket {
+  id              String   @id @default(uuid())
+  locationId      String   @map("location_id")
+  date            DateTime @db.Date
+  daypart         Daypart
+  channel         Channel  @default(DINE_IN)
+  expectedCovers  Int      @map("expected_covers")
+  expectedRevenue Int      @map("expected_revenue_cents")
+  confidenceLow   Int      @map("confidence_low_cents")
+  confidenceHigh  Int      @map("confidence_high_cents")
+  mape            Decimal? @db.Decimal(6, 4)
+  modelVersion    String   @map("model_version")
+  generatedAt     DateTime @default(now()) @map("generated_at")
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@unique([locationId, date, daypart, channel])
+  @@index([locationId, date])
+}
+
+model Shift {
+  id           String   @id @default(uuid())
+  locationId   String   @map("location_id")
+  date         DateTime @db.Date
+  daypart      Daypart
+  role         String   // mesero, cocinero_caliente, bartender, lavaloza, etc.
+  staffNeeded  Int      @map("staff_needed")
+  staffSuggested Int    @map("staff_suggested")
+  staffActual  Int?     @map("staff_actual")
+  source       String   @default("forecast") // forecast | manual_override
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@unique([locationId, date, daypart, role])
+  @@index([locationId, date])
+}
+
+// ─── INVENTORY ──────────────────────────────────────────────
+
+model ParLevel {
+  id           String   @id @default(uuid())
+  locationId   String   @map("location_id")
+  ingredientId String   @map("ingredient_id")
+  date         DateTime @db.Date
+  suggestedQty Decimal  @map("suggested_qty") @db.Decimal(12, 4)
+  currentQty   Decimal? @map("current_qty") @db.Decimal(12, 4)
+  unit         String
+
+  location   Location   @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@unique([locationId, ingredientId, date])
+}
+
+model InventoryCount {
+  id         String   @id @default(uuid())
+  locationId String   @map("location_id")
+  countedAt  DateTime @default(now()) @map("counted_at")
+  countedBy  String?  @map("counted_by") // userId
+
+  location Location              @relation(fields: [locationId], references: [id])
+  lines    InventoryCountLine[]
+
+  @@index([locationId, countedAt])
+}
+
+model InventoryCountLine {
+  id           String   @id @default(uuid())
+  countId      String   @map("count_id")
+  ingredientId String   @map("ingredient_id")
+  qty          Decimal  @db.Decimal(12, 4)
+  unit         String
+
+  count      InventoryCount @relation(fields: [countId], references: [id], onDelete: Cascade)
+  ingredient Ingredient     @relation(fields: [ingredientId], references: [id])
+
+  @@index([countId])
+}
+
+model PrepList {
+  id         String     @id @default(uuid())
+  locationId String     @map("location_id")
+  date       DateTime   @db.Date
+  daypart    Daypart
+  lines      PrepLine[]
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@unique([locationId, date, daypart])
+}
+
+model PrepLine {
+  id           String  @id @default(uuid())
+  prepListId   String  @map("prep_list_id")
+  ingredientId String  @map("ingredient_id")
+  qty          Decimal @db.Decimal(12, 4)
+  unit         String
+
+  prepList   PrepList   @relation(fields: [prepListId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@index([prepListId])
+}
+
+// ─── ANOMALIES & RECOMMENDATIONS (la "magia") ───────────────
+
+model Anomaly {
+  id          String      @id @default(uuid())
+  locationId  String      @map("location_id")
+  kind        AnomalyKind
+  severity    Int         @default(3) // 1=info, 3=warn, 5=critical
+  detectedAt  DateTime    @default(now()) @map("detected_at")
+  payload     Json
+  resolvedAt  DateTime?   @map("resolved_at")
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  recommendations Recommendation[]
+
+  @@index([locationId, detectedAt])
+  @@index([kind])
+}
+
+model Recommendation {
+  id                  String               @id @default(uuid())
+  tenantId            String               @map("tenant_id")
+  locationId          String               @map("location_id")
+  anomalyId           String?              @map("anomaly_id")
+  kind                RecommendationKind
+  status              RecommendationStatus @default(PENDING)
+  title               String
+  rationale           String               @db.Text
+  estimatedImpactCents Int?                @map("estimated_impact_cents")
+  payload             Json
+  expiresAt           DateTime?            @map("expires_at")
+  createdAt           DateTime             @default(now()) @map("created_at")
+
+  tenant   Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  location Location   @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  anomaly  Anomaly?   @relation(fields: [anomalyId], references: [id])
+  actions  ActionLog[]
+
+  @@index([tenantId, status])
+  @@index([locationId, createdAt])
+}
+
+model ActionLog {
+  id               String   @id @default(uuid())
+  recommendationId String   @map("recommendation_id")
+  userId           String   @map("user_id")
+  decision         String   // APPROVE, REJECT, SNOOZE, EXECUTE
+  comment          String?
+  executedAt       DateTime @default(now()) @map("executed_at")
+  // Resultado real medido despues de N dias — para entrenar el modelo
+  // de "que recomendaciones de hecho funcionan".
+  actualImpactCents Int?    @map("actual_impact_cents")
+
+  recommendation Recommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  user           User           @relation(fields: [userId], references: [id])
+
+  @@index([recommendationId])
+}
+
+// ─── CRM: GUESTS, SEGMENTS, CAMPAIGNS ───────────────────────
+
+model Guest {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  name         String
+  phone        String?  // E.164, idealmente para WhatsApp
+  email        String?
+  birthdate    DateTime? @db.Date
+  firstVisitAt DateTime? @map("first_visit_at")
+  lastVisitAt  DateTime? @map("last_visit_at")
+  visitCount   Int      @default(0) @map("visit_count")
+  totalSpentCents Int   @default(0) @map("total_spent_cents")
+  marketingOptIn Boolean @default(false) @map("marketing_opt_in")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  tenant       Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  reservations Reservation[]
+  reviews      Review[]
+  segments     GuestSegmentLink[]
+  campaignSends CampaignSend[]
+
+  @@unique([tenantId, phone])
+  @@index([tenantId])
+}
+
+model Segment {
+  id        String       @id @default(uuid())
+  tenantId  String       @map("tenant_id")
+  name      String
+  kind      GuestSegment
+  // Definicion del segmento — query DSL serializado.
+  // Ej: { "minVisits": 5, "lastVisitWithinDays": 30 }
+  rules     Json
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  guests    GuestSegmentLink[]
+  campaigns Campaign[]
+
+  @@index([tenantId])
+}
+
+model GuestSegmentLink {
+  guestId   String  @map("guest_id")
+  segmentId String  @map("segment_id")
+  addedAt   DateTime @default(now()) @map("added_at")
+
+  guest   Guest   @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  segment Segment @relation(fields: [segmentId], references: [id], onDelete: Cascade)
+
+  @@id([guestId, segmentId])
+}
+
+model Campaign {
+  id          String          @id @default(uuid())
+  tenantId    String          @map("tenant_id")
+  segmentId   String          @map("segment_id")
+  channel     CampaignChannel
+  templateId  String          @map("template_id") // referencia al template en el agente
+  variables   Json            @default("{}")
+  status      CampaignStatus  @default(DRAFT)
+  scheduledAt DateTime?       @map("scheduled_at")
+  sentAt      DateTime?       @map("sent_at")
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  tenant  Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  segment Segment        @relation(fields: [segmentId], references: [id])
+  sends   CampaignSend[]
+
+  @@index([tenantId, status])
+}
+
+model CampaignSend {
+  id           String   @id @default(uuid())
+  campaignId   String   @map("campaign_id")
+  guestId      String   @map("guest_id")
+  sentAt       DateTime @default(now()) @map("sent_at")
+  delivered    Boolean  @default(false)
+  read         Boolean  @default(false)
+  responded    Boolean  @default(false)
+  conversionCents Int?  @map("conversion_cents")
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  guest    Guest    @relation(fields: [guestId], references: [id])
+
+  @@unique([campaignId, guestId])
+  @@index([campaignId])
+}
+
+// ─── RESERVATIONS & REVIEWS ─────────────────────────────────
+
+model Reservation {
+  id         String            @id @default(uuid())
+  locationId String            @map("location_id")
+  guestId    String?           @map("guest_id")
+  guestName  String            @map("guest_name")
+  guestPhone String            @map("guest_phone")
+  partySize  Int               @map("party_size")
+  reservedAt DateTime          @map("reserved_at")
+  status     ReservationStatus @default(PENDING)
+  notes      String?
+  source     String            @default("whatsapp") // whatsapp | web | walkin | opentable
+  createdAt  DateTime          @default(now()) @map("created_at")
+
+  location Location @relation(fields: [locationId], references: [id])
+  guest    Guest?   @relation(fields: [guestId], references: [id])
+
+  @@index([locationId, reservedAt])
+  @@index([status])
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  locationId String   @map("location_id")
+  guestId    String?  @map("guest_id")
+  source     String   // google | tripadvisor | whatsapp | direct
+  rating     Int      // 1..5
+  text       String?
+  sentiment  Decimal? @db.Decimal(4, 3) // -1..1 (post-LLM)
+  topics     Json?    // ["servicio_lento", "comida_fria", ...]
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  location Location @relation(fields: [locationId], references: [id])
+  guest    Guest?   @relation(fields: [guestId], references: [id])
+
+  @@index([locationId, createdAt])
+}
