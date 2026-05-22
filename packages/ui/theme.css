@@ -1,79 +1,77 @@
 /* Copiloto — tokens de diseño. Estilo "kitchen ops": confiable, oscuro
    adaptable a claro, con un acento cálido que refuerza la idea de cocina. */
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222 22% 12%;
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 22% 12%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222 22% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 22% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 22% 12%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 22% 12%;
 
-    /* Primary: terracota cálida — evoca cocina sin gritar "rojo". */
-    --primary: 14 78% 48%;
-    --primary-foreground: 0 0% 100%;
+  /* Primary: terracota cálida — evoca cocina sin gritar "rojo". */
+  --primary: 14 78% 48%;
+  --primary-foreground: 0 0% 100%;
 
-    --secondary: 215 25% 96%;
-    --secondary-foreground: 222 22% 12%;
+  --secondary: 215 25% 96%;
+  --secondary-foreground: 222 22% 12%;
 
-    --muted: 215 20% 95%;
-    --muted-foreground: 222 12% 40%;
+  --muted: 215 20% 95%;
+  --muted-foreground: 222 12% 40%;
 
-    --accent: 38 92% 50%; /* azafrán para highlights de "recommended action" */
-    --accent-foreground: 222 30% 12%;
+  --accent: 38 92% 50%; /* azafrán para highlights de "recommended action" */
+  --accent-foreground: 222 30% 12%;
 
-    --destructive: 0 75% 50%;
-    --destructive-foreground: 0 0% 100%;
+  --destructive: 0 75% 50%;
+  --destructive-foreground: 0 0% 100%;
 
-    --border: 215 20% 88%;
-    --input: 215 20% 88%;
-    --ring: 14 78% 48%;
+  --border: 215 20% 88%;
+  --input: 215 20% 88%;
+  --ring: 14 78% 48%;
 
-    --radius: 0.625rem;
+  --radius: 0.625rem;
 
-    --font-display: "Lexend", system-ui, sans-serif;
-    --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Lexend", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
 
-    --sidebar-background: 222 28% 10%;
-    --sidebar-foreground: 0 0% 96%;
-    --sidebar-primary: 14 78% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 22% 16%;
-    --sidebar-accent-foreground: 0 0% 96%;
-    --sidebar-border: 222 22% 18%;
-    --sidebar-ring: 14 78% 48%;
-  }
+  --sidebar-background: 222 28% 10%;
+  --sidebar-foreground: 0 0% 96%;
+  --sidebar-primary: 14 78% 48%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 222 22% 16%;
+  --sidebar-accent-foreground: 0 0% 96%;
+  --sidebar-border: 222 22% 18%;
+  --sidebar-ring: 14 78% 48%;
+}
 
-  .dark {
-    --background: 222 28% 8%;
-    --foreground: 0 0% 96%;
+.dark {
+  --background: 222 28% 8%;
+  --foreground: 0 0% 96%;
 
-    --card: 222 28% 10%;
-    --card-foreground: 0 0% 96%;
+  --card: 222 28% 10%;
+  --card-foreground: 0 0% 96%;
 
-    --popover: 222 28% 10%;
-    --popover-foreground: 0 0% 96%;
+  --popover: 222 28% 10%;
+  --popover-foreground: 0 0% 96%;
 
-    --primary: 14 84% 56%;
-    --primary-foreground: 222 28% 8%;
+  --primary: 14 84% 56%;
+  --primary-foreground: 222 28% 8%;
 
-    --secondary: 222 22% 16%;
-    --secondary-foreground: 0 0% 96%;
+  --secondary: 222 22% 16%;
+  --secondary-foreground: 0 0% 96%;
 
-    --muted: 222 22% 16%;
-    --muted-foreground: 222 12% 65%;
+  --muted: 222 22% 16%;
+  --muted-foreground: 222 12% 65%;
 
-    --accent: 38 92% 56%;
-    --accent-foreground: 222 28% 8%;
+  --accent: 38 92% 56%;
+  --accent-foreground: 222 28% 8%;
 
-    --destructive: 0 70% 55%;
-    --destructive-foreground: 0 0% 100%;
+  --destructive: 0 70% 55%;
+  --destructive-foreground: 0 0% 100%;
 
-    --border: 222 22% 22%;
-    --input: 222 22% 22%;
-    --ring: 14 84% 56%;
-  }
+  --border: 222 22% 22%;
+  --input: 222 22% 22%;
+  --ring: 14 84% 56%;
 }
