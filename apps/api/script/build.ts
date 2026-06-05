@@ -1,21 +1,19 @@
 import { build } from "esbuild";
-import { rmSync, readFileSync } from "node:fs";
+import { rmSync } from "node:fs";
 import { resolve } from "node:path";
 
 const outdir = resolve("dist");
 rmSync(outdir, { recursive: true, force: true });
 
-// Solo los paquetes que vienen de node_modules deben permanecer external —
-// los `@copiloto/*` del workspace tienen que entrar al bundle porque su
-// `main` apunta a `.ts` que no existe en runtime (no compilamos los packages
-// a JS aparte). Bundlear nos da un solo dist/index.mjs autocontenido contra
-// el cual Node solo necesita resolver Prisma + libs npm.
-const pkg = JSON.parse(readFileSync(resolve("package.json"), "utf8")) as {
-  dependencies?: Record<string, string>;
-};
-const externalDeps = Object.keys(pkg.dependencies ?? {}).filter(
-  (name) => !name.startsWith("@copiloto/")
-);
+// Estrategia de externals — manejada con dos plugins para que las deps
+// transitivas se resuelvan sin necesidad de listarlas a mano:
+//
+// 1. Cualquier import non-relative (paquete npm) → external, salvo los
+//    `@copiloto/*` del workspace cuyo main apunta a .ts (los necesitamos
+//    inline porque no los pre-compilamos a .js).
+// 2. El Prisma generated client (apps/api/prisma/generated/client/) → external
+//    aunque su path sea relativo, porque es CJS con require() dinamicos que
+//    esbuild no traduce limpiamente a ESM.
 
 await build({
   entryPoints: [resolve("server/index.ts")],
@@ -25,8 +23,30 @@ await build({
   target: "node22",
   format: "esm",
   sourcemap: true,
-  external: externalDeps,
+  plugins: [
+    {
+      name: "external-npm-deps",
+      setup(build) {
+        // Filter ^[^./] matches paths que NO empiezan con `.` ni `/` — es decir,
+        // bare module specifiers (paquetes npm). Para los del workspace
+        // devolvemos null y dejamos que esbuild los siga normalmente.
+        build.onResolve({ filter: /^[^./]/ }, (args) => {
+          if (args.path.startsWith("@copiloto/")) return null;
+          return { path: args.path, external: true };
+        });
+      },
+    },
+    {
+      name: "external-generated-prisma",
+      setup(build) {
+        build.onResolve({ filter: /prisma\/generated\// }, (args) => ({
+          path: args.path,
+          external: true,
+        }));
+      },
+    },
+  ],
 });
 
 console.log(`[build] wrote ${outdir}/index.mjs`);
-console.log(`[build] externals (${externalDeps.length}): ${externalDeps.join(", ")}`);
+console.log(`[build] externals: npm packages (except @copiloto/*) + prisma/generated/*`);
