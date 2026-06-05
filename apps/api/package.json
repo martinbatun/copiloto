@@ -7,7 +7,6 @@
     "dev": "cross-env NODE_ENV=development PORT=3400 tsx watch --include '../../packages/**/src/**/*.ts' server/index.ts",
     "build": "prisma generate && tsx script/build.ts",
     "start": "NODE_ENV=production node dist/index.mjs",
-    "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
