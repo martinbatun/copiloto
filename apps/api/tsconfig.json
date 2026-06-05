@@ -4,7 +4,12 @@
     "outDir": "dist",
     "rootDir": ".",
     "noEmit": false,
-    "types": ["node"]
+    "types": ["node"],
+    // El api es app, no libreria — no necesita emitir .d.ts. Apagar
+    // declarations elimina los TS2742 ruidosos del pnpm node_modules layout
+    // cuando los routers de Express infieren tipos transitivos.
+    "declaration": false,
+    "declarationMap": false
   },
   "include": ["server/**/*", "prisma/**/*", "script/**/*"]
 }
