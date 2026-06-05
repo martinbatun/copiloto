@@ -293,8 +293,20 @@ model Ingredient {
   baseUnit     String   @map("base_unit") // g, ml, pza
   shelfLifeDays Int?    @map("shelf_life_days")
   perishable   Boolean  @default(false)
+  // Label libre para agrupar en el UI (Perecederos, Insumos, Bebidas...).
+  // No es enum: cada cocina inventa sus categorias.
+  category     String?
+  // Proveedor primario (el que sale por default en el comparador y en las
+  // alertas de stock bajo). Es opcional porque un ingrediente puede no tener
+  // proveedor asignado en sus primeras horas en el sistema.
+  defaultSupplierId String? @map("default_supplier_id")
+  // Costo unitario actual del ultimo invoice o entrada manual, en centavos
+  // sobre baseUnit. Cache para que el comparador de precios y el page de
+  // inventario no tengan que escanear InvoiceLine en cada GET.
+  costPerUnitCents Int? @map("cost_per_unit_cents")
 
   tenant       Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  defaultSupplier Supplier?      @relation(fields: [defaultSupplierId], references: [id])
   recipeLines  RecipeLine[]
   parLevels    ParLevel[]
   invoiceLines InvoiceLine[]
@@ -303,6 +315,7 @@ model Ingredient {
 
   @@unique([tenantId, sku])
   @@index([tenantId])
+  @@index([defaultSupplierId])
 }
 
 model Recipe {
@@ -347,8 +360,9 @@ model Supplier {
   email     String?
   phone     String?
 
-  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  invoices Invoice[]
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  invoices    Invoice[]
+  ingredients Ingredient[]
 
   @@index([tenantId])
 }

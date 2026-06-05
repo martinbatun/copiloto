@@ -341,6 +341,9 @@ importers:
 
   packages/auth:
     dependencies:
+      '@copiloto/shared':
+        specifier: workspace:*
+        version: link:../shared
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3

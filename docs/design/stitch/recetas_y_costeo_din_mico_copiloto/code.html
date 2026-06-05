@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Lexend:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-highest": "#e4e1e6",
+                "error-container": "#ffdad6",
+                "on-surface": "#1b1b1e",
+                "on-error": "#ffffff",
+                "secondary-fixed-dim": "#ffb95f",
+                "secondary-fixed": "#ffddb8",
+                "secondary-container": "#fea619",
+                "on-secondary-fixed-variant": "#653e00",
+                "surface-container-high": "#eae7eb",
+                "on-primary-fixed-variant": "#862200",
+                "tertiary-fixed-dim": "#ffb59f",
+                "on-tertiary": "#ffffff",
+                "tertiary-fixed": "#ffdbd1",
+                "on-error-container": "#93000a",
+                "surface-dim": "#dcd9dd",
+                "surface-container": "#f0edf1",
+                "on-primary-container": "#fffbff",
+                "tertiary": "#a23917",
+                "primary": "#a93107",
+                "on-surface-variant": "#59413b",
+                "outline": "#8d7169",
+                "on-secondary-container": "#684000",
+                "surface": "#fbf8fc",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed": "#3b0a00",
+                "primary-fixed": "#ffdbd1",
+                "surface-variant": "#e4e1e6",
+                "primary-container": "#cb4921",
+                "background": "#fbf8fc",
+                "inverse-on-surface": "#f3f0f4",
+                "on-tertiary-container": "#fffbff",
+                "outline-variant": "#e1bfb6",
+                "on-primary": "#ffffff",
+                "tertiary-container": "#c2512d",
+                "inverse-surface": "#303033",
+                "on-secondary": "#ffffff",
+                "surface-tint": "#ac340a",
+                "primary-fixed-dim": "#ffb5a0",
+                "surface-bright": "#fbf8fc",
+                "error": "#ba1a1a",
+                "surface-container-low": "#f6f2f7",
+                "on-secondary-fixed": "#2a1700",
+                "on-tertiary-fixed-variant": "#842503",
+                "on-tertiary-fixed": "#3a0a00",
+                "secondary": "#855300",
+                "inverse-primary": "#ffb5a0",
+                "on-background": "#1b1b1e"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "base": "4px",
+                "lg": "2rem",
+                "sm": "1rem",
+                "margin-mobile": "16px",
+                "gutter": "24px",
+                "md": "1.5rem",
+                "margin-desktop": "40px",
+                "xs": "0.5rem",
+                "xl": "3rem"
+            },
+            "fontFamily": {
+                "headline-sm": ["Lexend"],
+                "body-md": ["Inter"],
+                "body-sm": ["Inter"],
+                "numeral-xl": ["Lexend"],
+                "body-lg": ["Inter"],
+                "display-md": ["Lexend"],
+                "label-md": ["Inter"],
+                "headline-lg": ["Lexend"],
+                "display-lg": ["Lexend"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .recipe-scroll::-webkit-scrollbar { width: 4px; }
+        .recipe-scroll::-webkit-scrollbar-track { background: transparent; }
+        .recipe-scroll::-webkit-scrollbar-thumb { background: #e1bfb6; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full h-[64px] z-50 flex justify-between items-center px-margin-desktop bg-white/86 backdrop-blur-xl border-b border-surface-variant shadow-sm">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md font-bold text-primary">Copiloto</span>
+<div class="hidden md:flex gap-sm ml-xl">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Tablero</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Forecast</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Inventario</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-2 font-body-md text-body-md" href="#">Recetas</a>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-xs hover:bg-surface-container-low rounded-full transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-variant">
+<img alt="Monica" data-alt="A professional headshot of a female restaurant manager with a friendly expression. She is in a contemporary office setting with soft, warm lighting that emphasizes a clean and modern professional atmosphere. The image uses high-key tones and a shallow depth of field to highlight her expertise and culinary warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8C6CJVW1EPUpyWYDtBwi023Iw90hDo1l_OUDXegTZ5XwvcOizEgX4RtOHE52pQr6YtueKkAFHuHrL9tVSLCQsLzPElTGM5KUulKLUogL0nLOA7PkLtEU-IUohUQMzDL0RumlcawKJwBNzoUL_OSBLd1h6qf4jQEZ_YzYa14tHXFuI_mxk8cLIith36nXm0JbSOFDjkk6rQmF6bT9tc2FML3-PSxMhdV8sVk9WZRwJ623gkLdg3taq94HWjM2RbA0AfZt2xl69o2I"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Utility/Contextual) -->
+<aside class="fixed right-0 top-[64px] h-[calc(100vh-64px)] w-80 z-40 bg-surface-container-lowest border-l border-surface-variant flex flex-col py-lg gap-base shadow-lg">
+<div class="px-md mb-md">
+<div class="flex items-center gap-sm mb-xs">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">restaurant_menu</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Roma Norte</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gerente de Turno</p>
+</div>
+</div>
+</div>
+<nav class="flex-1">
+<div class="px-2 space-y-1">
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Huespedes</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-label-md text-label-md">KPIs</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm bg-primary-container text-on-primary-container rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Ayuda</span>
+</a>
+</div>
+</nav>
+<div class="px-md mt-auto">
+<button class="w-full py-md bg-gradient-to-r from-primary to-tertiary text-white rounded-xl font-bold flex items-center justify-center gap-xs shadow-md hover:scale-[1.02] transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span>Solicitar IA Insight</span>
+</button>
+<button class="w-full mt-base flex items-center gap-sm px-md py-sm text-error hover:bg-error-container/30 rounded-xl transition-all">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Cerrar Sesión</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="pt-[64px] pr-80 h-screen overflow-hidden flex flex-col">
+<header class="px-margin-desktop py-md">
+<div class="flex justify-between items-end">
+<div>
+<h1 class="font-display-md text-display-md text-on-surface">Recetas y costeo dinámico</h1>
+<p class="text-on-surface-variant font-body-md">Optimiza tus márgenes basándote en precios de mercado en tiempo real.</p>
+</div>
+<div class="flex gap-sm">
+<div class="bg-surface-container-high px-md py-xs rounded-full flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span class="text-body-sm font-semibold">3 alertas de costo críticas</span>
+</div>
+</div>
+</div>
+</header>
+<div class="flex-1 flex px-margin-desktop pb-md gap-gutter overflow-hidden">
+<!-- Left Panel: Recipe List -->
+<section class="w-1/3 flex flex-col gap-sm overflow-hidden">
+<div class="relative">
+<span class="absolute left-md top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">search</span>
+<input class="w-full pl-xl pr-md py-sm bg-surface border-outline-variant border rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Buscar receta..." type="text"/>
+</div>
+<div class="flex-1 overflow-y-auto recipe-scroll pr-xs space-y-sm">
+<!-- Recipe Item Active -->
+<div class="bg-white border-l-4 border-primary rounded-xl p-md shadow-sm ring-1 ring-surface-variant cursor-pointer group hover:bg-surface-container-low transition-all">
+<div class="flex justify-between items-start mb-base">
+<h4 class="font-headline-sm text-primary">Guacamole tradicional</h4>
+<span class="bg-error-container text-on-error-container text-[10px] px-xs py-[2px] rounded-full font-bold">ALERTA</span>
+</div>
+<div class="flex gap-md mt-xs">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Food Cost</span>
+<span class="font-numeral-xl text-error text-2xl">32%</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant pl-md">
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Margen</span>
+<span class="font-numeral-xl text-on-surface text-2xl">$145.00</span>
+</div>
+</div>
+</div>
+<!-- Recipe Item -->
+<div class="bg-white border-l-4 border-secondary rounded-xl p-md shadow-sm ring-1 ring-surface-variant cursor-pointer hover:bg-surface-container-low transition-all">
+<div class="flex justify-between items-start mb-base">
+<h4 class="font-headline-sm text-on-surface">Tacos al pastor (3 pz)</h4>
+<span class="bg-green-100 text-green-700 text-[10px] px-xs py-[2px] rounded-full font-bold">ÓPTIMO</span>
+</div>
+<div class="flex gap-md mt-xs">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Food Cost</span>
+<span class="font-numeral-xl text-on-surface text-2xl">24%</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant pl-md">
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Margen</span>
+<span class="font-numeral-xl text-on-surface text-2xl">$122.50</span>
+</div>
+</div>
+</div>
+<!-- Recipe Item -->
+<div class="bg-white border-l-4 border-outline rounded-xl p-md shadow-sm ring-1 ring-surface-variant cursor-pointer hover:bg-surface-container-low transition-all">
+<div class="flex justify-between items-start mb-base">
+<h4 class="font-headline-sm text-on-surface">Enchiladas Suizas</h4>
+<span class="bg-surface-container text-on-surface-variant text-[10px] px-xs py-[2px] rounded-full font-bold">ESTABLE</span>
+</div>
+<div class="flex gap-md mt-xs">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Food Cost</span>
+<span class="font-numeral-xl text-on-surface text-2xl">28%</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant pl-md">
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Margen</span>
+<span class="font-numeral-xl text-on-surface text-2xl">$188.00</span>
+</div>
+</div>
+</div>
+<div class="bg-white border-l-4 border-outline rounded-xl p-md shadow-sm ring-1 ring-surface-variant cursor-pointer hover:bg-surface-container-low transition-all">
+<div class="flex justify-between items-start mb-base">
+<h4 class="font-headline-sm text-on-surface">Pozole Blanco</h4>
+</div>
+<div class="flex gap-md mt-xs">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Food Cost</span>
+<span class="font-numeral-xl text-on-surface text-2xl">21%</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant pl-md">
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Margen</span>
+<span class="font-numeral-xl text-on-surface text-2xl">$210.00</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Panel: Recipe Detail -->
+<section class="flex-1 bg-white rounded-2xl shadow-sm ring-1 ring-surface-variant flex flex-col overflow-hidden relative">
+<!-- Copiloto Alert Overlay -->
+<div class="absolute top-md right-md z-10 w-80 bg-gradient-to-br from-tertiary to-primary-container p-md rounded-xl text-white shadow-xl transform translate-x-2 animate-pulse-slow">
+<div class="flex gap-sm items-start">
+<span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<div>
+<p class="font-bold text-sm mb-base">Recomendación de Copiloto</p>
+<p class="text-xs leading-relaxed mb-sm">El aguacate subió un <span class="font-bold text-secondary-fixed">8%</span>. Tu margen cayó $12 MXN por orden. Sugiero incrementar precio de $185 a $199 o reducir el gramaje de 200g a 180g.</p>
+<div class="flex gap-xs">
+<button class="bg-white/20 hover:bg-white/30 px-sm py-1 rounded text-[10px] font-bold transition-all">AJUSTAR PRECIO</button>
+<button class="bg-white text-primary px-sm py-1 rounded text-[10px] font-bold transition-all">REVISAR GRAMAJE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero Section -->
+<div class="h-48 w-full relative">
+<img class="w-full h-full object-cover" data-alt="A gourmet presentation of traditional Mexican guacamole served in a volcanic stone molcajete. The dish is garnished with fresh cilantro and radish slices, illuminated by warm, direct sunlight that creates dramatic shadows and highlights its vibrant green texture. The surrounding environment is a high-end, contemporary Mexican kitchen with light marble surfaces and earth-toned ceramic accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMmq7A0rd8H6yi3G-9eKMgdJIJYVrdfFec6pOItdUSgQQFru_rvKYiSoeGAkBqZ5_xTTrS5jMqQU3QbyhovvafLSFABphRUnR58_CmGmUFQqIklY6LXTFnTTAyB004QEM-WDQKqiY6SdWxTcI5azx2M06hPlHghg9d94H8qtL3ZU0XQrYmbse5X3D9tJ5riX4cTt42mzZH1nf_-uySam_sliFpp5UYSGF9J-prR4-Ft5ErBVZgClWTunt6VNNwnHoeGWOrLvhOFBI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-md">
+<div class="text-white">
+<h2 class="font-headline-lg text-headline-lg">Guacamole Tradicional</h2>
+<p class="text-sm opacity-90">SKU: REC-001 | Categoría: Entradas</p>
+</div>
+</div>
+</div>
+<div class="p-md flex-1 overflow-y-auto">
+<!-- Stats Grid -->
+<div class="grid grid-cols-4 gap-md mb-lg">
+<div class="p-md bg-surface-container rounded-xl">
+<p class="text-[10px] uppercase font-bold text-outline">Precio Venta</p>
+<p class="font-numeral-xl text-2xl">$185.00</p>
+</div>
+<div class="p-md bg-error-container/40 rounded-xl border border-error-container">
+<p class="text-[10px] uppercase font-bold text-error">Costo Unitario</p>
+<p class="font-numeral-xl text-2xl text-error">$59.20</p>
+<span class="text-[10px] text-error flex items-center gap-base">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +12.4% vs Mes Ant.
+                            </span>
+</div>
+<div class="p-md bg-surface-container rounded-xl">
+<p class="text-[10px] uppercase font-bold text-outline">Utilidad Bruta</p>
+<p class="font-numeral-xl text-2xl">$125.80</p>
+</div>
+<div class="p-md bg-surface-container rounded-xl">
+<p class="text-[10px] uppercase font-bold text-outline">Mermas Prom.</p>
+<p class="font-numeral-xl text-2xl">4.2%</p>
+</div>
+</div>
+<!-- Ingredients Table -->
+<div>
+<div class="flex justify-between items-center mb-sm">
+<h3 class="font-headline-sm text-headline-sm">Desglose de Ingredientes</h3>
+<button class="text-primary font-bold text-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">edit</span> Editar Receta
+                            </button>
+</div>
+<div class="border border-surface-variant rounded-xl overflow-hidden">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-[11px] uppercase tracking-wider font-bold text-outline">
+<tr>
+<th class="px-md py-sm">Ingrediente</th>
+<th class="px-md py-sm text-right">Cantidad</th>
+<th class="px-md py-sm text-right">Costo Unit.</th>
+<th class="px-md py-sm text-right">Costo Ext.</th>
+<th class="px-md py-sm">Estatus Mercado</th>
+</tr>
+</thead>
+<tbody class="text-body-sm divide-y divide-surface-variant">
+<tr class="bg-error-container/10 group">
+<td class="px-md py-sm font-bold">Aguacate Hass</td>
+<td class="px-md py-sm text-right">200g</td>
+<td class="px-md py-sm text-right">$85.00/kg</td>
+<td class="px-md py-sm text-right font-bold">$17.00</td>
+<td class="px-md py-sm">
+<span class="text-error font-bold text-[10px] flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">trending_up</span> UP 8%
+                                            </span>
+</td>
+</tr>
+<tr>
+<td class="px-md py-sm">Cebolla Morada</td>
+<td class="px-md py-sm text-right">30g</td>
+<td class="px-md py-sm text-right">$24.00/kg</td>
+<td class="px-md py-sm text-right">$0.72</td>
+<td class="px-md py-sm">
+<span class="text-outline text-[10px] flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">video_stable</span> ESTABLE
+                                            </span>
+</td>
+</tr>
+<tr>
+<td class="px-md py-sm">Chile Serraneo</td>
+<td class="px-md py-sm text-right">10g</td>
+<td class="px-md py-sm text-right">$42.00/kg</td>
+<td class="px-md py-sm text-right">$0.42</td>
+<td class="px-md py-sm">
+<span class="text-green-600 font-bold text-[10px] flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">trending_down</span> DOWN 4%
+                                            </span>
+</td>
+</tr>
+<tr>
+<td class="px-md py-sm">Cilantro Fresco</td>
+<td class="px-md py-sm text-right">5g</td>
+<td class="px-md py-sm text-right">$15.00/man.</td>
+<td class="px-md py-sm text-right">$0.15</td>
+<td class="px-md py-sm">
+<span class="text-outline text-[10px]">ESTABLE</span>
+</td>
+</tr>
+<tr class="bg-surface-container-lowest">
+<td class="px-md py-sm">Totopos de Maíz</td>
+<td class="px-md py-sm text-right">50g</td>
+<td class="px-md py-sm text-right">$35.00/kg</td>
+<td class="px-md py-sm text-right">$1.75</td>
+<td class="px-md py-sm">
+<span class="text-outline text-[10px]">ESTABLE</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="mt-lg flex gap-md">
+<div class="flex-1 border border-dashed border-outline-variant p-md rounded-xl flex items-center justify-center gap-sm text-outline hover:bg-surface-container-low cursor-pointer transition-all">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-label-md">Añadir Ingrediente</span>
+</div>
+<div class="flex-1 border border-dashed border-outline-variant p-md rounded-xl flex items-center justify-center gap-sm text-outline hover:bg-surface-container-low cursor-pointer transition-all">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md">Historial de Costos</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Interactive script for demo purpose -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Copiloto Recetas UI initialized');
+            
+            // Subtle entrance animations
+            const cards = document.querySelectorAll('section > div');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+</body></html>

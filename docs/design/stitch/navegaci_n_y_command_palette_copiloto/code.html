@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e4e1e6",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#1b1b1e",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#ffb95f",
+                      "secondary-fixed": "#ffddb8",
+                      "secondary-container": "#fea619",
+                      "on-secondary-fixed-variant": "#653e00",
+                      "surface-container-high": "#eae7eb",
+                      "on-primary-fixed-variant": "#862200",
+                      "tertiary-fixed-dim": "#ffb59f",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed": "#ffdbd1",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#dcd9dd",
+                      "surface-container": "#f0edf1",
+                      "on-primary-container": "#fffbff",
+                      "tertiary": "#a23917",
+                      "primary": "#a93107",
+                      "on-surface-variant": "#59413b",
+                      "outline": "#8d7169",
+                      "on-secondary-container": "#684000",
+                      "surface": "#fbf8fc",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed": "#3b0a00",
+                      "primary-fixed": "#ffdbd1",
+                      "surface-variant": "#e4e1e6",
+                      "primary-container": "#cb4921",
+                      "background": "#fbf8fc",
+                      "inverse-on-surface": "#f3f0f4",
+                      "on-tertiary-container": "#fffbff",
+                      "outline-variant": "#e1bfb6",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#c2512d",
+                      "inverse-surface": "#303033",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#ac340a",
+                      "primary-fixed-dim": "#ffb5a0",
+                      "surface-bright": "#fbf8fc",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f6f2f7",
+                      "on-secondary-fixed": "#2a1700",
+                      "on-tertiary-fixed-variant": "#842503",
+                      "on-tertiary-fixed": "#3a0a00",
+                      "secondary": "#855300",
+                      "inverse-primary": "#ffb5a0",
+                      "on-background": "#1b1b1e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "lg": "2rem",
+                      "sm": "1rem",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "md": "1.5rem",
+                      "margin-desktop": "40px",
+                      "xs": "0.5rem",
+                      "xl": "3rem"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Lexend"],
+                      "headline-sm": ["Lexend"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "numeral-xl": ["Lexend"],
+                      "body-lg": ["Inter"],
+                      "display-md": ["Lexend"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Lexend"],
+                      "display-lg": ["Lexend"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        kbd {
+            background: #f3f0f4;
+            border: 1px solid #e1bfb6;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #59413b;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #B9532A 0%, #9A3412 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-[64px] z-50 border-b border-surface-variant bg-white/86 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center h-full px-margin-desktop w-full max-w-full">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md font-bold text-primary">Copiloto</span>
+<nav class="hidden md:flex items-center gap-sm ml-lg">
+<a class="text-primary font-bold border-b-2 border-primary pb-2 font-body-md text-body-md" href="#">Tablero</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Forecast</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Recetas</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full"></span>
+</div>
+<div class="flex items-center gap-xs">
+<img alt="Monica" class="w-8 h-8 rounded-full object-cover" data-alt="Professional portrait of a young woman with a warm, confident expression in a high-key, modern office setting. She has natural styling and the lighting is soft and airy, reflecting a professional yet approachable aesthetic. The background is slightly blurred with soft warm tones to match the culinary warmth and premium modern brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwYVWDS4wYkggPQG7OfrXi90vLDJQDmL_tXqHf0UQVelCNSrTSTPVT39UynVgLRmlssSdV8Tres8lhehRdFbhaWWrOB5EP1MHa_YPpJx9i93LM0MMzenEGdWduc1xlsuycBQ6MWxmTtm_Nb7aWDtaw6e3upkDDNo4abINbJMmNGGKp7nv7pw4sAvLNy77FmTSBlsilXGxVdmQmeYc_WjC6kFuuBUOUoFI5w9Mur6o_AQPohCYQIWwK1O1NTTMQ1dzwXyIpYF-hrWs"/>
+<span class="font-label-md text-label-md">Monica</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Background Dashboard (Blurred) -->
+<main class="pt-[88px] px-margin-desktop h-screen overflow-hidden blur-sm pointer-events-none select-none">
+<div class="max-w-[1400px] mx-auto">
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Buenos días, Roma Norte</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Resumen operativo para el turno matutino.</p>
+</div>
+<div class="flex gap-sm">
+<div class="ai-gradient text-white px-md py-xs rounded-xl flex items-center gap-xs shadow-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-md text-label-md">IA Insights</span>
+</div>
+</div>
+</div>
+<div class="bento-grid">
+<!-- KPI Card -->
+<div class="col-span-4 bg-white border border-surface-variant rounded-xl p-md shadow-sm border-l-4 border-l-primary">
+<span class="text-on-surface-variant font-label-md text-label-md block mb-base">Ventas Proyectadas</span>
+<div class="flex items-baseline gap-xs">
+<span class="font-numeral-xl text-numeral-xl">$42,800</span>
+<span class="text-primary font-label-md text-label-md">+12% vs ayer</span>
+</div>
+</div>
+<!-- KPI Card -->
+<div class="col-span-4 bg-white border border-surface-variant rounded-xl p-md shadow-sm border-l-4 border-l-secondary">
+<span class="text-on-surface-variant font-label-md text-label-md block mb-base">Costo de Labor</span>
+<div class="flex items-baseline gap-xs">
+<span class="font-numeral-xl text-numeral-xl">18.4%</span>
+<span class="text-secondary font-label-md text-label-md">En rango</span>
+</div>
+</div>
+<!-- KPI Card -->
+<div class="col-span-4 bg-white border border-surface-variant rounded-xl p-md shadow-sm border-l-4 border-l-tertiary">
+<span class="text-on-surface-variant font-label-md text-label-md block mb-base">Inventario Crítico</span>
+<div class="flex items-baseline gap-xs">
+<span class="font-numeral-xl text-numeral-xl">3 Items</span>
+<span class="text-tertiary font-label-md text-label-md">Revisar stock</span>
+</div>
+</div>
+<!-- Main Activity Chart -->
+<div class="col-span-8 bg-white border border-surface-variant rounded-xl p-lg shadow-sm">
+<div class="flex justify-between mb-md">
+<h3 class="font-headline-sm text-headline-sm">Flujo de Comensales</h3>
+<div class="flex gap-xs">
+<span class="px-xs py-1 bg-surface-container rounded-lg text-on-surface-variant font-label-md text-label-md">Turno 1</span>
+<span class="px-xs py-1 bg-surface-container rounded-lg text-on-surface-variant font-label-md text-label-md">Turno 2</span>
+</div>
+</div>
+<div class="h-64 w-full bg-surface-container-low rounded-lg flex items-center justify-center">
+<img alt="Data visualization" class="w-full h-full object-cover rounded-lg opacity-40" data-alt="A clean and minimalist line graph showing food and beverage sales trends over a 24-hour period. The visualization is rendered in a high-end SaaS style with soft terracotta and saffron accent lines against a pristine white and light grey background. The lighting is bright and modern, creating a professional analytical atmosphere for a restaurant operations tool." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3fwSwgumEYkj986U6TWTmak9TEZd0xkuZaHWdlVjm24l2hrVrybacukW_akmbcda_mo_M423DCHrTrHPbiAQnJfoPE6mR7q4hklcT-WubrH4e5byC_sKB8mN1e2evYQ_hVxHvy30ozpq4op5GrMRY7NPVSQOWWIyRFXWbT4ZZ04mLeYdp5EcKsPhg-IZUsuC1rqOYGXD44PMgyrctb2PvSUDFTcOMBNhoPY_3bFHqKCOxzOZrLrGkGzEJBEWuvnsbIoqkFieAiq0"/>
+</div>
+</div>
+<!-- Live Updates -->
+<div class="col-span-4 bg-white border border-surface-variant rounded-xl p-md shadow-sm overflow-hidden">
+<h3 class="font-headline-sm text-headline-sm mb-md">Actividad en Vivo</h3>
+<div class="space-y-md">
+<div class="flex gap-sm border-b border-surface-variant pb-sm">
+<div class="w-2 h-10 bg-primary-container rounded-full"></div>
+<div>
+<p class="font-label-md text-label-md">Mesa 12 cerrada</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Ticket #4502 • $1,240</p>
+</div>
+</div>
+<div class="flex gap-sm">
+<div class="w-2 h-10 bg-secondary-container rounded-full"></div>
+<div>
+<p class="font-label-md text-label-md">Reserva VIP: Lucia Robles</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Llegada estimada: 14:15</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Command Palette Overlay -->
+<div class="fixed inset-0 z-[60] flex items-start justify-center pt-[153px] px-margin-mobile bg-on-surface/20 backdrop-blur-md" id="command-palette-overlay">
+<!-- Command Palette Modal -->
+<div class="w-full max-w-[580px] bg-white rounded-2xl shadow-2xl overflow-hidden border border-surface-variant ring-1 ring-black/5 animate-in fade-in zoom-in duration-200">
+<!-- Search Header -->
+<div class="relative border-b border-surface-variant p-md">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-primary text-2xl">search</span>
+<input autofocus="" class="w-full pl-xl pr-lg py-xs border-none focus:ring-0 text-headline-sm font-headline-sm text-on-surface placeholder-on-surface-variant/40" placeholder="Buscar comandos..." type="text"/>
+<div class="absolute right-md top-1/2 -translate-y-1/2 flex gap-xs items-center">
+<kbd>ESC</kbd>
+</div>
+</div>
+<!-- Content Area -->
+<div class="max-h-[480px] overflow-y-auto py-sm px-xs">
+<!-- Group: RECOMENDACIONES -->
+<div class="mb-md">
+<h4 class="px-md py-xs font-label-md text-label-md text-on-surface-variant/60 uppercase tracking-wider">Recomendaciones</h4>
+<div class="group/item flex items-center justify-between px-md py-sm rounded-xl hover:bg-surface-container-low cursor-pointer mx-xs transition-all">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Aprobar aguacate</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Orden de compra pendiente • Distribuidora San Juan</p>
+</div>
+</div>
+<div class="flex gap-xs items-center opacity-0 group-hover/item:opacity-100 transition-opacity">
+<kbd>↵</kbd>
+</div>
+</div>
+</div>
+<!-- Group: HUESPEDES -->
+<div class="mb-md">
+<h4 class="px-md py-xs font-label-md text-label-md text-on-surface-variant/60 uppercase tracking-wider">Huéspedes</h4>
+<div class="group/item flex items-center justify-between px-md py-sm rounded-xl bg-primary-container/10 border-l-4 border-l-primary mx-xs transition-all">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Lucia Robles" class="w-full h-full object-cover" data-alt="Close up portrait of a stylish woman with a friendly smile, high-end photography style. The image has a soft warm glow and high detail, matching the premium restaurant guest persona. She is in a chic indoor setting with natural ambient lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIpLoBg98hNX-AzRNIzYp7IKYy5VEnZ2PbH9DTUK4lKPiV5dH6txjKWMv0w_pqK5xRBlUy_a7Q2jRFts0PajwPBo7FJoSwVM2hW8kSC5iEteIqT7COQlJYEvMqHy5W94GhOhdShRIQ3dkY900hc_JUUqtPYJok5vjFrtvTmiWlpsW66YNsc-0DHVvl-8o6TsfzMA15Ojgdbyh6HPV6_TgTHq2scmkPqp7r414WPOl7qseIJMSQ3KDvtbJomiiC7QCae-4VP5a9FAM"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Lucia Robles <span class="ml-xs px-xs py-0.5 bg-primary text-white text-[10px] rounded-full uppercase">VIP</span></p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Mesa 4 • 2 personas • Alergia: Nueces</p>
+</div>
+</div>
+<div class="flex gap-xs items-center">
+<kbd>⌘</kbd><kbd>V</kbd>
+</div>
+</div>
+</div>
+<!-- Group: ACCIONES -->
+<div class="mb-sm">
+<h4 class="px-md py-xs font-label-md text-label-md text-on-surface-variant/60 uppercase tracking-wider">Acciones</h4>
+<div class="group/item flex items-center justify-between px-md py-sm rounded-xl hover:bg-surface-container-low cursor-pointer mx-xs transition-all">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover/item:text-primary transition-colors">
+<span class="material-symbols-outlined">event_note</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface">Crear reserva</p>
+</div>
+<div class="flex gap-xs items-center opacity-0 group-hover/item:opacity-100 transition-opacity">
+<kbd>⌘</kbd><kbd>N</kbd>
+</div>
+</div>
+<div class="group/item flex items-center justify-between px-md py-sm rounded-xl hover:bg-surface-container-low cursor-pointer mx-xs transition-all">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover/item:text-primary transition-colors">
+<span class="material-symbols-outlined">upload_file</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface">Subir factura</p>
+</div>
+<div class="flex gap-xs items-center opacity-0 group-hover/item:opacity-100 transition-opacity">
+<kbd>⌘</kbd><kbd>U</kbd>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Hints -->
+<div class="bg-surface-container-low border-t border-surface-variant px-md py-xs flex justify-between items-center text-on-surface-variant">
+<div class="flex gap-md">
+<div class="flex items-center gap-xs">
+<kbd class="text-[9px]">↑↓</kbd>
+<span class="text-[11px] font-label-md">Navegar</span>
+</div>
+<div class="flex items-center gap-xs">
+<kbd class="text-[9px]">↵</kbd>
+<span class="text-[11px] font-label-md">Seleccionar</span>
+</div>
+</div>
+<div class="flex items-center gap-xs">
+<span class="text-[11px] font-label-md">IA Activa</span>
+<span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Simple micro-interaction for closing the palette (visual demo only)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const palette = document.getElementById('command-palette-overlay');
+                palette.style.opacity = '0';
+                palette.style.pointerEvents = 'none';
+                palette.style.transition = 'opacity 0.2s ease-out';
+                // Remove blur from main
+                document.querySelector('main').classList.remove('blur-sm');
+            }
+        });
+
+        // Focus input on load
+        window.onload = () => {
+            document.querySelector('input').focus();
+        }
+    </script>
+</body></html>

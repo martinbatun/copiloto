@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copiloto - Motor de Demanda</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(169, 49, 7, 0.1) 0%, rgba(169, 49, 7, 0) 100%);
+        }
+        .ai-insight-gradient {
+            background: linear-gradient(135deg, #B9532A 0%, #9A3412 100%);
+        }
+        body {
+            background-color: #F8F6F3;
+            color: #1b1b1e;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#1b1b1e",
+                      "primary-fixed-dim": "#ffb5a0",
+                      "on-primary-container": "#fffbff",
+                      "on-surface-variant": "#59413b",
+                      "surface-bright": "#fbf8fc",
+                      "error-container": "#ffdad6",
+                      "outline-variant": "#e1bfb6",
+                      "on-error-container": "#93000a",
+                      "surface-container-highest": "#e4e1e6",
+                      "primary": "#a93107",
+                      "on-tertiary-fixed": "#3a0a00",
+                      "on-primary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed-variant": "#862200",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container": "#f0edf1",
+                      "secondary-fixed": "#ffddb8",
+                      "on-secondary-fixed-variant": "#653e00",
+                      "tertiary": "#a23917",
+                      "secondary-container": "#fea619",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#c2512d",
+                      "tertiary-fixed": "#ffdbd1",
+                      "inverse-on-surface": "#f3f0f4",
+                      "on-primary-fixed": "#3b0a00",
+                      "background": "#fbf8fc",
+                      "on-surface": "#1b1b1e",
+                      "secondary-fixed-dim": "#ffb95f",
+                      "on-tertiary": "#ffffff",
+                      "surface-variant": "#e4e1e6",
+                      "primary-fixed": "#ffdbd1",
+                      "on-tertiary-container": "#fffbff",
+                      "secondary": "#855300",
+                      "outline": "#8d7169",
+                      "surface-tint": "#ac340a",
+                      "inverse-primary": "#ffb5a0",
+                      "surface-dim": "#dcd9dd",
+                      "surface-container-high": "#eae7eb",
+                      "tertiary-fixed-dim": "#ffb59f",
+                      "surface": "#fbf8fc",
+                      "on-secondary-container": "#684000",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f6f2f7",
+                      "primary-container": "#cb4921",
+                      "on-tertiary-fixed-variant": "#842503",
+                      "on-secondary-fixed": "#2a1700",
+                      "inverse-surface": "#303033"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "2rem",
+                      "margin-mobile": "16px",
+                      "sm": "1rem",
+                      "base": "4px",
+                      "xs": "0.5rem",
+                      "md": "1.5rem",
+                      "gutter": "24px",
+                      "xl": "3rem",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Lexend"],
+                      "numeral-xl": ["Lexend"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Lexend"],
+                      "body-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "display-md": ["Lexend"],
+                      "display-lg": ["Lexend"],
+                      "label-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full h-[64px] z-50 flex justify-between items-center px-margin-desktop w-full max-w-full bg-white/86 backdrop-blur-xl border-b border-surface-variant shadow-sm">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md font-bold text-primary">Copiloto</span>
+<div class="hidden md:flex gap-sm ml-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Tablero</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-2 font-body-md text-body-md" href="#">Forecast</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Recetas</a>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-xs hover:bg-surface-container-low rounded-full transition-all duration-200">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-xs ml-sm border-l border-surface-variant pl-sm">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary">
+<img alt="Monica" data-alt="A professional headshot of a woman named Monica, a shift manager at a high-end restaurant. She is smiling warmly in a brightly lit, modern office environment. The lighting is soft and flattering, emphasizing a clean and professional aesthetic with a warm, welcoming mood typical of culinary leadership." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmaPMoaeL7yOE8b-gKoIkEtayV9SWoOM1zpo6C0XxKUlA_o9jXKSWqbHKvXtdmm34zJdCchWMQvpA59z-HvHdsZO2-ZlXw67XDcbeOPxgcdn5pYPrbD7d1G9LFEVhCnhD5tufgcQ9kxCczQpZcXdbNjEe1Dd6gkvbPTAMTSMH3Hbh1lyORKLcTJdPqfNafsyvk3zNP8O40ViXsERAkbw3u-g76t4batSCVJ9Z1ZqIxH4mD4TN0pKZ-SV_Yd5Mzekd1b2Vmj3sfC8s"/>
+</div>
+<span class="font-label-md text-label-md hidden md:block">Monica</span>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Suppressed for Main Dashboard Canvas) -->
+<!-- Main Content -->
+<main class="pt-[88px] pb-xl px-margin-desktop max-w-[1440px] mx-auto">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md mb-lg">
+<div>
+<h1 class="font-display-md text-display-md font-bold text-on-surface">Motor de Demanda</h1>
+<p class="font-body-sm text-body-sm text-[#71717A]">Pronostico 7 dias por sucursal y daypart · MAPE actual <span class="text-primary font-bold">8.4%</span> · objetivo &lt;10%</p>
+</div>
+<div class="flex flex-wrap gap-sm items-center">
+<div class="flex items-center bg-white border border-outline-variant rounded-full px-sm py-xs gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-md text-label-md">16-22 Mar 2026</span>
+</div>
+<div class="flex items-center bg-white border border-outline-variant rounded-full px-sm py-xs gap-xs cursor-pointer">
+<span class="font-label-md text-label-md">Roma Norte</span>
+<span class="material-symbols-outlined text-sm" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</div>
+<button class="border border-primary text-primary font-label-md text-label-md px-md py-xs rounded-full hover:bg-primary/5 transition-colors">
+                    Re-entrenar modelo
+                </button>
+<button class="border border-outline text-on-surface font-label-md text-label-md px-md py-xs rounded-full hover:bg-surface-container-low transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                    Exportar
+                </button>
+</div>
+</header>
+<!-- KPI Hero Strip -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-[24px]">
+<!-- Card 1 -->
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm border-l-4 border-l-primary">
+<p class="font-label-md text-label-md text-on-surface-variant mb-xs">MAPE 7d</p>
+<div class="flex items-end justify-between">
+<span class="font-numeral-xl text-numeral-xl text-on-surface">8.4%</span>
+<span class="bg-emerald-100 text-emerald-700 font-label-md text-[12px] px-xs py-[2px] rounded-full">objetivo &lt;10%</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm border-l-4 border-l-secondary-container">
+<p class="font-label-md text-label-md text-on-surface-variant mb-xs">Bias del modelo</p>
+<div class="flex items-end justify-between">
+<span class="font-numeral-xl text-numeral-xl text-on-surface">+1.2%</span>
+<span class="bg-amber-100 text-amber-700 font-label-md text-[12px] px-xs py-[2px] rounded-full">leve sobre-estimacion</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm border-l-4 border-l-tertiary">
+<p class="font-label-md text-label-md text-on-surface-variant mb-xs">Confianza promedio</p>
+<div class="flex items-end justify-between">
+<span class="font-numeral-xl text-numeral-xl text-on-surface">92%</span>
+<div class="w-16 h-8 flex items-end gap-[2px]">
+<div class="w-2 bg-primary/20 h-4 rounded-t-sm"></div>
+<div class="w-2 bg-primary/20 h-6 rounded-t-sm"></div>
+<div class="w-2 bg-primary h-8 rounded-t-sm"></div>
+<div class="w-2 bg-primary/60 h-7 rounded-t-sm"></div>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm border-l-4 border-l-primary-container">
+<p class="font-label-md text-label-md text-on-surface-variant mb-xs">Tickets pronosticados 7d</p>
+<div class="flex items-end justify-between">
+<span class="font-numeral-xl text-numeral-xl text-on-surface">1,968</span>
+<span class="text-emerald-600 font-label-md text-label-md">+8% vs sem. pas.</span>
+</div>
+</div>
+</div>
+<!-- Seccion 1 — Visualizacion Grande -->
+<section class="bg-white p-lg rounded-xl border border-[#E7E5E4] shadow-sm mb-lg relative overflow-hidden">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-sm text-headline-sm">Pronostico de Tickets vs Intervalo de Confianza</h3>
+<div class="flex gap-md items-center">
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 bg-primary rounded-full"></div>
+<span class="font-body-sm text-body-sm">Prediccion</span>
+</div>
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 bg-primary/10 rounded-full"></div>
+<span class="font-body-sm text-body-sm">Banda de confianza</span>
+</div>
+</div>
+</div>
+<div class="h-[320px] w-full relative">
+<!-- SVG Chart Mockup -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 300">
+<!-- Banda de confianza -->
+<path d="M0 200 Q 150 180, 300 220 T 600 150 T 1000 190 L 1000 250 T 600 210 T 300 280 Q 150 240, 0 260 Z" fill="rgba(169, 49, 7, 0.08)"></path>
+<!-- Linea de prediccion -->
+<path d="M0 230 Q 150 210, 300 250 T 600 180 T 1000 220" fill="none" stroke="#a93107" stroke-linecap="round" stroke-width="3"></path>
+<!-- Vertical grid lines -->
+<line stroke="#E7E5E4" stroke-dasharray="4 4" x1="142" x2="142" y1="0" y2="300"></line>
+<line stroke="#E7E5E4" stroke-dasharray="4 4" x1="285" x2="285" y1="0" y2="300"></line>
+<line stroke="#E7E5E4" stroke-dasharray="4 4" x1="428" x2="428" y1="0" y2="300"></line>
+<line stroke="#E7E5E4" stroke-dasharray="4 4" x1="571" x2="571" y1="0" y2="300"></line>
+<line stroke="#E7E5E4" stroke-dasharray="4 4" x1="714" x2="714" y1="0" y2="300"></line>
+<line stroke="#E7E5E4" stroke-dasharray="4 4" x1="857" x2="857" y1="0" y2="300"></line>
+</svg>
+<!-- Annotations -->
+<div class="absolute top-4 left-[10%] bg-white/90 border border-outline-variant px-xs py-1 rounded-lg shadow-sm text-[11px] font-bold">
+                    Lun 16: Dia escolar
+                </div>
+<div class="absolute top-[30%] left-[65%] bg-primary text-white px-xs py-1 rounded-lg shadow-md text-[11px] font-bold">
+                    Vie 20: Quincena
+                </div>
+<div class="absolute bottom-[20%] right-[5%] bg-white/90 border border-outline-variant px-xs py-1 rounded-lg shadow-sm text-[11px] font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="cloudy_snowing">cloudy_snowing</span>
+                    Dom 22: Lluvia
+                </div>
+<!-- Labels -->
+<div class="flex justify-between mt-xs px-2 text-[12px] font-bold text-on-surface-variant">
+<span>Lun 16</span>
+<span>Mar 17</span>
+<span>Mie 18</span>
+<span>Jue 19</span>
+<span>Vie 20</span>
+<span>Sab 21</span>
+<span>Dom 22</span>
+</div>
+</div>
+</section>
+<!-- Seccion 2 — Drivers del Forecast -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-lg">
+<!-- Izq ranking de drivers -->
+<div class="md:col-span-7 bg-white p-lg rounded-xl border border-[#E7E5E4] shadow-sm">
+<h3 class="font-headline-sm text-headline-sm mb-md">Drivers de Demanda (Impacto %)</h3>
+<div class="space-y-md">
+<div class="flex items-center gap-md">
+<span class="w-24 font-label-md text-label-md text-on-surface-variant">Quincena</span>
+<div class="flex-1 h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 75%"></div>
+</div>
+<span class="w-12 font-bold text-emerald-600 text-right">+15%</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="w-24 font-label-md text-label-md text-on-surface-variant">Promo 2x1</span>
+<div class="flex-1 h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-emerald-400 rounded-full" style="width: 50%"></div>
+</div>
+<span class="w-12 font-bold text-emerald-500 text-right">+10%</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="w-24 font-label-md text-label-md text-on-surface-variant">Lluvia</span>
+<div class="flex-1 h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full ml-auto" style="width: 30%"></div>
+</div>
+<span class="w-12 font-bold text-error text-right">-6%</span>
+</div>
+</div>
+</div>
+<!-- Der card insight IA -->
+<div class="md:col-span-5 ai-insight-gradient p-lg rounded-xl shadow-lg flex flex-col justify-between text-white relative overflow-hidden">
+<!-- Abstract visual element -->
+<div class="absolute -right-4 -top-4 opacity-20">
+<span class="material-symbols-outlined text-[120px]" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-xs mb-xs">
+<span class="material-symbols-outlined text-secondary-container" data-icon="psychology" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-label-md text-label-md tracking-wider uppercase">Copiloto Insight</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm mb-sm leading-tight">Optimización para el Viernes 20</h4>
+<p class="font-body-sm text-body-sm opacity-90 mb-md">La coincidencia de quincena y el evento local "Roma Fest" incrementará el volumen de pedidos un 22% por encima del promedio.</p>
+</div>
+<div class="bg-white/10 backdrop-blur-md rounded-lg p-sm border border-white/20 relative z-10">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-label-md text-label-md">Acción sugerida:</span>
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-xs py-[2px] rounded uppercase">Alta prioridad</span>
+</div>
+<ul class="space-y-xs">
+<li class="flex items-center gap-xs font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-sm" data-icon="person_add">person_add</span>
+                            Subir Staff +1 en Cocina Caliente
+                        </li>
+<li class="flex items-center gap-xs font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-sm" data-icon="restaurant">restaurant</span>
+                            Prep de Carnes +18% (Mise en place)
+                        </li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Seccion 3 — Breakdown por Daypart -->
+<h3 class="font-headline-sm text-headline-sm mb-md">Detalle por Daypart (Viernes 20)</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter mb-lg">
+<!-- Desayuno -->
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm flex flex-col items-center">
+<div class="relative w-24 h-24 mb-xs">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="40" stroke="#f0edf1" stroke-dasharray="125 251" stroke-linecap="round" stroke-width="8" transform="rotate(135 50 50)"></circle>
+<circle cx="50" cy="50" fill="none" r="40" stroke="#F59E0B" stroke-dasharray="45 251" stroke-linecap="round" stroke-width="8" transform="rotate(135 50 50)"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center pt-2">
+<span class="font-numeral-xl text-headline-lg">62</span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">Tix</span>
+</div>
+</div>
+<span class="font-label-md text-label-md">Desayuno</span>
+</div>
+<!-- Comida -->
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm flex flex-col items-center">
+<div class="relative w-24 h-24 mb-xs">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="40" stroke="#f0edf1" stroke-dasharray="125 251" stroke-linecap="round" stroke-width="8" transform="rotate(135 50 50)"></circle>
+<circle cx="50" cy="50" fill="none" r="40" stroke="#a93107" stroke-dasharray="100 251" stroke-linecap="round" stroke-width="8" transform="rotate(135 50 50)"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center pt-2">
+<span class="font-numeral-xl text-headline-lg">148</span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">Tix</span>
+</div>
+</div>
+<span class="font-label-md text-label-md">Comida</span>
+</div>
+<!-- Cena -->
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm flex flex-col items-center">
+<div class="relative w-24 h-24 mb-xs">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="40" stroke="#f0edf1" stroke-dasharray="125 251" stroke-linecap="round" stroke-width="8" transform="rotate(135 50 50)"></circle>
+<circle cx="50" cy="50" fill="none" r="40" stroke="#a23917" stroke-dasharray="50 251" stroke-linecap="round" stroke-width="8" transform="rotate(135 50 50)"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center pt-2">
+<span class="font-numeral-xl text-headline-lg">61</span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">Tix</span>
+</div>
+</div>
+<span class="font-label-md text-label-md">Cena</span>
+</div>
+<!-- Late Night -->
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm flex flex-col items-center">
+<div class="relative w-24 h-24 mb-xs">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="40" stroke="#f0edf1" stroke-dasharray="125 251" stroke-linecap="round" stroke-width="8" transform="rotate(135 50 50)"></circle>
+<circle cx="50" cy="50" fill="none" r="40" stroke="#1b1b1e" stroke-dasharray="15 251" stroke-linecap="round" stroke-width="8" transform="rotate(135 50 50)"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center pt-2">
+<span class="font-numeral-xl text-headline-lg">13</span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">Tix</span>
+</div>
+</div>
+<span class="font-label-md text-label-md">Late night</span>
+</div>
+</div>
+<!-- Seccion 4 — Output Integrado -->
+<h3 class="font-headline-sm text-headline-sm mb-md">Planes de Acción Derivados</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Staffing Sugerido</p>
+<p class="font-headline-sm text-headline-sm">12 personas <span class="text-body-sm font-normal text-on-surface-variant">(Vie 20)</span></p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-secondary-container/10 rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Par Levels</p>
+<p class="font-headline-sm text-headline-sm">18 SKUs <span class="text-body-sm font-normal text-on-surface-variant">ajustados</span></p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-[#E7E5E4] shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-tertiary/10 rounded-full flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Prep List</p>
+<p class="font-headline-sm text-headline-sm">284 <span class="text-body-sm font-normal text-on-surface-variant">covers proyectados</span></p>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB (Suppressed for this screen intent) -->
+<script>
+        // Micro-interactions and simple hover effects
+        document.querySelectorAll('.rounded-xl').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'transform 0.2s ease-out';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

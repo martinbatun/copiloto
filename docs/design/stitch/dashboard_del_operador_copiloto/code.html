@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copiloto | Panel de Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Lexend:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f3f0f4",
+                        "inverse-primary": "#ffb5a0",
+                        "on-surface": "#1b1b1e",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#dcd9dd",
+                        "surface-container": "#f0edf1",
+                        "primary-fixed": "#ffdbd1",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#303033",
+                        "secondary-fixed": "#ffddb8",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "primary-container": "#cb4921",
+                        "background": "#fbf8fc",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e4e1e6",
+                        "surface-bright": "#fbf8fc",
+                        "surface-tint": "#ac340a",
+                        "tertiary": "#a23917",
+                        "secondary-container": "#fea619",
+                        "on-secondary-container": "#684000",
+                        "on-primary-fixed-variant": "#862200",
+                        "on-surface-variant": "#59413b",
+                        "primary": "#a93107",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f6f2f7",
+                        "on-primary-container": "#fffbff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "on-background": "#1b1b1e",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#e1bfb6",
+                        "surface-container-highest": "#e4e1e6",
+                        "on-secondary-fixed": "#2a1700",
+                        "surface": "#fbf8fc",
+                        "secondary": "#855300",
+                        "tertiary-container": "#c2512d",
+                        "on-tertiary-fixed-variant": "#842503",
+                        "on-primary-fixed": "#3b0a00",
+                        "primary-fixed-dim": "#ffb5a0",
+                        "outline": "#8d7169",
+                        "surface-container-high": "#eae7eb",
+                        "tertiary-fixed": "#ffdbd1",
+                        "on-tertiary-container": "#fffbff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "margin-desktop": "40px",
+                        "lg": "2rem",
+                        "xs": "0.5rem",
+                        "md": "1.5rem",
+                        "xl": "3rem"
+                    },
+                    "fontFamily": {
+                        "display-md": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Lexend"],
+                        "numeral-xl": ["Lexend"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "display-md": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "numeral-xl": ["40px", { "lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid #E7E5E4;
+        }
+        .main-canvas {
+            background-color: #F8F6F3;
+            min-height: 100vh;
+        }
+        .card-shadow {
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .copiloto-gradient {
+            background: linear-gradient(135deg, rgba(217, 83, 42, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+        }
+        .ai-insight-bg {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(217, 83, 42, 0.03) 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            vertical-align: middle;
+        }
+        .tab-active {
+            background-color: rgba(217, 83, 42, 0.09);
+            color: #D9532A;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- Header Navigation -->
+<header class="fixed top-0 left-0 right-0 h-[64px] z-50 glass-nav px-margin-desktop flex items-center justify-between">
+<div class="flex items-center gap-md">
+<!-- Logo -->
+<div class="flex items-center gap-xs">
+<div class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#D9532A] to-[#B9431A] flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-white" data-icon="cooking">cooking</span>
+</div>
+<span class="font-display-md text-[15px] font-extrabold tracking-tight text-primary">Copiloto</span>
+</div>
+<!-- Branch Switcher -->
+<div class="ml-2 flex items-center gap-2 px-3 py-1.5 bg-[#F8F6F3] border border-outline-variant rounded-full cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[13px] text-primary" data-icon="location_on">location_on</span>
+<span class="text-[13px] font-bold">Roma Norte</span>
+<span class="material-symbols-outlined text-[13px]" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Nav Links -->
+<nav class="hidden xl:flex items-center gap-base ml-4">
+<a class="px-3 py-2 rounded-full tab-active flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-[15px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-md">Tablero</span>
+</a>
+<a class="px-3 py-2 rounded-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-2 transition-all" href="#">
+<span class="material-symbols-outlined text-[15px]" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md">Co-piloto</span>
+</a>
+<a class="px-3 py-2 rounded-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-2 transition-all" href="#">
+<span class="material-symbols-outlined text-[15px]" data-icon="trending_up">trending_up</span>
+<span class="font-label-md">Forecast</span>
+</a>
+<a class="px-3 py-2 rounded-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-2 transition-all" href="#">
+<span class="material-symbols-outlined text-[15px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md">Schedule</span>
+</a>
+<a class="px-3 py-2 rounded-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-2 transition-all" href="#">
+<span class="material-symbols-outlined text-[15px]" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md">Inventario</span>
+</a>
+<a class="px-3 py-2 rounded-full text-on-surface-variant hover:bg-surface-container-low flex items-center gap-2 transition-all" href="#">
+<span class="material-symbols-outlined text-[15px]" data-icon="menu_book">menu_book</span>
+<span class="font-label-md">Recetas</span>
+</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<!-- Search -->
+<div class="flex items-center gap-2 px-4 py-2 bg-[#F8F6F3] border border-outline-variant rounded-full text-on-surface-variant hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+<span class="text-[13px] w-32">Buscar plato...</span>
+<kbd class="px-1.5 py-0.5 bg-white border border-outline-variant rounded text-[10px] font-mono">⌘K</kbd>
+</div>
+<!-- Notifications & Profile -->
+<div class="flex items-center gap-4">
+<button class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+<span class="absolute top-2.5 right-2.5 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+</button>
+<div class="w-[38px] h-[38px] bg-primary-fixed rounded-full flex items-center justify-center font-bold text-primary text-sm ring-2 ring-white shadow-sm overflow-hidden">
+<img alt="Monica" class="w-full h-full object-cover" data-alt="A professional headshot of a female restaurant manager with a warm and confident expression. She is in a brightly lit modern kitchen environment with subtle out-of-focus culinary elements in the background. The lighting is soft and natural, emphasizing a premium and clean aesthetic with warm skin tones and high-key brightness." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiN_CCeRFJKPbGInNnFYp8racfmva0rb6hVK_D3lCcRF60xsfChbQaH-uOTBXhYOiYjnClQcVpx7b8OB5o-shq6RZG1VO7iPAIbI7jkl2yEQd9DEgTcq1EmUBHJrz94aJtvFedK3RTvnbxyVYB4w1zKKUFngGuMw6Dkv8EveEwLmqtqEwzM-886c-0GYkJhi5tqY4hcwAXassIYXI3HftL_xgtK2gPsrMESfsRMt0t9hurjqYPusZTgkGIKC5jtIak5M8qZv0lZ4s"/>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:text-error hover:bg-error-container transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+</button>
+</div>
+</div>
+</header>
+<main class="main-canvas pt-[96px] pb-xl px-margin-desktop">
+<div class="max-w-[1280px] mx-auto flex flex-col gap-gutter">
+<!-- 1. HERO SECTION -->
+<section class="bg-white rounded-[20px] p-9 card-shadow flex flex-col lg:flex-row justify-between gap-lg border border-outline-variant copiloto-gradient">
+<div class="flex-1 flex flex-col justify-center gap-6">
+<div>
+<h1 class="font-display-md text-[30px] font-bold text-on-surface mb-2">Buenos días, Monica</h1>
+<p class="font-body-md text-on-surface-variant">Hoy es miércoles. Pronóstico de <span class="font-bold text-on-surface">284 tickets</span> — 12% arriba del promedio.</p>
+</div>
+<div class="flex flex-wrap gap-3">
+<div class="flex items-center gap-2 px-4 py-2.5 bg-white border border-outline-variant rounded-full card-shadow hover:scale-[1.02] transition-transform cursor-default">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="local_fire_department">local_fire_department</span>
+<span class="text-sm font-semibold">12 órdenes en cocina</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2.5 bg-white border border-outline-variant rounded-full card-shadow hover:scale-[1.02] transition-transform cursor-default">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="auto_awesome">auto_awesome</span>
+<span class="text-sm font-semibold">3 recomendaciones</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2.5 bg-white border border-outline-variant rounded-full card-shadow hover:scale-[1.02] transition-transform cursor-default">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="warning">warning</span>
+<span class="text-sm font-semibold">2 anomalías</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2.5 bg-white border border-outline-variant rounded-full card-shadow hover:scale-[1.02] transition-transform cursor-default">
+<span class="material-symbols-outlined text-[18px] text-blue-500" data-icon="calendar_month">calendar_month</span>
+<span class="text-sm font-semibold">8 reservas confirmadas</span>
+</div>
+</div>
+</div>
+<div class="w-full lg:w-[320px] bg-surface-container-lowest p-6 rounded-xl border border-outline-variant card-shadow">
+<h3 class="font-label-md text-on-surface-variant uppercase tracking-wider mb-4">Pulso del turno</h3>
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Margen vs meta</span>
+<div class="flex items-center gap-2">
+<span class="font-bold">37.2% / 35%</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Food cost</span>
+<div class="flex items-center gap-2">
+<span class="font-bold">28.4%</span>
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Labor %</span>
+<div class="flex items-center gap-2">
+<span class="font-bold">22.1%</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. KPI CARDS -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-white p-6 rounded-xl border border-outline-variant card-shadow flex flex-col gap-2">
+<span class="text-on-surface-variant font-label-md">Ventas del día</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-md text-[28px] font-extrabold text-on-surface">$48,720</span>
+<span class="text-xs font-bold text-on-surface-variant">MXN</span>
+</div>
+<span class="inline-flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full text-xs font-bold w-fit">
+<span class="material-symbols-outlined text-[14px]" data-icon="arrow_upward">arrow_upward</span>
+                        +9% vs forecast
+                    </span>
+</div>
+<div class="bg-white p-6 rounded-xl border border-outline-variant card-shadow flex flex-col gap-2 relative overflow-hidden">
+<span class="text-on-surface-variant font-label-md">Ticket promedio</span>
+<span class="font-display-md text-[28px] font-extrabold text-on-surface">$284</span>
+<div class="absolute bottom-4 right-4 h-8 w-24">
+<svg class="w-full h-full text-primary opacity-30" fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 100 40">
+<path d="M0 35 L10 32 L25 38 L40 15 L60 25 L80 5 L100 12" stroke-linecap="round"></path>
+</svg>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-outline-variant card-shadow flex flex-col gap-2">
+<span class="text-on-surface-variant font-label-md">Food cost del turno</span>
+<div class="flex items-center justify-between">
+<span class="font-display-md text-[28px] font-extrabold text-on-surface">28.4%</span>
+<div class="w-12 h-12 relative">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#E7E5E4" stroke-width="4"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#D9532A" stroke-dasharray="28, 100" stroke-width="4"></path>
+</svg>
+</div>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-outline-variant card-shadow flex flex-col gap-2">
+<span class="text-on-surface-variant font-label-md">Labor % proyectado</span>
+<span class="font-display-md text-[28px] font-extrabold text-on-surface">22.1%</span>
+<span class="text-xs font-medium text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="groups">groups</span>
+                        8 staff en piso
+                    </span>
+</div>
+</section>
+<!-- 3. CO-PILOTO INSIGHT BLOCK -->
+<section class="bg-white rounded-[20px] border border-primary/20 ai-insight-bg card-shadow overflow-hidden">
+<div class="p-6 border-b border-primary/10 flex items-center gap-3">
+<span class="material-symbols-outlined text-[#F59E0B]" data-icon="auto_awesome">auto_awesome</span>
+<h2 class="font-display-md text-[18px] font-bold">Tu co-piloto tiene 3 acciones para ti</h2>
+</div>
+<div class="flex flex-col">
+<!-- Row 1 -->
+<div class="p-5 border-l-[4px] border-primary flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-outline-variant/50">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="font-bold text-on-surface">Sube par level de aguacate a 18kg</span>
+<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">+ $480 MXN evitados</span>
+</div>
+<p class="text-sm text-on-surface-variant italic">Se proyecta un pico de consumo por el evento corporativo en mesa 4-8.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold shadow-sm hover:brightness-110 transition-all">Aprobar</button>
+<button class="px-4 py-2 bg-white border border-outline-variant text-on-surface rounded-lg text-sm font-semibold hover:bg-surface-container-low transition-all">Modificar</button>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="p-5 border-l-[4px] border-secondary flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-outline-variant/50">
+<div class="flex flex-col gap-1">
+<span class="font-bold text-on-surface">Cierra el plato del día: ya saliste con 78 órdenes (cap 80)</span>
+<p class="text-sm text-on-surface-variant">Evita tiempos de espera prolongados desactivándolo en el menú digital ahora.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 bg-secondary text-white rounded-lg text-sm font-bold shadow-sm hover:brightness-110 transition-all">Cerrar plato</button>
+<button class="px-4 py-2 bg-white border border-outline-variant text-on-surface rounded-lg text-sm font-semibold hover:bg-surface-container-low transition-all">Posponer</button>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="p-5 border-l-[4px] border-blue-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<span class="font-bold text-on-surface">Llama a Lucia Robles — VIP hoy en mesa 12</span>
+<p class="text-sm text-on-surface-variant italic">Cumpleaños detectado. Inicia protocolo de bienvenida premium.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-bold shadow-sm hover:brightness-110 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="chat">chat</span> WhatsApp
+                            </button>
+<button class="px-4 py-2 bg-white border border-outline-variant text-on-surface rounded-lg text-sm font-semibold hover:bg-surface-container-low transition-all">Marcar visto</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. DOUBLE COLUMN 60/40 -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left: Forecasting Area Chart -->
+<div class="lg:col-span-7 bg-white p-8 rounded-[20px] border border-outline-variant card-shadow">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-display-md text-[18px] font-bold">Pronóstico vs Real</h3>
+<div class="flex items-center gap-4 text-xs font-bold text-on-surface-variant">
+<div class="flex items-center gap-1.5"><span class="w-2.5 h-0.5 bg-primary border-t border-dashed border-primary"></span> Forecast</div>
+<div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Real</div>
+</div>
+</div>
+<div class="relative h-[280px] w-full">
+<!-- Chart Mockup -->
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Grid Lines -->
+<line stroke="#F0EDF1" stroke-width="0.5" x1="0" x2="100" y1="20" y2="20"></line>
+<line stroke="#F0EDF1" stroke-width="0.5" x1="0" x2="100" y1="50" y2="50"></line>
+<line stroke="#F0EDF1" stroke-width="0.5" x1="0" x2="100" y1="80" y2="80"></line>
+<!-- Area Real -->
+<path d="M0 90 L10 85 L20 88 L30 40 L40 50 L50 75 L60 85 L70 30 L80 40 L90 85 L100 80 V 100 H 0 Z" fill="rgba(16, 185, 129, 0.05)"></path>
+<path d="M0 90 L10 85 L20 88 L30 40 L40 50 L50 75 L60 85 L70 30 L80 40 L90 85 L100 80" fill="none" stroke="#10b981" stroke-linejoin="round" stroke-width="2"></path>
+<!-- Forecast Dashed -->
+<path d="M0 88 L10 82 L20 85 L30 35 L40 45 L50 70 L60 80 L70 25 L80 35 L90 80 L100 75" fill="none" stroke="#D9532A" stroke-dasharray="4,2" stroke-width="1.5"></path>
+<!-- Annotations -->
+<g class="text-[3px] font-bold fill-on-surface">
+<circle cx="30" cy="40" fill="#10b981" r="1.5"></circle>
+<text x="25" y="32">13:30 pico</text>
+<circle cx="60" cy="85" fill="#10b981" r="1.5"></circle>
+<text x="55" y="95">15:00 valle</text>
+<circle cx="80" cy="40" fill="#10b981" r="1.5"></circle>
+<text x="75" y="32">16:30 postres</text>
+</g>
+</svg>
+<div class="flex justify-between mt-4 text-xs font-bold text-on-surface-variant/60 uppercase">
+<span>12:00</span>
+<span>13:00</span>
+<span>14:00</span>
+<span>15:00</span>
+<span>16:00</span>
+<span>17:00</span>
+</div>
+</div>
+</div>
+<!-- Right: Timeline -->
+<div class="lg:col-span-5 bg-white p-8 rounded-[20px] border border-outline-variant card-shadow">
+<h3 class="font-display-md text-[18px] font-bold mb-8">Agenda del turno</h3>
+<div class="relative flex flex-col gap-8 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-surface-container-high">
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center border-2 border-white z-10">
+<span class="material-symbols-outlined text-[14px] text-emerald-600" data-icon="login">login</span>
+</div>
+<div>
+<span class="block text-xs font-bold text-on-surface-variant uppercase">10:30 AM</span>
+<span class="font-bold text-sm">Apertura y Checklist</span>
+</div>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center border-2 border-white z-10">
+<span class="material-symbols-outlined text-[14px] text-blue-600" data-icon="book_online">book_online</span>
+</div>
+<div>
+<span class="block text-xs font-bold text-on-surface-variant uppercase">12:00 PM</span>
+<span class="font-bold text-sm">Primer bloque de Reservas (14 pax)</span>
+</div>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center border-2 border-white z-10">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="trending_up">trending_up</span>
+</div>
+<div>
+<span class="block text-xs font-bold text-on-surface-variant uppercase">13:30 PM</span>
+<span class="font-bold text-sm">Pico de Demanda Proyectado</span>
+</div>
+</div>
+<div class="relative pl-10 opacity-50">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center border-2 border-white z-10">
+<span class="material-symbols-outlined text-[14px]" data-icon="coffee">coffee</span>
+</div>
+<div>
+<span class="block text-xs font-bold text-on-surface-variant uppercase">15:30 PM</span>
+<span class="font-bold text-sm">Break de Staff - Rotación B</span>
+</div>
+</div>
+<div class="relative pl-10 opacity-50">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center border-2 border-white z-10">
+<span class="material-symbols-outlined text-[14px]" data-icon="inventory">inventory</span>
+</div>
+<div>
+<span class="block text-xs font-bold text-on-surface-variant uppercase">17:00 PM</span>
+<span class="font-bold text-sm">Reposición de Insumos Críticos</span>
+</div>
+</div>
+<div class="relative pl-10 opacity-50">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center border-2 border-white z-10">
+<span class="material-symbols-outlined text-[14px]" data-icon="assignment">assignment</span>
+</div>
+<div>
+<span class="block text-xs font-bold text-on-surface-variant uppercase">18:00 PM</span>
+<span class="font-bold text-sm">Scorecard y Cierre de Turno</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating AI Prompt -->
+<div class="fixed bottom-8 right-8 z-40">
+<button class="flex items-center gap-3 px-6 py-4 bg-[#D9532A] text-white rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all group overflow-hidden relative">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+<span class="material-symbols-outlined" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-bold tracking-tight">Solicitar IA Insight</span>
+</button>
+</div>
+<style>
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+    </style>
+<script>
+        // Micro-interaction for the search bar
+        const searchInput = document.querySelector('.group');
+        window.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                console.log('Search focus triggered');
+                // Normally focus input here
+            }
+        });
+
+        // Simple hover effect for KPI cards
+        document.querySelectorAll('section > div').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'all 0.3s ease';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0px)';
+            });
+        });
+    </script>
+</body></html>

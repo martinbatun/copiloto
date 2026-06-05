@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copiloto Agent - Admin WhatsApp FOH</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Lexend:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-highest": "#e4e1e6",
+                "error-container": "#ffdad6",
+                "on-surface": "#1b1b1e",
+                "on-error": "#ffffff",
+                "secondary-fixed-dim": "#ffb95f",
+                "secondary-fixed": "#ffddb8",
+                "secondary-container": "#fea619",
+                "on-secondary-fixed-variant": "#653e00",
+                "surface-container-high": "#eae7eb",
+                "on-primary-fixed-variant": "#862200",
+                "tertiary-fixed-dim": "#ffb59f",
+                "on-tertiary": "#ffffff",
+                "tertiary-fixed": "#ffdbd1",
+                "on-error-container": "#93000a",
+                "surface-dim": "#dcd9dd",
+                "surface-container": "#f0edf1",
+                "on-primary-container": "#fffbff",
+                "tertiary": "#a23917",
+                "primary": "#a93107",
+                "brand-whatsapp": "#25D366",
+                "brand-dark": "#1F2128",
+                "on-surface-variant": "#59413b",
+                "outline": "#8d7169",
+                "on-secondary-container": "#684000",
+                "surface": "#fbf8fc",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed": "#3b0a00",
+                "primary-fixed": "#ffdbd1",
+                "surface-variant": "#e4e1e6",
+                "primary-container": "#cb4921",
+                "background": "#fbf8fc",
+                "inverse-on-surface": "#f3f0f4",
+                "on-tertiary-container": "#fffbff",
+                "outline-variant": "#e1bfb6",
+                "on-primary": "#ffffff",
+                "tertiary-container": "#c2512d",
+                "inverse-surface": "#303033",
+                "on-secondary": "#ffffff",
+                "surface-tint": "#ac340a",
+                "primary-fixed-dim": "#ffb5a0",
+                "surface-bright": "#fbf8fc",
+                "error": "#ba1a1a",
+                "surface-container-low": "#f6f2f7",
+                "on-secondary-fixed": "#2a1700",
+                "on-tertiary-fixed-variant": "#842503",
+                "on-tertiary-fixed": "#3a0a00",
+                "secondary": "#855300",
+                "inverse-primary": "#ffb5a0",
+                "on-background": "#1b1b1e"
+            },
+            "spacing": {
+                "base": "4px", "lg": "2rem", "sm": "1rem", "margin-mobile": "16px", "gutter": "24px", "md": "1.5rem", "margin-desktop": "40px", "xs": "0.5rem", "xl": "3rem"
+            },
+            "fontFamily": {
+                "headline-sm": ["Lexend"], "body-md": ["Inter"], "body-sm": ["Inter"], "display-md": ["Lexend"], "label-md": ["Inter"], "headline-lg": ["Lexend"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .whatsapp-pattern {
+            background-color: #e5ddd5;
+            background-image: url("https://www.transparenttextures.com/patterns/pinstripe-light.png");
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full h-[64px] z-50 flex justify-between items-center px-margin-desktop w-full max-w-full bg-brand-dark shadow-sm border-b border-surface-variant/10 backdrop-blur-xl">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md font-extrabold text-white">Copiloto</span>
+<div class="h-6 w-[1px] bg-white/20 mx-2"></div>
+<span class="text-white font-headline-sm text-headline-sm tracking-tight">Agent</span>
+</div>
+<div class="hidden md:flex gap-md items-center h-full">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md px-2" href="#">Tablero</a>
+<a class="text-white font-bold border-b-2 border-primary pb-2 font-label-md text-label-md px-2" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md px-2" href="#">Forecast</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md px-2" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md px-2" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md px-2" href="#">Recetas</a>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-base hover:bg-white/10 rounded-full transition-all text-white">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-xs ml-4">
+<img alt="Monica" class="w-8 h-8 rounded-full border border-white/20 object-cover" data-alt="A professional headshot of Monica, a restaurant floor manager, with a friendly and confident expression. The lighting is soft and warm, typical of a high-end hospitality setting, against a blurred background of a modern architectural interior. The visual style is premium and clean, reflecting operational excellence and culinary warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVBY4MhIyA5wqtwvqZtZolpaVpEvlCvrTLVHlnVUQ6jHFvOwAidASC8EibWuhh7VEKiKeWc61iEpQwBwRWiSnLX77QoWs59gMKfvI3sO8XLzexYDNMrIRBfDBhzrAf_6UfeRd9WeKPBS-btnve98sqcp2LG7LAUBqXPMBX7LfGGlWeNhyzciQNvb5rkROm99dNlL49BiKX32xPg84Z30garKfQBDOk9wW2R9NVOzL7jITSyK3-pT83kFXpasR9nVYcEmUGNdEu-g0"/>
+<span class="text-white text-body-sm font-semibold">Monica</span>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Right Side) -->
+<aside class="fixed right-0 top-[64px] h-[calc(100vh-64px)] w-80 z-40 flex flex-col py-lg gap-base bg-surface-container-lowest border-l border-surface-variant shadow-lg overflow-y-auto">
+<div class="px-sm mb-md">
+<div class="flex items-center gap-sm p-sm bg-surface-container-low rounded-xl">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md">Roma Norte</h3>
+<p class="text-body-sm text-on-surface-variant">Gerente de Turno</p>
+</div>
+</div>
+</div>
+<div class="px-sm flex flex-col gap-xs mb-xl">
+<p class="px-xs text-[10px] uppercase font-bold tracking-widest text-on-surface-variant/60 mb-1">Acciones Bot</p>
+<button class="flex items-center gap-sm p-sm bg-primary-container text-on-primary-container rounded-xl transition-transform active:translate-x-1">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Huespedes</span>
+</button>
+<button class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">KPIs</span>
+</button>
+<button class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</button>
+</div>
+<div class="mt-auto px-sm pb-lg flex flex-col gap-xs">
+<button class="w-full py-md bg-gradient-to-r from-primary to-tertiary text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all mb-4">
+                Solicitar IA Insight
+            </button>
+<button class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Ayuda</span>
+</button>
+<button class="flex items-center gap-sm p-sm text-error hover:bg-error-container/20 rounded-xl transition-all">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Cerrar Sesión</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="pt-[64px] pr-80 h-screen flex flex-col">
+<!-- KPI Strip -->
+<section class="h-16 flex items-center px-margin-desktop bg-white border-b border-surface-variant gap-xl shrink-0">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-brand-whatsapp/10 flex items-center justify-center text-brand-whatsapp">
+<span class="material-symbols-outlined">forum</span>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant">Conversaciones Hoy</p>
+<p class="font-numeral-xl text-numeral-xl leading-none">84</p>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant">Tiempo Respuesta</p>
+<p class="font-numeral-xl text-numeral-xl leading-none">1.8s</p>
+</div>
+</div>
+<div class="ml-auto">
+<span class="px-sm py-1 bg-brand-whatsapp text-white rounded-full text-[12px] font-bold flex items-center gap-1">
+<span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                    Agente Online
+                </span>
+</div>
+</section>
+<!-- Chat Workspace Split -->
+<section class="flex flex-1 overflow-hidden">
+<!-- Left: Chat List -->
+<div class="w-1/3 min-w-[320px] bg-surface-container-lowest border-r border-surface-variant flex flex-col">
+<div class="p-md bg-white">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-body-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="Buscar conversaciones..." type="text"/>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<!-- Chat Item Active -->
+<div class="p-md bg-surface-container border-l-4 border-primary flex gap-md cursor-pointer transition-all">
+<img alt="Adriana" class="w-12 h-12 rounded-full object-cover" data-alt="Close-up portrait of Adriana Hidalgo, a young woman with a warm and expressive face. Soft natural lighting highlights her features. The setting is slightly out of focus, suggesting a contemporary cafe environment. The image uses a warm, minimalist color palette with high-key whites and subtle earthy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8ReYKx4ksQco95Y7c47TJiNmFphAne4WIN5Z2y919o7oDETlk2RLvRZArtWhaEzsWtybRhSM_UpswBlQS4RNtp8r3AiUi_0Wx7ZGTiqBM05oDz1sZsdyyBJJXHEL4vh9_RtGmAEXNLzOWFbGF-4k2-lPz_5N7jUO_5Ww0VKJXbWqk7fF0Utx9-SDZF89i52om7DZEWh9rsKhg4DSYFYnIKQ6a35Q_0UYQjh3OVP21hat1fjV_ptBBjW8BGZ7IaWf1X9JtReXMAsU"/>
+<div class="flex-1 overflow-hidden">
+<div class="flex justify-between items-center mb-1">
+<h4 class="font-bold text-label-md truncate">Adriana Hidalgo</h4>
+<span class="text-[10px] font-bold text-primary">AHORA</span>
+</div>
+<p class="text-body-sm text-on-surface truncate">Perfecto, confírmame para 4 personas a las 8pm.</p>
+</div>
+</div>
+<!-- Chat Item Inactive -->
+<div class="p-md border-b border-surface-variant flex gap-md hover:bg-surface-container-low cursor-pointer transition-all">
+<img alt="Roberto" class="w-12 h-12 rounded-full object-cover" data-alt="Portrait of Roberto Najera, a middle-aged man with a neat beard and professional attire. The lighting is crisp and modern, set against a blurred city background. The style is clean and high-end, maintaining the brand's aesthetic of operational excellence and modern professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3CrDPgGBx-X84zhhgZZJkeWcS-mL3VNOI6ONzT3XwfyvRT876a1XN0xTZmeXbMkiqd9VXmrUgo4mtcJ8WTy41O4KhWJ7X0AU6UNbDqTnb0qccQeq06XrAfQUxzZUggJHV04txC2RgIgx-sNILCjwuFSvJmNB7wLZV2s0P1y_TR5f-FrPoLjVmWN-aaBj2E3qWFDBEAoWTyxW_m0CjWnBjv9qP96vAsEqTyKB7i4_qQK7gYeK_P9trRvhIxqxAFCX8FQifOl7XXW4"/>
+<div class="flex-1 overflow-hidden">
+<div class="flex justify-between items-center mb-1">
+<h4 class="font-bold text-label-md truncate">Roberto Najera</h4>
+<span class="text-[10px] text-on-surface-variant/60">10:45 AM</span>
+</div>
+<p class="text-body-sm text-on-surface-variant truncate">¿Tienen opciones veganas en el menú?</p>
+</div>
+</div>
+<!-- More generic items... -->
+<div class="p-md border-b border-surface-variant flex gap-md hover:bg-surface-container-low opacity-60 transition-all">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<div class="flex justify-between items-center mb-1">
+<h4 class="font-bold text-label-md truncate">Sofía Castillo</h4>
+<span class="text-[10px] text-on-surface-variant/60">Ayer</span>
+</div>
+<p class="text-body-sm text-on-surface-variant truncate">Gracias por la atención.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Chat Detail -->
+<div class="flex-1 flex flex-col relative">
+<!-- Chat Header -->
+<header class="h-16 flex items-center px-md bg-white/80 backdrop-blur-md border-b border-surface-variant z-10">
+<img alt="Adriana" class="w-10 h-10 rounded-full object-cover mr-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsmZOcaory2TAi7OUetznqj-feicHGhLPHqrifGxNJkw-xuqVvnkUiTbIP8399fiFkx4Scpiu-c6LHUccmt-ZmDkxu2pe8lYFgE3KsA7IDetVkQZrfgTPlWEwZvoWtIBEQ4Z59miw9cQu4Zios1PI2CnlQPM9KkFkWNoh7EjBd8lk1mrJqVf7xU2w_szYybaNQKpwll5RJs72Re3pHLef1i_G3SSH54QRcA5_PwOG29JKomVU2CcelIjkvot9GJZp50ijf7i2s8g8"/>
+<div>
+<h3 class="font-bold text-label-md">Adriana Hidalgo</h3>
+<p class="text-[11px] text-brand-whatsapp font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">smartphone</span> +52 55 1234 5678
+                        </p>
+</div>
+<div class="ml-auto flex gap-xs">
+<button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-lg"><span class="material-symbols-outlined">call</span></button>
+<button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-lg"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</header>
+<!-- Message Thread -->
+<div class="flex-1 overflow-y-auto p-lg whatsapp-pattern flex flex-col gap-md">
+<div class="self-center bg-white/80 backdrop-blur px-md py-xs rounded-full text-[11px] font-bold text-on-surface-variant shadow-sm mb-2">HOY</div>
+<!-- Client Msg -->
+<div class="flex flex-col items-start max-w-[70%]">
+<div class="bg-white p-md rounded-2xl rounded-tl-none shadow-sm text-body-sm relative">
+                            Hola, me gustaría reservar una mesa para esta noche.
+                            <span class="absolute right-2 -bottom-4 text-[10px] text-on-surface-variant/60">12:15 PM</span>
+</div>
+</div>
+<!-- Bot Msg (Copiloto) -->
+<div class="flex flex-col items-end max-w-[70%] self-end">
+<div class="bg-[#dcf8c6] p-md rounded-2xl rounded-tr-none shadow-sm text-body-sm relative border border-brand-whatsapp/20">
+<div class="flex items-center gap-xs mb-1 text-[10px] font-bold text-primary">
+<span class="material-symbols-outlined text-[14px]">smart_toy</span> COPILOTO AI
+                            </div>
+                            ¡Claro que sí, Adriana! Con gusto te ayudo. ¿Para cuántas personas y a qué hora te gustaría?
+                            <span class="absolute left-2 -bottom-4 text-[10px] text-on-surface-variant/60">12:15 PM</span>
+</div>
+</div>
+<!-- Client Msg -->
+<div class="flex flex-col items-start max-w-[70%]">
+<div class="bg-white p-md rounded-2xl rounded-tl-none shadow-sm text-body-sm relative">
+                            Somos 4 personas, a las 8:00 PM por favor.
+                            <span class="absolute right-2 -bottom-4 text-[10px] text-on-surface-variant/60">12:16 PM</span>
+</div>
+</div>
+<!-- Bot Msg (Processing) -->
+<div class="flex flex-col items-end max-w-[70%] self-end">
+<div class="bg-[#dcf8c6] p-md rounded-2xl rounded-tr-none shadow-sm text-body-sm relative border border-brand-whatsapp/20">
+<div class="flex items-center gap-xs mb-1 text-[10px] font-bold text-primary">
+<span class="material-symbols-outlined text-[14px]">smart_toy</span> COPILOTO AI
+                            </div>
+                            Revisando disponibilidad... ¡Tenemos mesa! Confírmame para 4 personas a las 8pm y queda lista tu reserva.
+                            <span class="absolute left-2 -bottom-4 text-[10px] text-on-surface-variant/60">12:16 PM</span>
+</div>
+</div>
+<!-- Client Msg -->
+<div class="flex flex-col items-start max-w-[70%]">
+<div class="bg-white p-md rounded-2xl rounded-tl-none shadow-sm text-body-sm relative">
+                            Perfecto, confírmame para 4 personas a las 8pm.
+                            <span class="absolute right-2 -bottom-4 text-[10px] text-on-surface-variant/60">12:17 PM</span>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<footer class="p-md bg-white border-t border-surface-variant flex items-center gap-md">
+<button class="p-xs text-on-surface-variant"><span class="material-symbols-outlined">add</span></button>
+<div class="flex-1 bg-surface-container-low rounded-xl px-md py-2 flex items-center">
+<input class="flex-1 bg-transparent border-none focus:ring-0 outline-none text-body-sm" placeholder="Escribe un mensaje..." type="text"/>
+<button class="text-on-surface-variant ml-2"><span class="material-symbols-outlined">mood</span></button>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg transition-transform active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</footer>
+<!-- Visual Flow Overlay (Agent UI) -->
+<div class="absolute bottom-24 left-1/2 -translate-x-1/2 w-[90%] bg-white/90 backdrop-blur-xl border border-primary/20 rounded-2xl shadow-2xl p-md flex items-center gap-lg">
+<div class="flex-1">
+<p class="text-[10px] font-bold text-primary uppercase mb-2 tracking-widest">Estado del Flow: Reserva en curso</p>
+<div class="flex items-center gap-xs">
+<div class="flex items-center gap-xs">
+<span class="w-6 h-6 rounded-full bg-brand-whatsapp text-white text-[10px] flex items-center justify-center font-bold">1</span>
+<span class="text-[11px] font-bold">Intención</span>
+</div>
+<div class="h-[2px] w-8 bg-brand-whatsapp"></div>
+<div class="flex items-center gap-xs">
+<span class="w-6 h-6 rounded-full bg-brand-whatsapp text-white text-[10px] flex items-center justify-center font-bold">2</span>
+<span class="text-[11px] font-bold">Datos</span>
+</div>
+<div class="h-[2px] w-8 bg-brand-whatsapp"></div>
+<div class="flex items-center gap-xs">
+<span class="w-6 h-6 rounded-full bg-primary text-white text-[10px] flex items-center justify-center font-bold animate-pulse">3</span>
+<span class="text-[11px] font-bold text-primary">Confirmación</span>
+</div>
+<div class="h-[2px] w-8 bg-surface-variant"></div>
+<div class="flex items-center gap-xs">
+<span class="w-6 h-6 rounded-full bg-surface-variant text-on-surface-variant/40 text-[10px] flex items-center justify-center font-bold">4</span>
+<span class="text-[11px] font-bold text-on-surface-variant/40">Finalizar</span>
+</div>
+</div>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-2 border border-primary text-primary rounded-lg text-label-md font-bold hover:bg-primary/5 transition-colors">Intervenir</button>
+<button class="px-md py-2 bg-primary text-white rounded-lg text-label-md font-bold shadow-md hover:shadow-lg transition-all">Confirmar por Bot</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Layer (Contextual) -->
+<div class="fixed bottom-lg right-[340px] z-50">
+<button class="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-tertiary text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+</div>
+<script>
+        // Simple micro-interaction for chat item selection
+        document.querySelectorAll('.overflow-y-auto > div').forEach(item => {
+            item.addEventListener('click', () => {
+                // In a real app, this would load the chat
+                console.log('Chat selected');
+            });
+        });
+    </script>
+</body></html>

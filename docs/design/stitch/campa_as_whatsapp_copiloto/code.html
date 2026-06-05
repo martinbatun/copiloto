@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copiloto | Campañas WhatsApp</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Lexend:wght@600;700;800;900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .copiloto-gradient {
+            background: linear-gradient(135deg, #a93107 0%, #a23917 100%);
+        }
+        .ai-glow {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+        body {
+            background-color: #F8F6F3;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e4e1e6",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#1b1b1e",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#ffb95f",
+                      "secondary-fixed": "#ffddb8",
+                      "secondary-container": "#fea619",
+                      "on-secondary-fixed-variant": "#653e00",
+                      "surface-container-high": "#eae7eb",
+                      "on-primary-fixed-variant": "#862200",
+                      "tertiary-fixed-dim": "#ffb59f",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed": "#ffdbd1",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#dcd9dd",
+                      "surface-container": "#f0edf1",
+                      "on-primary-container": "#fffbff",
+                      "tertiary": "#a23917",
+                      "primary": "#a93107",
+                      "on-surface-variant": "#59413b",
+                      "outline": "#8d7169",
+                      "on-secondary-container": "#684000",
+                      "surface": "#fbf8fc",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed": "#3b0a00",
+                      "primary-fixed": "#ffdbd1",
+                      "surface-variant": "#e4e1e6",
+                      "primary-container": "#cb4921",
+                      "background": "#fbf8fc",
+                      "inverse-on-surface": "#f3f0f4",
+                      "on-tertiary-container": "#fffbff",
+                      "outline-variant": "#e1bfb6",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#c2512d",
+                      "inverse-surface": "#303033",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#ac340a",
+                      "primary-fixed-dim": "#ffb5a0",
+                      "surface-bright": "#fbf8fc",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f6f2f7",
+                      "on-secondary-fixed": "#2a1700",
+                      "on-tertiary-fixed-variant": "#842503",
+                      "on-tertiary-fixed": "#3a0a00",
+                      "secondary": "#855300",
+                      "inverse-primary": "#ffb5a0",
+                      "on-background": "#1b1b1e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "lg": "2rem",
+                      "sm": "1rem",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "md": "1.5rem",
+                      "margin-desktop": "40px",
+                      "xs": "0.5rem",
+                      "xl": "3rem"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Lexend"],
+                      "headline-sm": ["Lexend"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "numeral-xl": ["Lexend"],
+                      "body-lg": ["Inter"],
+                      "display-md": ["Lexend"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Lexend"],
+                      "display-lg": ["Lexend"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="font-body-md text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-[64px] z-50 glass-nav border-b border-surface-variant flex justify-between items-center px-margin-desktop shadow-sm">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md font-bold text-primary">Copiloto</span>
+<nav class="hidden md:flex items-center gap-sm ml-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Tablero</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-2 font-body-md text-body-md" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Forecast</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Recetas</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-xs rounded-full transition-all">notifications</button>
+<div class="flex items-center gap-xs ml-base">
+<img alt="Monica" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A professional portrait of a restaurant manager named Monica, looking confident and approachable. She is in a modern, brightly lit restaurant interior with warm wood accents and soft ambient lighting. The style is premium and professional, with a shallow depth of field focusing on her friendly expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdfYixqbFH7pZbebWC3tXNiQLMUVn44P7dqNzt0VGpRAoTmVDlj9yWBUq8vNAVWei8eo96cvzqngiFg07NDB15A4iQKqlh7wU168GMb-CXAdAuaglTEp5dvXwSzMrI-IH0Zoy1o1CuGm9rBqE9wdcguOQSoyilBesILs_w1YILKPOyRdkuDZHpM9pUKRmHBYIRtkQMlqaukJsitkrg3IE2kahyCJy5fAV4UzjdrNw_RvwaJc6-azHzCqsqy-Nj3VVNQ1odHW3ljEY"/>
+<span class="font-label-md text-label-md hidden lg:block">Monica</span>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Right Side as requested in JSON "fixed right-0") -->
+<aside class="fixed right-0 top-[64px] h-[calc(100vh-64px)] w-80 z-40 bg-surface-container-lowest border-l border-surface-variant flex flex-col py-lg gap-base">
+<div class="px-sm mb-md">
+<div class="flex items-center gap-sm p-sm bg-surface-container-low rounded-xl">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div>
+<p class="font-label-md text-label-md">Roma Norte</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gerente de Turno</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2 transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Huespedes</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm bg-primary-container text-on-primary-container rounded-xl mx-2 shadow-sm transition-transform active:translate-x-1" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">KPIs</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2 transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Ayuda</span>
+</a>
+</nav>
+<div class="px-sm mt-auto space-y-md">
+<div class="p-md rounded-2xl bg-gradient-to-br from-primary to-tertiary text-white shadow-lg">
+<p class="font-headline-sm text-headline-sm mb-xs">Copiloto AI</p>
+<p class="font-body-sm text-body-sm mb-md opacity-90">Tus campañas de retención podrían mejorar un 12% este mes.</p>
+<button class="w-full bg-secondary-container text-on-secondary-container py-sm rounded-xl font-label-md text-label-md hover:scale-[1.02] transition-transform">
+                    Solicitar IA Insight
+                </button>
+</div>
+<a class="flex items-center gap-sm px-md py-sm text-error hover:bg-error-container/20 rounded-xl mx-2 transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Cerrar Sesión</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="pt-[88px] pr-80 pl-margin-desktop pb-xl min-h-screen">
+<!-- Header Section -->
+<header class="mb-lg">
+<div class="flex justify-between items-end mb-sm">
+<div>
+<h1 class="font-display-md text-display-md text-on-surface">Campañas de WhatsApp</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Automatiza la comunicación con tus clientes para aumentar la frecuencia de visita sin saturar el canal.</p>
+</div>
+<button class="bg-primary text-white px-md py-sm rounded-xl font-label-md text-label-md flex items-center gap-xs shadow-md hover:bg-primary-container transition-all">
+<span class="material-symbols-outlined">add</span> Nueva Campaña
+                </button>
+</div>
+</header>
+<!-- Bento Grid Content -->
+<div class="bento-grid">
+<!-- Guardrails Card (Full width row) -->
+<section class="col-span-12 bg-white rounded-2xl border border-outline-variant p-lg shadow-sm flex flex-col md:flex-row gap-lg items-center">
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<h2 class="font-headline-sm text-headline-sm">Channel Guardrails</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Protección activa para evitar el spam y bloqueos de Meta.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-md w-full md:w-auto">
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant/30">
+<p class="font-label-md text-label-md text-on-surface-variant mb-xs">Límite Mensual</p>
+<p class="font-numeral-xl text-numeral-xl text-primary">2,480<span class="text-body-sm font-normal text-on-surface-variant ml-xs">/5k</span></p>
+<div class="w-full bg-surface-container-high h-1 rounded-full mt-sm">
+<div class="bg-primary h-1 rounded-full w-[49%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant/30">
+<p class="font-label-md text-label-md text-on-surface-variant mb-xs">Cooldown</p>
+<p class="font-numeral-xl text-numeral-xl">7 <span class="text-body-sm font-normal text-on-surface-variant">días</span></p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-sm">Entre envíos por usuario</p>
+</div>
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant/30 hidden lg:block">
+<p class="font-label-md text-label-md text-on-surface-variant mb-xs">Tasa de Reporte</p>
+<p class="font-numeral-xl text-numeral-xl text-secondary">0.2%</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-sm">Umbral seguro (&lt; 1%)</p>
+</div>
+</div>
+</section>
+<!-- Active Campaigns Section -->
+<div class="col-span-12 md:col-span-8 flex flex-col gap-md">
+<h3 class="font-headline-sm text-headline-sm px-base">Campañas Activas</h3>
+<!-- Active Card 1: En curso -->
+<div class="bg-white rounded-2xl border-l-4 border-l-primary border border-outline-variant p-md shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex gap-md">
+<div class="w-[200px] h-[280px] bg-surface-container-low rounded-xl overflow-hidden relative border border-outline-variant/50 shrink-0">
+<div class="absolute top-0 left-0 w-full bg-[#E7FFDB] p-xs text-[10px] font-bold text-center border-b border-outline-variant/20 uppercase tracking-widest text-[#128C7E]">Preview WhatsApp</div>
+<div class="p-sm pt-8 space-y-sm">
+<div class="bg-white p-xs rounded-lg shadow-sm text-[11px] border border-surface-variant">
+<p class="font-bold text-primary mb-1">¡Felicidades Monica!</p>
+<p class="text-on-surface-variant mb-2 leading-tight">Queremos celebrar contigo. Te regalamos una bebida de cortesía en tu próxima visita...</p>
+<div class="mt-xs pt-xs border-t border-surface-variant text-center text-blue-500 font-bold">Canjear Regalo</div>
+</div>
+<div class="flex justify-end">
+<div class="bg-[#DCF8C6] p-xs rounded-lg shadow-sm text-[11px] w-2/3">
+<p>¡Muchas gracias! Estaré ahí hoy.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="inline-block px-sm py-1 rounded-full bg-primary-container/20 text-primary font-label-md text-[10px] uppercase mb-1">En curso</span>
+<h4 class="font-headline-sm text-headline-sm">Cumpleañeros · 18 Mar</h4>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant">more_vert</button>
+</div>
+<div class="grid grid-cols-2 gap-md mt-base mb-auto">
+<div class="p-sm bg-surface-container-lowest rounded-xl border border-surface-variant">
+<p class="font-label-md text-label-md text-on-surface-variant">Apertura</p>
+<p class="font-numeral-xl text-[28px] text-on-surface">94.2%</p>
+</div>
+<div class="p-sm bg-surface-container-lowest rounded-xl border border-surface-variant">
+<p class="font-label-md text-label-md text-on-surface-variant">Conversión</p>
+<p class="font-numeral-xl text-[28px] text-primary">12.5%</p>
+</div>
+</div>
+<div class="mt-md pt-md border-t border-outline-variant/30 flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border-2 border-white flex items-center justify-center font-bold text-[10px]">ML</div>
+<div class="w-8 h-8 rounded-full bg-secondary-fixed border-2 border-white flex items-center justify-center font-bold text-[10px]">JD</div>
+<div class="w-8 h-8 rounded-full bg-primary-fixed border-2 border-white flex items-center justify-center font-bold text-[10px]">+42</div>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline">Ver Analíticas</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Card 2: Pending -->
+<div class="bg-white rounded-2xl border-l-4 border-l-secondary border border-outline-variant p-md shadow-sm group">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+</div>
+<div>
+<span class="inline-block px-sm py-1 rounded-full bg-surface-container-highest text-on-surface-variant font-label-md text-[10px] uppercase mb-1">Pendiente de Aprobación</span>
+<h4 class="font-headline-sm text-headline-sm">Recover churn — 60d sin visita</h4>
+</div>
+</div>
+<div class="flex gap-sm">
+<button class="bg-surface-container-high px-md py-sm rounded-xl font-label-md text-label-md">Editar</button>
+<button class="bg-secondary text-white px-md py-sm rounded-xl font-label-md text-label-md shadow-sm">Activar</button>
+</div>
+</div>
+<div class="bg-surface-container-low p-md rounded-xl flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">auto_awesome</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">
+<strong class="text-on-surface">Insight IA:</strong> 1,240 clientes han superado los 60 días sin visita. Esta campaña podría recuperar un valor estimado de <span class="text-primary font-bold">$18,400 MXN</span> este trimestre.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Sidebar Templates Section -->
+<div class="col-span-12 md:col-span-4 flex flex-col gap-md">
+<h3 class="font-headline-sm text-headline-sm px-base">Plantillas WBA Aprobadas</h3>
+<div class="space-y-sm">
+<!-- Template Item 1 -->
+<div class="bg-white border border-outline-variant p-sm rounded-xl hover:bg-surface-container-lowest transition-colors cursor-pointer group">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-label-md text-label-md text-primary">birthday_dineout</span>
+<span class="px-xs py-0.5 bg-green-100 text-green-700 text-[10px] rounded uppercase font-bold">Approved</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">"¡Hola {{name}}! Queremos celebrar tu cumpleaños contigo en..."</p>
+<div class="mt-sm flex justify-between items-center text-[11px] text-on-surface-variant">
+<span>Marketing Category</span>
+<span class="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Template Item 2 -->
+<div class="bg-white border border-outline-variant p-sm rounded-xl hover:bg-surface-container-lowest transition-colors cursor-pointer group">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-label-md text-label-md text-primary">churn_recover</span>
+<span class="px-xs py-0.5 bg-green-100 text-green-700 text-[10px] rounded uppercase font-bold">Approved</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">"Te extrañamos en {{restaurant_name}}, hace tiempo que..."</p>
+<div class="mt-sm flex justify-between items-center text-[11px] text-on-surface-variant">
+<span>Utility Category</span>
+<span class="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Template Item 3 -->
+<div class="bg-white border border-outline-variant p-sm rounded-xl opacity-60 grayscale cursor-not-allowed">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-label-md text-label-md">new_menu_alert</span>
+<span class="px-xs py-0.5 bg-surface-container-highest text-on-surface-variant text-[10px] rounded uppercase font-bold">Pending</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">"Ven a probar nuestra nueva carta de temporada..."</p>
+</div>
+<button class="w-full py-sm border-2 border-dashed border-outline-variant rounded-xl text-on-surface-variant font-label-md text-label-md hover:bg-white hover:border-primary transition-all">
+                        + Nueva Plantilla
+                    </button>
+</div>
+<!-- Ad/Insight Card -->
+<div class="mt-md p-lg rounded-2xl copiloto-gradient text-white ai-glow">
+<span class="material-symbols-outlined mb-sm" style="font-variation-settings: 'FILL' 1;">tips_and_updates</span>
+<h4 class="font-headline-sm text-headline-sm mb-xs">Mejor Horario</h4>
+<p class="font-body-sm text-body-sm mb-md opacity-90">Tus clientes de Roma Norte responden un 45% más a los mensajes enviados los Miércoles a las 11:30 AM.</p>
+<div class="bg-white/20 p-sm rounded-lg backdrop-blur-md">
+<p class="text-[10px] uppercase font-bold mb-1 opacity-70">Sugerencia</p>
+<p class="font-label-md text-label-md">Reprogramar "Recover churn" para el Miércoles 20.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for AI Copiloto (Contextual) -->
+<button class="fixed bottom-lg left-margin-desktop bg-secondary text-on-secondary-fixed p-md rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all z-50 flex items-center gap-xs pr-lg border-2 border-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-md text-label-md">Sugerencia Copiloto</span>
+</button>
+<script>
+        // Micro-interactions for hover states
+        document.querySelectorAll('.group').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.classList.add('shadow-lg');
+            });
+            item.addEventListener('mouseleave', () => {
+                item.classList.remove('shadow-lg');
+            });
+        });
+    </script>
+</body></html>

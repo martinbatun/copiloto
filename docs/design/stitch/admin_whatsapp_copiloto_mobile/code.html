@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copiloto - WhatsApp Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Lexend:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "surface-container": "#f0edf1",
+                    "surface-bright": "#fbf8fc",
+                    "on-secondary-fixed": "#2a1700",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#59413b",
+                    "surface-dim": "#dcd9dd",
+                    "primary-fixed-dim": "#ffb5a0",
+                    "on-background": "#1b1b1e",
+                    "on-tertiary-fixed-variant": "#842503",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#c2512d",
+                    "surface-variant": "#e4e1e6",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#3a0a00",
+                    "tertiary": "#a23917",
+                    "secondary-container": "#fea619",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#a93107",
+                    "inverse-on-surface": "#f3f0f4",
+                    "on-primary-fixed": "#3b0a00",
+                    "surface-container-high": "#eae7eb",
+                    "outline-variant": "#e1bfb6",
+                    "outline": "#8d7169",
+                    "tertiary-fixed": "#ffdbd1",
+                    "background": "#fbf8fc",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1b1b1e",
+                    "surface-container-highest": "#e4e1e6",
+                    "on-secondary-container": "#684000",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#ac340a",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "secondary-fixed": "#ffddb8",
+                    "on-primary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "on-primary-fixed-variant": "#862200",
+                    "primary-container": "#cb4921",
+                    "surface-container-low": "#f6f2f7",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb59f",
+                    "surface": "#fbf8fc",
+                    "secondary": "#855300",
+                    "primary-fixed": "#ffdbd1",
+                    "inverse-primary": "#ffb5a0",
+                    "on-tertiary-container": "#fffbff",
+                    "inverse-surface": "#303033"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "3rem",
+                    "sm": "1rem",
+                    "md": "1.5rem",
+                    "xs": "0.5rem",
+                    "margin-desktop": "40px",
+                    "base": "4px",
+                    "lg": "2rem",
+                    "margin-mobile": "16px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-md": ["Lexend"],
+                    "numeral-xl": ["Lexend"],
+                    "headline-sm": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/86 backdrop-blur-xl dark:bg-surface-dim/86 shadow-sm border-b border-outline-variant/30 flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-xs">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant/50">
+<img alt="Manager" class="w-full h-full object-cover" data-alt="A professional portrait of a modern restaurant manager in a high-end culinary setting. The lighting is warm and natural, suggesting an inviting yet professional atmosphere. The manager is wearing a clean, minimalist uniform, and the background is a softly blurred modern kitchen with warm wood accents and metallic surfaces, matching the premium Copiloto aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8-R6_iF8Ty3qLhnsxeJDaDrru0BFGmbn3DyK38L8ycw_ds0lNy78PtLt3f3vqwPR6kw2a9MNG9sHHYkp7jP8CvtR-zKW48leF-1qvk2runb9PRGt3hSVI4dycR2AqVgrNqgL5Tft1vS23f_MPH-ENq-BgNesRtNxoh_H1_Yaf5qw0U5oHWN-Yx3A-r6mwiIuhqRZP8KmN7mXx75NSgb063Acv2vVf4OIRxYalJLpt9hfBGNwg1SJz1ETsb-Tv1afowhKnXa3chq4"/>
+</div>
+<span class="font-display-md text-headline-sm text-primary dark:text-primary-fixed-dim tracking-tight">Copiloto</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="mt-20 px-margin-mobile space-y-md">
+<!-- Header Section -->
+<section class="flex flex-col gap-xs pt-xs">
+<h1 class="font-display-md text-headline-lg-mobile text-on-surface">Agente WhatsApp</h1>
+<p class="text-on-surface-variant font-body-sm">Configura la inteligencia y monitorea el rendimiento de tu asistente.</p>
+</section>
+<!-- Service Status Card -->
+<section class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+<div>
+<p class="font-label-md text-on-surface">Estado del Servicio</p>
+<p class="font-body-sm text-green-600 font-semibold">En línea</p>
+</div>
+</div>
+<button class="relative inline-flex h-6 w-11 items-center rounded-full bg-primary transition-colors duration-200 focus:outline-none" id="serviceToggle" onclick="toggleService()">
+<span class="translate-x-6 inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ease-in-out" id="toggleCircle"></span>
+</button>
+</div>
+</section>
+<!-- Metrics Bento Grid (Mobile Focus) -->
+<section class="grid grid-cols-2 gap-sm">
+<!-- CSAT Card -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 border-l-4 border-l-secondary-container rounded-xl p-md shadow-sm">
+<div class="flex flex-col">
+<span class="material-symbols-outlined text-secondary mb-xs" data-icon="star">star</span>
+<p class="font-label-md text-on-surface-variant">CSAT</p>
+<p class="font-numeral-xl text-secondary">4.8</p>
+<p class="text-xs text-green-600 flex items-center mt-base">
+<span class="material-symbols-outlined text-xs mr-1" data-icon="trending_up">trending_up</span> +2% vs ayer
+                    </p>
+</div>
+</div>
+<!-- Response Time -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 border-l-4 border-l-tertiary rounded-xl p-md shadow-sm">
+<div class="flex flex-col">
+<span class="material-symbols-outlined text-tertiary mb-xs" data-icon="timer">timer</span>
+<p class="font-label-md text-on-surface-variant">Respuesta</p>
+<p class="font-numeral-xl text-tertiary">12s</p>
+<p class="text-xs text-tertiary flex items-center mt-base">
+<span class="material-symbols-outlined text-xs mr-1" data-icon="bolt">bolt</span> Óptimo
+                    </p>
+</div>
+</div>
+<!-- Conversations Full Width -->
+<div class="col-span-2 bg-surface-container-lowest border border-outline-variant/30 border-l-4 border-l-primary rounded-xl p-md shadow-sm relative overflow-hidden">
+<div class="flex justify-between items-end relative z-10">
+<div>
+<p class="font-label-md text-on-surface-variant">Conversaciones Hoy</p>
+<p class="font-numeral-xl text-primary">142</p>
+</div>
+<div class="h-12 w-24 flex items-end gap-1">
+<div class="w-2 bg-primary/20 h-1/2 rounded-t-sm"></div>
+<div class="w-2 bg-primary/30 h-2/3 rounded-t-sm"></div>
+<div class="w-2 bg-primary/40 h-3/4 rounded-t-sm"></div>
+<div class="w-2 bg-primary/60 h-1/2 rounded-t-sm"></div>
+<div class="w-2 bg-primary h-full rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Configuration Section -->
+<section class="space-y-sm">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-on-surface">Configuración IA</h2>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed text-xs px-2 py-1 rounded-full font-bold">PRO</span>
+</div>
+<!-- Greeting Config -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm space-y-sm">
+<label class="font-label-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="chat_bubble">chat_bubble</span>
+                    Saludo Inicial Automático
+                </label>
+<textarea class="w-full bg-surface-container border border-outline-variant/50 rounded-lg p-sm text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all resize-none" placeholder="Escribe el saludo aquí..." rows="3">¡Hola! Bienvenido a La Central Gourmet. Soy tu asistente virtual, ¿en qué puedo ayudarte hoy?</textarea>
+</div>
+<!-- Bot Behavior -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm">
+<div class="p-md space-y-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-body-md font-semibold">Toma de Reservas</span>
+</div>
+<input checked="" class="text-primary rounded focus:ring-primary" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="delivery_dining">delivery_dining</span>
+<span class="font-body-md font-semibold">Estatus de Delivery</span>
+</div>
+<input checked="" class="text-primary rounded focus:ring-primary" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="live_help">live_help</span>
+<span class="font-body-md font-semibold">Preguntas Frecuentes</span>
+</div>
+<input checked="" class="text-primary rounded focus:ring-primary" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- Copiloto Insights Card -->
+<div class="p-md rounded-xl bg-gradient-to-br from-[#B9532A] to-[#9A3412] text-white shadow-lg space-y-xs relative overflow-hidden">
+<div class="absolute top-0 right-0 p-xs opacity-20">
+<span class="material-symbols-outlined text-6xl" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary-container" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md uppercase tracking-wider text-secondary-container">Insight de Copiloto</span>
+</div>
+<p class="font-body-md relative z-10">Detectamos que el 40% de las consultas de hoy son sobre el menú de brunch. ¿Deseas que actualice el saludo con las promociones de hoy?</p>
+<div class="pt-sm flex gap-sm relative z-10">
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-lg font-bold text-sm hover:scale-105 transition-transform active:scale-95">Actualizar ahora</button>
+<button class="bg-white/10 text-white px-4 py-2 rounded-lg font-bold text-sm border border-white/20">Ignorar</button>
+</div>
+</div>
+</section>
+<!-- Recent CSAT Feedback -->
+<section class="space-y-sm">
+<h2 class="font-headline-sm text-on-surface">Feedback Reciente</h2>
+<div class="flex gap-sm overflow-x-auto hide-scrollbar pb-xs">
+<!-- Feedback Item -->
+<div class="min-w-[280px] bg-white border border-outline-variant/30 rounded-xl p-md shadow-sm">
+<div class="flex items-center justify-between mb-xs">
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-[10px] text-on-surface-variant">Hace 2m</span>
+</div>
+<p class="text-sm italic text-on-surface">"Increíble lo rápido que reservé mi mesa para 6 personas."</p>
+<p class="text-[10px] mt-xs text-on-surface-variant font-semibold">— Juan Pérez</p>
+</div>
+<!-- Feedback Item -->
+<div class="min-w-[280px] bg-white border border-outline-variant/30 rounded-xl p-md shadow-sm">
+<div class="flex items-center justify-between mb-xs">
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="star">star</span>
+</div>
+<span class="text-[10px] text-on-surface-variant">Hace 1h</span>
+</div>
+<p class="text-sm italic text-on-surface">"El bot me ayudó con el menú pero tardó un poco en responder al final."</p>
+<p class="text-[10px] mt-xs text-on-surface-variant font-semibold">— María G.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-surface/86 backdrop-blur-xl border-t border-outline-variant/30 flex justify-around items-center px-xs pb-safe z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Operaciones</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Staff</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Inventario</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-label-md text-label-md">CRM</span>
+</a>
+<!-- Active Tab -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200 shadow-md" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md">Copiloto</span>
+</a>
+</nav>
+<!-- Interactions Script -->
+<script>
+        function toggleService() {
+            const toggle = document.getElementById('serviceToggle');
+            const circle = document.getElementById('toggleCircle');
+            const isActive = toggle.classList.contains('bg-primary');
+
+            if (isActive) {
+                toggle.classList.remove('bg-primary');
+                toggle.classList.add('bg-surface-container-highest');
+                circle.classList.remove('translate-x-6');
+                circle.classList.add('translate-x-1');
+            } else {
+                toggle.classList.add('bg-primary');
+                toggle.classList.remove('bg-surface-container-highest');
+                circle.classList.add('translate-x-6');
+                circle.classList.remove('translate-x-1');
+            }
+        }
+    </script>
+</body></html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#fbf8fc",
+                    "on-secondary-container": "#684000",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "on-primary-container": "#fffbff",
+                    "outline-variant": "#e1bfb6",
+                    "outline": "#8d7169",
+                    "surface-container-highest": "#e4e1e6",
+                    "on-primary-fixed-variant": "#862200",
+                    "inverse-surface": "#303033",
+                    "tertiary-container": "#c2512d",
+                    "on-error": "#ffffff",
+                    "inverse-primary": "#ffb5a0",
+                    "primary-fixed": "#ffdbd1",
+                    "on-surface": "#1b1b1e",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "error-container": "#ffdad6",
+                    "on-background": "#1b1b1e",
+                    "surface": "#fbf8fc",
+                    "primary-fixed-dim": "#ffb5a0",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#a93107",
+                    "secondary-container": "#fea619",
+                    "background": "#fbf8fc",
+                    "secondary-fixed": "#ffddb8",
+                    "surface-container-high": "#eae7eb",
+                    "surface-dim": "#dcd9dd",
+                    "secondary": "#855300",
+                    "on-tertiary-container": "#fffbff",
+                    "tertiary": "#a23917",
+                    "tertiary-fixed": "#ffdbd1",
+                    "on-tertiary-fixed": "#3a0a00",
+                    "on-tertiary-fixed-variant": "#842503",
+                    "on-secondary-fixed": "#2a1700",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e4e1e6",
+                    "surface-container": "#f0edf1",
+                    "tertiary-fixed-dim": "#ffb59f",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3f0f4",
+                    "surface-tint": "#ac340a",
+                    "error": "#ba1a1a",
+                    "primary-container": "#cb4921",
+                    "surface-container-low": "#f6f2f7",
+                    "on-surface-variant": "#59413b",
+                    "on-primary-fixed": "#3b0a00",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "1rem",
+                    "margin-desktop": "40px",
+                    "margin-mobile": "16px",
+                    "xl": "3rem",
+                    "gutter": "24px",
+                    "base": "4px",
+                    "md": "1.5rem",
+                    "lg": "2rem",
+                    "xs": "0.5rem"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Lexend"],
+                    "body-sm": ["Inter"],
+                    "numeral-xl": ["Lexend"],
+                    "headline-sm": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "display-md": ["Lexend"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F8F6F3;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .card-accent-labor { border-left: 4px solid #a93107; }
+        .card-accent-sales { border-left: 4px solid #fea619; }
+        .card-accent-ai { border-left: 4px solid #f59e0b; }
+        .gradient-ai {
+            background: linear-gradient(135deg, #B9532A 0%, #9A3412 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 glass border-b border-surface-container-highest shadow-sm flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">Copiloto</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+</header>
+<main class="pt-20 pb-28 px-margin-mobile">
+<!-- Quick Stats Bento -->
+<section class="grid grid-cols-2 gap-3 mb-6">
+<div class="col-span-1 bg-white p-4 rounded-xl border border-outline-variant card-accent-sales">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Ventas Hoy</p>
+<h2 class="font-numeral-xl text-numeral-xl text-on-surface">$42.8k</h2>
+<div class="flex items-center text-primary mt-1">
+<span class="material-symbols-outlined text-[16px] mr-1">trending_up</span>
+<span class="text-xs font-bold">+12% vs ayer</span>
+</div>
+</div>
+<div class="col-span-1 bg-white p-4 rounded-xl border border-outline-variant card-accent-labor">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Ocupación</p>
+<h2 class="font-numeral-xl text-numeral-xl text-on-surface">84%</h2>
+<div class="flex items-center text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[16px] mr-1">groups</span>
+<span class="text-xs font-bold">142 pax</span>
+</div>
+</div>
+</section>
+<!-- Anomalies Section -->
+<section class="mb-6">
+<div class="flex justify-between items-center mb-3">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Anomalías Críticas</h3>
+<span class="bg-error/10 text-error px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">2 Alertas</span>
+</div>
+<div class="space-y-3">
+<!-- Anomaly Card 1 -->
+<div class="bg-white p-4 rounded-xl border border-error/20 flex gap-4 relative overflow-hidden active:scale-[0.98] transition-transform">
+<div class="w-1 bg-error absolute left-0 top-0 bottom-0"></div>
+<div class="w-12 h-12 bg-error-container rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-1">Costo de Insumos Crítico</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">El costo de "Proteínas" ha subido un 18% en los últimos 3 envíos. Revisa proveedores.</p>
+<button class="mt-3 text-primary font-bold text-sm flex items-center gap-1">
+                            Ver Análisis <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Anomaly Card 2 -->
+<div class="bg-white p-4 rounded-xl border border-error/20 flex gap-4 relative overflow-hidden active:scale-[0.98] transition-transform">
+<div class="w-1 bg-error absolute left-0 top-0 bottom-0"></div>
+<div class="w-12 h-12 bg-error-container rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">person_alert</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-1">Retraso en Staff</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">3 empleados de cocina aún no han registrado entrada. Turno de cena en riesgo.</p>
+<button class="mt-3 text-primary font-bold text-sm flex items-center gap-1">
+                            Contactar <span class="material-symbols-outlined text-sm">chat</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Trend Chart Placeholder -->
+<section class="bg-white p-5 rounded-xl border border-outline-variant mb-6">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Tendencia</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Últimas 6 horas</p>
+</div>
+<span class="text-xs font-bold text-on-surface-variant bg-surface-container px-2 py-1 rounded">Ventas/h</span>
+</div>
+<div class="h-32 flex items-end justify-between gap-2 px-1">
+<div class="w-full bg-surface-container rounded-t-sm h-[40%] transition-all hover:bg-primary-container"></div>
+<div class="w-full bg-surface-container rounded-t-sm h-[60%] transition-all hover:bg-primary-container"></div>
+<div class="w-full bg-surface-container rounded-t-sm h-[45%] transition-all hover:bg-primary-container"></div>
+<div class="w-full bg-primary rounded-t-sm h-[85%] transition-all"></div>
+<div class="w-full bg-surface-container rounded-t-sm h-[70%] transition-all hover:bg-primary-container"></div>
+<div class="w-full bg-surface-container rounded-t-sm h-[30%] transition-all hover:bg-primary-container"></div>
+<div class="w-full bg-surface-container rounded-t-sm h-[55%] transition-all hover:bg-primary-container"></div>
+</div>
+<div class="flex justify-between mt-3 px-1 text-[10px] text-on-surface-variant font-medium">
+<span>12:00</span>
+<span>14:00</span>
+<span>16:00</span>
+<span>18:00</span>
+</div>
+</section>
+<!-- Copiloto Insights -->
+<section class="gradient-ai p-5 rounded-2xl shadow-lg mb-6 relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-md text-label-md text-white uppercase tracking-widest text-[10px]">IA Copiloto</span>
+</div>
+<h4 class="text-white font-headline-sm text-headline-sm mb-2">Optimización de Inventario</h4>
+<p class="text-white/80 font-body-sm text-body-sm mb-4">He detectado un excedente de Aguacate. Te sugiero activar la promoción "Guacamole Especial" para evitar mermas hoy.</p>
+<button class="w-full bg-secondary-container text-on-secondary-container font-bold py-3 rounded-lg active:scale-95 transition-transform">
+                    Activar Sugerencia
+                </button>
+</div>
+</section>
+<!-- Today's Tasks -->
+<section class="mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Tareas de Hoy</h3>
+<div class="space-y-2">
+<div class="bg-white p-4 rounded-xl border border-outline-variant flex items-center justify-between group active:bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 border-2 border-outline rounded-md flex items-center justify-center"></div>
+<span class="font-body-md text-body-md text-on-surface">Cierre de Caja Mañana</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">drag_handle</span>
+</div>
+<div class="bg-white p-4 rounded-xl border border-outline-variant flex items-center justify-between opacity-60">
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface line-through">Revisión de Gas</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">drag_handle</span>
+</div>
+<div class="bg-white p-4 rounded-xl border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 border-2 border-outline rounded-md flex items-center justify-center"></div>
+<span class="font-body-md text-body-md text-on-surface">Pedido de Lácteos</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">drag_handle</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 glass rounded-t-xl border-t border-surface-container-highest shadow-lg flex justify-around items-center h-20 px-2 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:text-primary transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md">Copiloto</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:text-primary transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Operaciones</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:text-primary transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+<span class="font-label-md text-label-md">Más</span>
+</a>
+</nav>
+<!-- FAB Contextual (Only for Main Dash) -->
+<button class="fixed bottom-24 right-margin-mobile w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center active:scale-95 transition-transform z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<script>
+        // Micro-interactions and atmospheric effects
+        document.querySelectorAll('.active\\:scale-95').forEach(button => {
+            button.addEventListener('touchstart', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('touchend', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+
+        // Simple horizontal scroll behavior for charts or lists if needed
+        const cards = document.querySelectorAll('.bg-white');
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, observerOptions);
+
+        cards.forEach(card => {
+            card.classList.add('transition-all', 'duration-500', 'opacity-0', 'translate-y-4');
+            observer.observe(card);
+        });
+    </script>
+</body></html>

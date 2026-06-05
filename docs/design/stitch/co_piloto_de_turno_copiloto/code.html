@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copiloto | Co-piloto de Turno</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Lexend:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #E7E5E4;
+            border-radius: 10px;
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        .animate-pulse-dot {
+            animation: pulse-dot 2s infinite;
+        }
+        .typing-dot {
+            width: 4px;
+            height: 4px;
+            background: #a93107;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a93107",
+                        "primary-container": "#cb4921",
+                        "secondary": "#855300",
+                        "secondary-container": "#fea619",
+                        "tertiary": "#a23917",
+                        "tertiary-container": "#c2512d",
+                        "surface": "#fbf8fc",
+                        "surface-dim": "#dcd9dd",
+                        "surface-variant": "#e4e1e6",
+                        "outline": "#8d7169",
+                        "outline-variant": "#e1bfb6",
+                        "on-surface": "#1b1b1e",
+                        "on-surface-variant": "#59413b",
+                        "background": "#fbf8fc",
+                        "on-background": "#1b1b1e",
+                        "error": "#ba1a1a"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "xs": "0.5rem",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "margin-desktop": "40px"
+                    },
+                    fontFamily: {
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-md": ["Lexend"],
+                        "headline-sm": ["Lexend"],
+                        "headline-lg": ["Lexend"]
+                    },
+                    fontSize: {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "display-md": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- TOP NAVIGATION BAR (As defined in JSON) -->
+<header class="fixed top-0 w-full h-[64px] z-50 glass-nav border-b border-surface-variant flex justify-between items-center px-margin-desktop shadow-sm">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-[24px] font-bold text-primary">Copiloto</span>
+<nav class="flex gap-md h-full ml-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors flex items-center h-[64px]" href="#">Tablero</a>
+<a class="text-primary font-bold border-b-2 border-primary flex items-center h-[64px]" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors flex items-center h-[64px]" href="#">Forecast</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors flex items-center h-[64px]" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors flex items-center h-[64px]" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors flex items-center h-[64px]" href="#">Recetas</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+</button>
+<div class="flex items-center gap-xs ml-base">
+<img alt="Monica" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" data-alt="A high-quality professional portrait of a Mexican woman with a friendly, confident expression. She is in a contemporary office setting with soft, warm lighting. The image style is sharp and modern, reflecting a premium SaaS brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKSuPy5DuotZVqI7vDY55JGZoP32g8qBVbzkMQs9LwiIUwSZqmvjJIFa2ot0CieS1YgNuHb6plp34VwOpCUFnH_RWtUXILxgdk0VLAL73Fd7d4WmTPggp06bKeWr2wv8nYMirtTWoZ1PrBmnnNJ0NOpvTXXctMIB0KEGqJR39rOSizhFW-C5zi66LUU5_EmU4nGLLYwJ2jhg-xXtMKzSUImyMFuTaOu9su4NTaayClbhbaH6n9RjWXPYnT5UIHC95WKX8e_-Cz92c"/>
+<span class="font-label-md text-on-surface">Monica</span>
+<span class="material-symbols-outlined text-on-surface-variant">keyboard_arrow_down</span>
+</div>
+</div>
+</header>
+<!-- SUBHEADER -->
+<div class="fixed top-[64px] w-full h-[52px] z-40 bg-white border-b border-[#E7E5E4] px-[32px] flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="text-[#D9532A] flex items-center">
+<i class="w-5 h-5" data-lucide="bot"></i>
+</div>
+<span class="font-headline-sm text-[17px] font-bold text-on-surface">Co-piloto del turno · Roma Norte</span>
+<div class="flex items-center bg-[#10B9811F] text-[#10B981] px-3 py-1 rounded-full text-[11px] font-bold gap-1.5 ml-2">
+<span class="w-1.5 h-1.5 bg-[#10B981] rounded-full animate-pulse-dot"></span>
+                EN VIVO
+            </div>
+</div>
+<div class="flex items-center bg-[#F6F2F7] p-1 rounded-xl">
+<button class="px-4 py-1.5 rounded-lg text-[13px] font-semibold bg-white shadow-sm text-primary transition-all">Chat</button>
+<button class="px-4 py-1.5 rounded-lg text-[13px] font-medium text-on-surface-variant hover:text-on-surface">Action Ledger</button>
+<button class="px-4 py-1.5 rounded-lg text-[13px] font-medium text-on-surface-variant hover:text-on-surface">Recomendaciones</button>
+<button class="px-4 py-1.5 rounded-lg text-[13px] font-medium text-on-surface-variant hover:text-on-surface">Logs</button>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 border border-[#E7E5E4] rounded-full px-3 py-1 text-[12px] font-medium text-on-surface-variant cursor-pointer hover:bg-surface-variant">
+<span>Modelo: Claude Sonnet 4.6</span>
+<i class="w-3.5 h-3.5" data-lucide="chevron-down"></i>
+</div>
+<button class="text-[13px] font-medium text-on-surface-variant/70 hover:text-primary transition-colors">Limpiar sesión</button>
+</div>
+</div>
+<!-- MAIN CONTENT -->
+<main class="pt-[116px] pb-[100px] px-[24px] min-h-screen bg-[#F8F6F3]">
+<div class="flex gap-[20px] w-full h-[calc(100vh-168px)]">
+<!-- LEFT PANEL: CHAT -->
+<div class="w-[64%] bg-white rounded-2xl border border-[#E7E5E4] flex flex-col relative overflow-hidden shadow-sm">
+<!-- Chat Header -->
+<div class="p-[20px] px-[28px] border-b border-[#E7E5E4] flex justify-between items-center bg-white/50 backdrop-blur-md sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-[#B9532A] to-[#D9532A] flex items-center justify-center text-white shadow-md">
+<i class="w-6 h-6" data-lucide="bot"></i>
+</div>
+<div>
+<h2 class="font-headline-sm text-[16px] font-bold text-on-surface">Copiloto</h2>
+<p class="text-[12px] text-on-surface-variant/80">Sous-chef digital · contexto: <span class="font-medium text-primary">turno comida miércoles</span></p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full border border-[#E7E5E4] flex items-center justify-center text-on-surface-variant hover:bg-surface-variant">
+<i class="w-4 h-4" data-lucide="help-circle"></i>
+</button>
+</div>
+<!-- Chat Messages -->
+<div class="flex-1 overflow-y-auto p-[28px] flex flex-col gap-6 custom-scrollbar bg-[#FFFFFF]">
+<!-- Message 1: Bot -->
+<div class="flex gap-3 max-w-[76%] animate-in fade-in slide-in-from-bottom-2 duration-300">
+<div class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center shrink-0 mt-1">
+<i class="w-4 h-4" data-lucide="bot"></i>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="bg-[#F8F6F3] text-[#18181B] rounded-[18px] rounded-tl-none px-4 py-3 text-[14px] leading-[1.6]">
+<p>Buenas tardes Monica. Acabo de revisar el run-rate del turno y tengo 3 cosas que vale la pena mirar contigo.</p>
+<ul class="mt-2 space-y-1.5">
+<li>1. <span class="font-bold">Aguacate</span> va a quedarte corto entre 13:00-15:00. Sugiero subir par level de 12 a 18kg.</li>
+<li>2. <span class="font-bold">Plato del dia</span> lleva 78 ordenes (limite 80). Te recomiendo cerrarlo antes del proximo rush.</li>
+<li>3. <span class="font-bold text-primary">Lucia Robles</span> llego a mesa 12 — es VIP y hoy es su cumpleaños segun nuestro CRM.</li>
+</ul>
+</div>
+<div class="flex items-center gap-3 ml-2 text-[11px] text-on-surface-variant/50">
+<span>14:20</span>
+<button class="hover:text-primary transition-colors"><i class="w-3 h-3 inline" data-lucide="copy"></i></button>
+<button class="hover:text-primary transition-colors"><i class="w-3 h-3 inline" data-lucide="refresh-cw"></i></button>
+</div>
+</div>
+</div>
+<!-- Message 2: User -->
+<div class="flex gap-3 max-w-[60%] ml-auto animate-in fade-in slide-in-from-right-2 duration-300">
+<div class="flex flex-col items-end gap-1.5">
+<div class="bg-[#18181B] text-white rounded-[18px] rounded-tr-none px-4 py-2.5 text-[14px]">
+                                ¿Cuanto me cuesta la falta de aguacate?
+                            </div>
+<span class="text-[11px] text-on-surface-variant/50 mr-2">14:21</span>
+</div>
+</div>
+<!-- Message 3: Bot Table -->
+<div class="flex gap-3 max-w-[76%] animate-in fade-in slide-in-from-bottom-2 duration-300">
+<div class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center shrink-0 mt-1">
+<i class="w-4 h-4" data-lucide="bot"></i>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="bg-[#F8F6F3] text-[#18181B] rounded-[18px] rounded-tl-none px-4 py-3 text-[14px]">
+<p class="mb-3">Si no subes el par level, mi proyeccion es:</p>
+<div class="bg-white border border-[#E7E5E4] rounded-xl p-4 shadow-sm mb-3">
+<table class="w-full text-[13px] border-separate border-spacing-y-2">
+<tbody><tr>
+<td class="text-on-surface-variant">Platos cancelados estimados</td>
+<td class="text-right font-semibold">6 ordenes</td>
+</tr>
+<tr>
+<td class="text-on-surface-variant">Merma de complemento</td>
+<td class="text-right font-semibold">1.2kg de guacamole</td>
+</tr>
+<tr>
+<td class="text-on-surface-variant">Costo de oportunidad</td>
+<td class="text-right font-semibold">$840 MXN</td>
+</tr>
+<tr>
+<td class="text-on-surface-variant">Costo merma</td>
+<td class="text-right font-semibold">$180 MXN</td>
+</tr>
+</tbody></table>
+<div class="border-t border-surface-variant mt-2 pt-3 flex justify-between items-center">
+<span class="font-bold">Impacto neto:</span>
+<span class="font-display-md text-[17px] font-bold text-[#B9421E]">-$1,020 MXN</span>
+</div>
+</div>
+<p>El costo de reponer 6kg ahora es $1,440 MXN — ganas ~$480 MXN evitando la cancelacion.</p>
+</div>
+<span class="text-[11px] text-on-surface-variant/50 ml-2">14:21</span>
+</div>
+</div>
+<!-- Message 4: User Action -->
+<div class="flex gap-3 max-w-[60%] ml-auto animate-in fade-in slide-in-from-right-2 duration-300">
+<div class="flex flex-col items-end gap-1.5">
+<div class="bg-[#18181B] text-white rounded-[18px] rounded-tr-none px-4 py-2.5 text-[14px]">
+                                Aprueba la accion de aguacate. Para el plato del dia, recuerdamelo en 30 min.
+                            </div>
+<span class="text-[11px] text-on-surface-variant/50 mr-2">14:22</span>
+</div>
+</div>
+<!-- Message 5: Bot Action Executed Card -->
+<div class="flex gap-3 max-w-[85%] animate-in fade-in slide-in-from-bottom-2 duration-300">
+<div class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center shrink-0 mt-1">
+<i class="w-4 h-4" data-lucide="bot"></i>
+</div>
+<div class="flex flex-col gap-1.5 w-full">
+<div class="bg-[#F8F6F3] text-[#18181B] rounded-[18px] rounded-tl-none px-4 py-3 text-[14px]">
+<p class="mb-3">Listo, ejecuto:</p>
+<div class="bg-[#D9532A0D] border-2 border-[#D9532A] rounded-2xl p-5 shadow-sm">
+<div class="flex items-center gap-2 mb-3 text-[#10B981]">
+<i class="w-5 h-5" data-lucide="check-circle-2"></i>
+<span class="font-bold text-on-surface">Accion ejecutada · Aguacate par level 12 → 18kg</span>
+</div>
+<ul class="space-y-2 text-[13px] text-on-surface-variant mb-4">
+<li class="flex items-start gap-2"><span class="w-1 h-1 bg-primary rounded-full mt-2"></span> Notificado a Chef Eduardo via WhatsApp (entregado 14:22)</li>
+<li class="flex items-start gap-2"><span class="w-1 h-1 bg-primary rounded-full mt-2"></span> Pedido de reposicion creado a Sigma Alimentos (orden #SA-4827)</li>
+<li class="flex items-start gap-2"><span class="w-1 h-1 bg-primary rounded-full mt-2"></span> Entrega ETA: 14:45 · costo $1,440 MXN</li>
+<li class="flex items-start gap-2"><span class="w-1 h-1 bg-primary rounded-full mt-2"></span> Registrado en Action Ledger por Monica Salinas</li>
+</ul>
+<div class="inline-flex items-center gap-1.5 bg-[#10B9811F] text-[#10B981] px-3 py-1 rounded-full text-[11px] font-bold">
+<i class="w-3.5 h-3.5" data-lucide="shield-check"></i>
+                                        APROBADO POR HUMANO · TRAZABLE
+                                    </div>
+</div>
+<p class="mt-3">Para el plato del dia te aviso 14:35. ¿Algo mas?</p>
+</div>
+<span class="text-[11px] text-on-surface-variant/50 ml-2">14:23</span>
+</div>
+</div>
+<!-- Message 6: Suggestions -->
+<div class="flex gap-3 max-w-[76%] animate-in fade-in slide-in-from-bottom-2 duration-300">
+<div class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center shrink-0 mt-1">
+<i class="w-4 h-4" data-lucide="bot"></i>
+</div>
+<div class="flex flex-col gap-3">
+<div class="bg-[#F8F6F3] text-[#18181B] rounded-[18px] rounded-tl-none px-4 py-3 text-[14px]">
+                                Mientras tanto: ya que viste el ticket de Lucia Robles, ¿quieres que envie un saludo de cumpleaños con cortesia de postre por WhatsApp?
+                            </div>
+<div class="flex flex-wrap gap-2">
+<button class="bg-[#D9532A] text-white px-4 py-2 rounded-full text-[13px] font-semibold hover:opacity-90 transition-all shadow-sm">Si, postre cortesía</button>
+<button class="border border-[#D9532A] text-[#D9532A] px-4 py-2 rounded-full text-[13px] font-semibold hover:bg-[#D9532A0A] transition-all">Si, pero sin postre</button>
+<button class="border border-[#E7E5E4] text-on-surface-variant px-4 py-2 rounded-full text-[13px] font-semibold hover:bg-surface-variant transition-all">No</button>
+</div>
+</div>
+</div>
+<!-- Typing Indicator -->
+<div class="flex gap-3 mt-4">
+<div class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center shrink-0">
+<i class="w-4 h-4" data-lucide="bot"></i>
+</div>
+<div class="bg-[#F8F6F3] rounded-[18px] px-4 py-3 flex gap-1 items-center h-10">
+<span class="typing-dot"></span>
+<span class="typing-dot"></span>
+<span class="typing-dot"></span>
+</div>
+</div>
+</div>
+<!-- Chat Footer Input -->
+<div class="p-[18px] px-[24px] border-t border-[#E7E5E4] bg-white sticky bottom-0">
+<div class="flex flex-col gap-3">
+<div class="relative">
+<textarea class="w-full bg-[#F8F6F3] border-none rounded-2xl p-4 px-5 text-[15px] resize-none min-h-[56px] focus:ring-2 focus:ring-primary/20 transition-all custom-scrollbar" placeholder="Pregunta o pide una accion al co-piloto…"></textarea>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-4 text-on-surface-variant/60">
+<button class="hover:text-primary transition-colors"><i class="w-4 h-4" data-lucide="paperclip"></i></button>
+<button class="hover:text-primary transition-colors"><i class="w-4 h-4" data-lucide="mic"></i></button>
+<button class="hover:text-primary transition-colors"><i class="w-4 h-4" data-lucide="image"></i></button>
+<button class="hover:text-primary transition-colors"><i class="w-4 h-4" data-lucide="bar-chart-3"></i></button>
+<div class="h-4 w-[1px] bg-[#E7E5E4]"></div>
+<span class="text-[12px] font-medium bg-[#E7E5E4]/40 px-2 py-0.5 rounded text-on-surface-variant/80 uppercase tracking-wide">Contexto: turno comida</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-[11px] text-on-surface-variant/40 font-mono">⌘ ↵</span>
+<button class="bg-gradient-to-r from-[#B9532A] to-[#D9532A] text-white px-5 py-2.5 rounded-full flex items-center gap-2 font-semibold text-[14px] shadow-md hover:shadow-lg transition-all active:scale-95">
+<span>Enviar</span>
+<i class="w-3.5 h-3.5" data-lucide="send"></i>
+</button>
+</div>
+</div>
+<!-- Quick Suggestions -->
+<div class="flex gap-2.5 overflow-x-auto pb-1 mt-1 scrollbar-hide">
+<button class="shrink-0 bg-white border border-[#E7E5E4] px-3 py-1.5 rounded-full text-[12px] text-on-surface-variant hover:border-primary hover:text-primary transition-all">¿Como va el food cost?</button>
+<button class="shrink-0 bg-white border border-[#E7E5E4] px-3 py-1.5 rounded-full text-[12px] text-on-surface-variant hover:border-primary hover:text-primary transition-all">Genera prep list para cena</button>
+<button class="shrink-0 bg-white border border-[#E7E5E4] px-3 py-1.5 rounded-full text-[12px] text-on-surface-variant hover:border-primary hover:text-primary transition-all">¿Quien esta tarde con break?</button>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT PANEL: CONTEXT & LEDGER -->
+<div class="w-[36%] flex flex-col gap-[16px] overflow-y-auto custom-scrollbar">
+<!-- Card 1: Contexto -->
+<div class="bg-white rounded-2xl border border-[#E7E5E4] p-[20px] shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-2">
+<i class="w-4 h-4 text-[#D9532A]" data-lucide="brain"></i>
+<h3 class="font-bold text-[14px] text-on-surface">Lo que el co-piloto sabe</h3>
+</div>
+<button class="text-[12px] font-bold text-primary hover:underline">Editar contexto</button>
+</div>
+<div class="flex flex-wrap gap-2">
+<div class="bg-[#F8F6F3] border border-[#E7E5E4] px-3 py-1.5 rounded-lg text-[12px] font-medium">Sucursal: Roma Norte</div>
+<div class="bg-[#F8F6F3] border border-[#E7E5E4] px-3 py-1.5 rounded-lg text-[12px] font-medium">Turno: comida (12:00-17:00)</div>
+<div class="bg-[#F8F6F3] border border-[#E7E5E4] px-3 py-1.5 rounded-lg text-[12px] font-medium">Pronostico: 284 tickets</div>
+<div class="bg-[#F8F6F3] border border-[#E7E5E4] px-3 py-1.5 rounded-lg text-[12px] font-medium text-[#10B981]">Run-rate: +9%</div>
+<div class="bg-[#F8F6F3] border border-[#E7E5E4] px-3 py-1.5 rounded-lg text-[12px] font-medium text-[#B9421E]">Inventario: 14 alertas</div>
+<div class="bg-[#F8F6F3] border border-[#E7E5E4] px-3 py-1.5 rounded-lg text-[12px] font-medium">Reservas cena: 8 confirmadas</div>
+</div>
+</div>
+<!-- Card 2: Action Ledger -->
+<div class="bg-white rounded-2xl border border-[#E7E5E4] flex flex-col shadow-sm max-h-[440px]">
+<div class="p-[20px] border-b border-[#E7E5E4] sticky top-0 bg-white z-10">
+<div class="flex justify-between items-center mb-3">
+<h3 class="font-bold text-[14px] text-on-surface">Hoy · 8 acciones</h3>
+<div class="flex items-center gap-1.5 text-[11px] font-bold text-on-surface-variant/60">
+<span class="bg-[#10B9811A] text-[#10B981] px-2 py-0.5 rounded uppercase">Aprobadas</span>
+<span class="bg-surface-variant px-2 py-0.5 rounded uppercase">Rechazadas</span>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-[20px] pt-0 custom-scrollbar">
+<div class="space-y-4 py-4">
+<!-- Entry 1 -->
+<div class="flex gap-3 group cursor-pointer">
+<div class="mt-1.5 w-2 h-2 rounded-full bg-[#10B981] shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<span class="text-[12px] font-medium text-on-surface-variant/50">14:22</span>
+<i class="w-3.5 h-3.5 text-on-surface-variant/30 group-hover:text-primary transition-colors" data-lucide="chevron-right"></i>
+</div>
+<p class="text-[13px] leading-snug"><span class="font-bold">Subir par level aguacate 12→18kg</span> · aprobado por Monica · <span class="text-[#10B981] font-bold">ROI +$480</span></p>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="flex gap-3 group cursor-pointer">
+<div class="mt-1.5 w-2 h-2 rounded-full bg-[#10B981] shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<span class="text-[12px] font-medium text-on-surface-variant/50">14:05</span>
+<i class="w-3.5 h-3.5 text-on-surface-variant/30 group-hover:text-primary transition-colors" data-lucide="chevron-right"></i>
+</div>
+<p class="text-[13px] leading-snug"><span class="font-bold">Cerrar promo del lunes</span> (caducada) · aprobado · sin impacto</p>
+</div>
+</div>
+<!-- Entry 3 -->
+<div class="flex gap-3 group cursor-pointer">
+<div class="mt-1.5 w-2 h-2 rounded-full bg-[#F59E0B] shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<span class="text-[12px] font-medium text-on-surface-variant/50">13:48</span>
+<i class="w-3.5 h-3.5 text-on-surface-variant/30 group-hover:text-primary transition-colors" data-lucide="chevron-right"></i>
+</div>
+<p class="text-[13px] leading-snug"><span class="font-bold">Reasignar staff: mover Luis a barra</span> · esperando aprobacion</p>
+</div>
+</div>
+<!-- Entry 4 -->
+<div class="flex gap-3 group cursor-pointer">
+<div class="mt-1.5 w-2 h-2 rounded-full bg-[#10B981] shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<span class="text-[12px] font-medium text-on-surface-variant/50">13:30</span>
+<i class="w-3.5 h-3.5 text-on-surface-variant/30 group-hover:text-primary transition-colors" data-lucide="chevron-right"></i>
+</div>
+<p class="text-[13px] leading-snug"><span class="font-bold">Subir prep de guacamole 8→14kg</span> · aprobado por Chef Eduardo</p>
+</div>
+</div>
+<!-- Entry 5 -->
+<div class="flex gap-3 group cursor-pointer">
+<div class="mt-1.5 w-2 h-2 rounded-full bg-[#EF4444] shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<span class="text-[12px] font-medium text-on-surface-variant/50">13:12</span>
+<i class="w-3.5 h-3.5 text-on-surface-variant/30 group-hover:text-primary transition-colors" data-lucide="chevron-right"></i>
+</div>
+<p class="text-[13px] leading-snug"><span class="font-bold text-error">Rechazado: ofrecer cortesia</span> a queja online · razon: 'caso ya escalado'</p>
+</div>
+</div>
+<!-- Entry 6 -->
+<div class="flex gap-3 group cursor-pointer">
+<div class="mt-1.5 w-2 h-2 rounded-full bg-[#3B82F6] shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<span class="text-[12px] font-medium text-on-surface-variant/50">12:45</span>
+<i class="w-3.5 h-3.5 text-on-surface-variant/30 group-hover:text-primary transition-colors" data-lucide="chevron-right"></i>
+</div>
+<p class="text-[13px] leading-snug"><span class="font-bold text-[#3B82F6]">Auto-renovado pedido semanal</span> de tortillas (Salvador Tortillas)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-[#E7E5E4] text-center">
+<button class="text-[13px] font-bold text-primary hover:underline">Ver historial completo</button>
+</div>
+</div>
+<!-- Card 3: Pendientes -->
+<div class="bg-white rounded-2xl border border-[#E7E5E4] p-[20px] shadow-sm">
+<h3 class="font-bold text-[14px] text-on-surface mb-4">Recomendaciones pendientes</h3>
+<div class="space-y-3">
+<div class="p-3 bg-[#F8F6F3] rounded-xl border border-[#E7E5E4] flex gap-3 items-center group">
+<div class="w-8 h-8 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<i class="w-4 h-4" data-lucide="trending-up"></i>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-[12px] font-semibold truncate leading-tight">Pre-comprar mango -18%</p>
+<span class="text-[10px] text-on-surface-variant font-medium uppercase">Sugerencia</span>
+</div>
+<button class="px-3 py-1 bg-white border border-[#E7E5E4] rounded-lg text-[11px] font-bold group-hover:border-primary transition-all">Abrir</button>
+</div>
+<div class="p-3 bg-[#F8F6F3] rounded-xl border border-[#E7E5E4] flex gap-3 items-center group">
+<div class="w-8 h-8 rounded-lg bg-tertiary-container text-white flex items-center justify-center shrink-0">
+<i class="w-4 h-4" data-lucide="users"></i>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-[12px] font-semibold truncate leading-tight">Reasignar mesa 4 a Adriana</p>
+<span class="text-[10px] text-on-surface-variant font-medium uppercase">Operacion</span>
+</div>
+<button class="px-3 py-1 bg-white border border-[#E7E5E4] rounded-lg text-[11px] font-bold group-hover:border-primary transition-all">Abrir</button>
+</div>
+<div class="p-3 bg-[#F8F6F3] rounded-xl border border-[#E7E5E4] flex gap-3 items-center group">
+<div class="w-8 h-8 rounded-lg bg-surface-dim flex items-center justify-center shrink-0">
+<i class="w-4 h-4" data-lucide="message-square"></i>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-[12px] font-semibold truncate leading-tight">Responder review 4.0★ Yelp</p>
+<span class="text-[10px] text-on-surface-variant font-medium uppercase">Reputacion</span>
+</div>
+<button class="px-3 py-1 bg-white border border-[#E7E5E4] rounded-lg text-[11px] font-bold group-hover:border-primary transition-all">Abrir</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Handle auto-scroll for chat
+        const chatContainer = document.querySelector('.flex-1.overflow-y-auto');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Basic interactivity for inputs
+        const textarea = document.querySelector('textarea');
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        }
+    </script>
+</body></html>

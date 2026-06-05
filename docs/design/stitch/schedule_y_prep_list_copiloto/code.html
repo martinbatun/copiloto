@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copiloto - Schedule &amp; Prep List</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e4e1e6",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#1b1b1e",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "secondary-fixed": "#ffddb8",
+                        "secondary-container": "#fea619",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "surface-container-high": "#eae7eb",
+                        "on-primary-fixed-variant": "#862200",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdbd1",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#dcd9dd",
+                        "surface-container": "#f0edf1",
+                        "on-primary-container": "#fffbff",
+                        "tertiary": "#a23917",
+                        "primary": "#a93107",
+                        "on-surface-variant": "#59413b",
+                        "outline": "#8d7169",
+                        "on-secondary-container": "#684000",
+                        "surface": "#fbf8fc",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#3b0a00",
+                        "primary-fixed": "#ffdbd1",
+                        "surface-variant": "#e4e1e6",
+                        "primary-container": "#cb4921",
+                        "background": "#fbf8fc",
+                        "inverse-on-surface": "#f3f0f4",
+                        "on-tertiary-container": "#fffbff",
+                        "outline-variant": "#e1bfb6",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#c2512d",
+                        "inverse-surface": "#303033",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#ac340a",
+                        "primary-fixed-dim": "#ffb5a0",
+                        "surface-bright": "#fbf8fc",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f6f2f7",
+                        "on-secondary-fixed": "#2a1700",
+                        "on-tertiary-fixed-variant": "#842503",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "secondary": "#855300",
+                        "inverse-primary": "#ffb5a0",
+                        "on-background": "#1b1b1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "lg": "2rem",
+                        "sm": "1rem",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "md": "1.5rem",
+                        "margin-desktop": "40px",
+                        "xs": "0.5rem",
+                        "xl": "3rem"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Lexend"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-md": ["Lexend"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e1bfb6; border-radius: 10px; }
+        .glass-nav { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary/20">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-[64px] z-50 bg-white/86 backdrop-blur-xl border-b border-surface-variant shadow-sm flex justify-between items-center px-margin-desktop">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md font-bold text-primary">Copiloto</span>
+<nav class="hidden md:flex gap-sm ml-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md py-2" href="#">Tablero</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md py-2" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md py-2" href="#">Forecast</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-2 font-body-md" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md py-2" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md py-2" href="#">Recetas</a>
+</nav>
+</div>
+<div class="flex items-center gap-sm">
+<div class="relative flex items-center bg-surface-container-low px-sm py-xs rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant mr-xs">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-40" placeholder="Buscar..." type="text"/>
+</div>
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<img alt="Monica" class="w-8 h-8 rounded-full border border-primary/20" data-alt="A professional portrait of a restaurant manager named Monica, featuring soft studio lighting, a minimalist high-key background, and a warm, inviting smile. The aesthetic is clean and modern, reflecting operational excellence and culinary warmth with a palette of soft whites and terracotta accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlKGT9Bgh5RwxSCZyavvx9uGC-NMe496yO5q7e4Jno01fePKv55Nl7vdBP4POa96tZI1fi8XsfSiolyWKMt_kaPLGH7lRtX9Y2_q6BTJfKVZmVsJLClr43UMX2UKJ6_NBOapzLFFmr-lItFfrWCzkAT4uPCsu6TwtqTitdy7fk2wO3C8vihvL41SxrHnNb3woT5Yk0UGC44y5KIOdEC0cPtehexAHgpvGxwobV4xo8d2PjKVkXHgnMX1gVF7Ww8A_CsJQDXu250Bg"/>
+</div>
+</header>
+<!-- SideNavBar (Right) -->
+<aside class="fixed right-0 top-[64px] h-[calc(100vh-64px)] w-80 z-40 border-l border-surface-variant bg-surface-container-lowest flex flex-col py-lg gap-base">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-sm mb-xs">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">restaurant</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-label-md">Roma Norte</h3>
+<p class="text-body-sm text-on-surface-variant">Gerente de Turno</p>
+</div>
+</div>
+<button class="w-full mt-md bg-gradient-to-r from-primary to-tertiary text-white py-sm rounded-xl font-label-md flex items-center justify-center gap-xs hover:shadow-lg transition-all active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                Solicitar IA Insight
+            </button>
+</div>
+<nav class="flex-grow">
+<a class="flex items-center gap-sm py-sm px-md text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md">Huespedes</span>
+</a>
+<a class="flex items-center gap-sm py-sm px-md text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-label-md">KPIs</span>
+</a>
+<a class="flex items-center gap-sm py-sm px-md text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md">Configuración</span>
+</a>
+<a class="flex items-center gap-sm py-sm px-md text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md">Ayuda</span>
+</a>
+</nav>
+<div class="mt-auto px-md">
+<a class="flex items-center gap-sm py-sm px-md text-error hover:bg-error-container/20 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md">Cerrar Sesión</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-[64px] pr-80 min-h-screen">
+<div class="p-margin-desktop">
+<header class="flex justify-between items-end mb-lg">
+<div>
+<p class="text-primary font-label-md mb-xs">Operaciones / Personal</p>
+<h1 class="font-display-md text-display-md text-on-surface">Schedule de la semana</h1>
+</div>
+<div class="flex gap-sm">
+<div class="bg-surface-container-high p-1 rounded-xl flex">
+<button class="px-md py-xs bg-white rounded-lg shadow-sm text-label-md">Día</button>
+<button class="px-md py-xs text-on-surface-variant text-label-md">Semana</button>
+</div>
+<button class="bg-primary text-white px-lg py-sm rounded-xl font-label-md shadow-lg flex items-center gap-sm hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">send</span>
+                        Publicar y notificar via WhatsApp
+                    </button>
+</div>
+</header>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- PANEL IZQUIERDO: Timeline -->
+<div class="col-span-12 lg:col-span-8 bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<div class="p-md border-b border-surface-variant bg-surface-container-lowest flex justify-between items-center">
+<div class="flex items-center gap-md">
+<span class="font-headline-sm text-on-surface">Timeline de Turnos</span>
+<span class="text-body-sm text-on-surface-variant">Lunes, 24 de Mayo</span>
+</div>
+<div class="flex gap-base">
+<span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Cocina
+                            </span>
+<span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Piso
+                            </span>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<div class="min-w-[800px]">
+<!-- Time Header -->
+<div class="grid grid-cols-[180px_1fr] border-b border-surface-variant">
+<div class="p-sm bg-surface-container-low border-r border-surface-variant font-label-md text-on-surface-variant">Personal</div>
+<div class="flex">
+<div class="flex-1 text-center py-sm text-[11px] font-bold text-on-surface-variant border-r border-surface-variant/30">08:00</div>
+<div class="flex-1 text-center py-sm text-[11px] font-bold text-on-surface-variant border-r border-surface-variant/30">10:00</div>
+<div class="flex-1 text-center py-sm text-[11px] font-bold text-on-surface-variant border-r border-surface-variant/30">12:00</div>
+<div class="flex-1 text-center py-sm text-[11px] font-bold text-on-surface-variant border-r border-surface-variant/30 text-primary">14:00</div>
+<div class="flex-1 text-center py-sm text-[11px] font-bold text-on-surface-variant border-r border-surface-variant/30">16:00</div>
+<div class="flex-1 text-center py-sm text-[11px] font-bold text-on-surface-variant border-r border-surface-variant/30">18:00</div>
+<div class="flex-1 text-center py-sm text-[11px] font-bold text-on-surface-variant border-r border-surface-variant/30">20:00</div>
+<div class="flex-1 text-center py-sm text-[11px] font-bold text-on-surface-variant">22:00</div>
+</div>
+</div>
+<!-- Staff Rows -->
+<div class="divide-y divide-surface-variant/50">
+<!-- Row 1 -->
+<div class="grid grid-cols-[180px_1fr] items-center group hover:bg-surface-container-lowest transition-colors">
+<div class="p-sm border-r border-surface-variant flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-container-high text-[10px] flex items-center justify-center font-bold">ER</div>
+<span class="text-body-sm font-medium">Eduardo Reyes</span>
+</div>
+<div class="relative h-12 flex items-center px-4">
+<div class="absolute left-[10%] w-[40%] h-6 bg-secondary/20 border-l-4 border-secondary rounded-md flex items-center px-2">
+<span class="text-[10px] font-bold text-secondary">AM - COCINA</span>
+</div>
+</div>
+</div>
+<!-- Row 2 - Reassigned -->
+<div class="grid grid-cols-[180px_1fr] items-center group hover:bg-surface-container-lowest transition-colors">
+<div class="p-sm border-r border-surface-variant flex flex-col">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-[10px] flex items-center justify-center font-bold text-primary">LR</div>
+<span class="text-body-sm font-medium">Luis Robles</span>
+</div>
+<span class="mt-1 inline-block text-[9px] bg-secondary-container/20 text-on-secondary-container px-1.5 py-0.5 rounded font-bold self-start">Reasignado por IA</span>
+</div>
+<div class="relative h-12 flex items-center px-4">
+<div class="absolute left-[40%] w-[45%] h-6 bg-tertiary-container/20 border-l-4 border-tertiary rounded-md flex items-center px-2 animate-pulse">
+<span class="text-[10px] font-bold text-tertiary">PM - PISO (IA OPTIMIZED)</span>
+</div>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-[180px_1fr] items-center group hover:bg-surface-container-lowest transition-colors">
+<div class="p-sm border-r border-surface-variant flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-container-high text-[10px] flex items-center justify-center font-bold">AC</div>
+<span class="text-body-sm font-medium">Adriana Castillo</span>
+</div>
+<div class="relative h-12 flex items-center px-4">
+<div class="absolute left-[5%] w-[40%] h-6 bg-secondary/20 border-l-4 border-secondary rounded-md flex items-center px-2">
+<span class="text-[10px] font-bold text-secondary">AM - COCINA</span>
+</div>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="grid grid-cols-[180px_1fr] items-center group hover:bg-surface-container-lowest transition-colors">
+<div class="p-sm border-r border-surface-variant flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-container-high text-[10px] flex items-center justify-center font-bold">MG</div>
+<span class="text-body-sm font-medium">Miguel García</span>
+</div>
+<div class="relative h-12 flex items-center px-4">
+<div class="absolute left-[50%] w-[40%] h-6 bg-tertiary-container/20 border-l-4 border-tertiary rounded-md flex items-center px-2">
+<span class="text-[10px] font-bold text-tertiary">PM - PISO</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- PANEL DERECHO: Cards -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+<!-- Coverage Card -->
+<section class="bg-white rounded-xl border-l-4 border-secondary p-md shadow-sm">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-sm text-label-md">Coverage vs Pronóstico</h3>
+<span class="bg-secondary-container/20 text-on-secondary-container text-[11px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> Optimizado
+                            </span>
+</div>
+<div class="space-y-md">
+<div class="flex items-end gap-base h-24">
+<div class="flex-1 bg-surface-container flex flex-col justify-end rounded-t-lg overflow-hidden relative">
+<div class="w-full bg-outline-variant h-[60%] opacity-40"></div>
+<div class="absolute bottom-0 w-full bg-secondary h-[55%]"></div>
+</div>
+<div class="flex-1 bg-surface-container flex flex-col justify-end rounded-t-lg overflow-hidden relative">
+<div class="w-full bg-outline-variant h-[80%] opacity-40"></div>
+<div class="absolute bottom-0 w-full bg-secondary h-[78%]"></div>
+</div>
+<div class="flex-1 bg-surface-container flex flex-col justify-end rounded-t-lg overflow-hidden relative">
+<div class="w-full bg-outline-variant h-[100%] opacity-40"></div>
+<div class="absolute bottom-0 w-full bg-primary h-[95%]"></div>
+<div class="absolute top-2 w-full text-center text-[9px] font-bold text-primary">PEAK</div>
+</div>
+<div class="flex-1 bg-surface-container flex flex-col justify-end rounded-t-lg overflow-hidden relative">
+<div class="w-full bg-outline-variant h-[70%] opacity-40"></div>
+<div class="absolute bottom-0 w-full bg-secondary h-[65%]"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container-low p-sm rounded-lg">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Eficiencia</p>
+<p class="text-headline-sm text-secondary">98%</p>
+</div>
+<div class="bg-surface-container-low p-sm rounded-lg">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Costo Labor</p>
+<p class="text-headline-sm text-primary">14.2%</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Prep List Card -->
+<section class="bg-white rounded-xl border border-outline-variant p-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 -mr-16 -mt-16 rounded-full"></div>
+<div class="flex items-center gap-xs mb-md">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+<h3 class="font-headline-sm text-label-md">Prep List por día</h3>
+</div>
+<div class="space-y-sm">
+<!-- Prep Item -->
+<div class="flex items-center gap-sm p-sm bg-surface-container-low rounded-xl border border-transparent hover:border-outline-variant transition-all cursor-pointer group">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Mole" class="w-full h-full object-cover" data-alt="A high-resolution, top-down photograph of traditional Mexican mole poblano sauce simmering in a clay pot, rich in dark chocolate and chili tones. The lighting is warm and rustic, highlighting the silky texture of the sauce within a professional culinary kitchen setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDb22lAZMlOMytshBJ_aareXxX1cef4mBs084DtUD65-L8d3A8GMjn5JQJheVoL9XW4JWjiNCXPEKlS1ouOovyyfeLze8SWmHE1UerI5gQ8-rPdKl5T5oLDFleCfpNvgKa-Ec1rFO7LZ9N84KYF89U0N0MmyNf7FVp12h9JDc2HLdxog2-j4yxJwlTyNd__CDVeA38O9ulNlnfq-4KLiVTKsfYuJV90YJxXRFvaNgOYuyAS9o3RJWi3oWEIgmqeMX_DgxK02HDvQc4"/>
+</div>
+<div class="flex-grow">
+<p class="text-body-sm font-bold">Mise en place mole</p>
+<div class="flex items-center justify-between">
+<p class="text-[10px] text-on-surface-variant">Meta: 12 Litros</p>
+<span class="text-[10px] font-bold text-primary">Prioridad Alta</span>
+</div>
+</div>
+</div>
+<!-- Prep Item -->
+<div class="flex items-center gap-sm p-sm bg-surface-container-low rounded-xl border border-transparent hover:border-outline-variant transition-all cursor-pointer group">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Tortillas" class="w-full h-full object-cover" data-alt="Close-up of freshly made, steaming corn tortillas stacked neatly on a clean white cloth. The lighting is natural and bright, capturing the fine texture and authentic feel of artisanal Mexican bread-making in a high-end restaurant kitchen." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOXYKpKNRwzpchznH-F0ghlCszJkojrTDAshzUnzyaldsFc6QPmS-8SYNr1FQLZVEqX9CzbYlAVMX54sETFMZYGKOJSzypK27r83mvdu_-h8ars2ZX0teoLfdgDR-lOwX3kAnRt3TafX3pvM5WdOZRJNwSUVnDCBdmEimeXTUB_hNub-6HpIbVj5JgAnEmxOHsnPQ-WSEcWSp97TIC230m8Gc7monpq7S5hgm40wV4OrsGdeTjmW9wBqiJmcLLzYBLf7BNGHFqrTY"/>
+</div>
+<div class="flex-grow">
+<p class="text-body-sm font-bold">Tortillas de maíz azul</p>
+<div class="flex items-center justify-between">
+<p class="text-[10px] text-on-surface-variant">Meta: 400 Unidades</p>
+<span class="text-[10px] font-bold text-secondary">Media</span>
+</div>
+</div>
+</div>
+<!-- Prep Item -->
+<div class="flex items-center gap-sm p-sm bg-surface-container-low rounded-xl border border-transparent hover:border-outline-variant transition-all cursor-pointer group">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Salsa" class="w-full h-full object-cover" data-alt="A vibrant, close-up shot of freshly prepared salsa verde in a stone molcajete, showing chunks of tomatillo, onion, and cilantro. The lighting is vibrant and high-contrast, emphasizing freshness and culinary craft in a modern Mexican restaurant environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPj32tIQKfq8CJtanewNRmm7MCa6tZbB32LaAK-uiauHVMQJJTwuXdpol5f6_44pZ5v33ro5yA6FTWU4P1OnMIs4rZ6xuAFh3b8xaxLozGsA7_r2MANNVZqvvPhQVZ72QV0daIBQrX1tCyAXmMy_l1uk-QIPO8nWob5Lp5fpk5op1bG6NxJkN0nJ04IFo3EwD3kNMOaIV3omQnp2JTo3sB4xJjvT4Tyt2hbD7LY7_n0rH72_d92QY-netk_qXxD6ahy6I5Iw4i_sU"/>
+</div>
+<div class="flex-grow">
+<p class="text-body-sm font-bold">Salsa de tomatillo</p>
+<div class="flex items-center justify-between">
+<p class="text-[10px] text-on-surface-variant">Meta: 8 Litros</p>
+<span class="text-[10px] font-bold text-on-surface-variant">Rutina</span>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-md text-primary font-label-md py-sm border border-primary/20 rounded-xl hover:bg-primary/5 transition-colors">
+                            Ver Prep List Completa
+                        </button>
+</section>
+<!-- AI Suggestion Alert -->
+<div class="bg-gradient-to-br from-[#B9532A] to-[#9A3412] p-md rounded-xl text-white shadow-lg relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[100px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<h4 class="font-headline-sm text-label-md mb-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">psychology</span>
+                            Copiloto AI Insight
+                        </h4>
+<p class="text-[13px] leading-relaxed opacity-90">
+                            Detectamos un incremento del 15% en reservas para el Miércoles. Sugerimos adelantar la preparación de 4kg extra de proteína para evitar cuellos de botella.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple micro-interaction for rows
+        document.querySelectorAll('.group').forEach(row => {
+            row.addEventListener('click', () => {
+                row.classList.toggle('bg-primary/5');
+            });
+        });
+    </script>
+</body></html>

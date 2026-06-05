@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "surface-container": "#f0edf1",
+                    "surface-bright": "#fbf8fc",
+                    "on-secondary-fixed": "#2a1700",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#59413b",
+                    "surface-dim": "#dcd9dd",
+                    "primary-fixed-dim": "#ffb5a0",
+                    "on-background": "#1b1b1e",
+                    "on-tertiary-fixed-variant": "#842503",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#c2512d",
+                    "surface-variant": "#e4e1e6",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#3a0a00",
+                    "tertiary": "#a23917",
+                    "secondary-container": "#fea619",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#a93107",
+                    "inverse-on-surface": "#f3f0f4",
+                    "on-primary-fixed": "#3b0a00",
+                    "surface-container-high": "#eae7eb",
+                    "outline-variant": "#e1bfb6",
+                    "outline": "#8d7169",
+                    "tertiary-fixed": "#ffdbd1",
+                    "background": "#fbf8fc",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1b1b1e",
+                    "surface-container-highest": "#e4e1e6",
+                    "on-secondary-container": "#684000",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#ac340a",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "secondary-fixed": "#ffddb8",
+                    "on-primary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "on-primary-fixed-variant": "#862200",
+                    "primary-container": "#cb4921",
+                    "surface-container-low": "#f6f2f7",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb59f",
+                    "surface": "#fbf8fc",
+                    "secondary": "#855300",
+                    "primary-fixed": "#ffdbd1",
+                    "inverse-primary": "#ffb5a0",
+                    "on-tertiary-container": "#fffbff",
+                    "inverse-surface": "#303033"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "3rem",
+                    "sm": "1rem",
+                    "md": "1.5rem",
+                    "xs": "0.5rem",
+                    "margin-desktop": "40px",
+                    "base": "4px",
+                    "lg": "2rem",
+                    "margin-mobile": "16px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-md": ["Lexend"],
+                    "numeral-xl": ["Lexend"],
+                    "headline-sm": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .bento-card {
+            border-left: 4px solid;
+        }
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scroll-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 glass-panel border-b border-outline-variant/30 shadow-sm h-16 flex justify-between items-center px-margin-mobile">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-outline-variant/50">
+<img alt="Manager Profile" class="w-full h-full object-cover" data-alt="A professional close-up portrait of a Latin American restaurant manager wearing a clean chef coat. The lighting is warm and natural, suggesting a high-end culinary environment. The background shows a soft-focus professional kitchen with copper accents and warm terracotta walls, maintaining the Copiloto brand aesthetic of culinary warmth and operational excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9LfPsU_07a9wO-Z9-M4pev9Pd3kKjecrB8I3hHs2jckzfo6G4W5sG9sgcuOWQHBgFTxAPw4JTbObQfO0UqHAbbFKW9CYPIpuuSx4yavLgk1IGP1gRaeAQco8mRx3l_hphexqQxAIwNRQCT4QqR2rH5s_g3pRn6nJaUfE-OV23fZ2Xb5coGFBPJZD-XDRnRNPidkciF3l_NocjrrZwmNk-ALM3Y5SYm5sUDF4dOx9SOA84S5qQV1o-w0W40-48QgSC49u-SF4BECQ"/>
+</div>
+<span class="font-display-md text-headline-sm text-primary tracking-tight">Copiloto</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center text-primary active:scale-95 transition-transform hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined">terminal</span>
+</button>
+</header>
+<main class="pt-20 px-margin-mobile space-y-md">
+<!-- Search & Filter Area -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md" placeholder="Buscar insumos o proveedores..." type="text"/>
+</div>
+<!-- Copiloto AI: Oportunidades de Ahorro -->
+<section class="space-y-sm">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h2 class="font-display-md text-headline-sm text-on-surface">Oportunidades Copiloto</h2>
+</div>
+<div class="overflow-x-auto flex gap-sm scroll-hide py-1">
+<div class="min-w-[280px] bg-gradient-to-br from-tertiary to-primary p-md rounded-xl text-white shadow-lg flex flex-col justify-between active:scale-95 transition-transform">
+<div class="space-y-xs">
+<span class="text-label-md bg-white/20 px-2 py-0.5 rounded-full backdrop-blur-sm">AHORRO 12%</span>
+<p class="font-display-md text-body-lg font-bold">Aceite de Canasta - Bidón 20L</p>
+<p class="text-body-sm text-white/80 leading-tight">Proveedor "El Grano" bajó precios por excedente de stock. Vence en 48h.</p>
+</div>
+<button class="mt-md bg-secondary-container text-on-secondary-fixed font-bold py-2 rounded-lg text-label-md">Aprovechar Ahora</button>
+</div>
+<div class="min-w-[280px] bg-white border border-tertiary/20 p-md rounded-xl shadow-sm flex flex-col justify-between active:scale-95 transition-transform bento-card border-l-secondary-container">
+<div class="space-y-xs">
+<span class="text-label-md text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_down</span> SMART BUY
+                        </span>
+<p class="font-display-md text-body-lg font-bold text-on-surface">Aguacate Hass Premium</p>
+<p class="text-body-sm text-on-surface-variant leading-tight">Combinar pedido de Limón y Aguacate con 'Distribuidora Sol' ahorra $450 MXN en envío.</p>
+</div>
+<button class="mt-md border border-primary text-primary font-bold py-2 rounded-lg text-label-md hover:bg-primary/5">Ver Combinación</button>
+</div>
+</div>
+</section>
+<!-- Comparador de Precios Clave -->
+<section class="space-y-sm">
+<div class="flex justify-between items-center px-1">
+<h2 class="font-display-md text-headline-sm text-on-surface">Comparador de Precios</h2>
+<button class="text-primary font-bold text-label-md">Ver todos</button>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-left text-body-sm border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant/30 text-on-surface-variant">
+<tr>
+<th class="px-4 py-3 font-semibold">Insumo</th>
+<th class="px-4 py-3 font-semibold text-right">Mejor Precio</th>
+<th class="px-2 py-3"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<tr class="active:bg-surface-container-low transition-colors">
+<td class="px-4 py-4">
+<p class="font-bold text-on-surface">Harina de Trigo (Kg)</p>
+<p class="text-xs text-on-surface-variant">Promedio: $22.50</p>
+</td>
+<td class="px-4 py-4 text-right">
+<p class="text-tertiary font-bold">$18.90</p>
+<p class="text-[10px] text-on-surface-variant">Molinos del Sur</p>
+</td>
+<td class="px-2 py-4">
+<span class="material-symbols-outlined text-outline text-lg">chevron_right</span>
+</td>
+</tr>
+<tr class="active:bg-surface-container-low transition-colors">
+<td class="px-4 py-4">
+<p class="font-bold text-on-surface">Huevo Blanco (30 pz)</p>
+<p class="text-xs text-on-surface-variant">Promedio: $115.00</p>
+</td>
+<td class="px-4 py-4 text-right">
+<p class="text-tertiary font-bold">$102.00</p>
+<p class="text-[10px] text-on-surface-variant">Granja Central</p>
+</td>
+<td class="px-2 py-4">
+<span class="material-symbols-outlined text-outline text-lg">chevron_right</span>
+</td>
+</tr>
+<tr class="active:bg-surface-container-low transition-colors">
+<td class="px-4 py-4">
+<p class="font-bold text-on-surface">Pechuga de Pollo</p>
+<p class="text-xs text-on-surface-variant">Promedio: $140.00</p>
+</td>
+<td class="px-4 py-4 text-right">
+<p class="text-on-surface font-bold">$138.50</p>
+<p class="text-[10px] text-on-surface-variant">Carnes Selectas</p>
+</td>
+<td class="px-2 py-4">
+<span class="material-symbols-outlined text-outline text-lg">chevron_right</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Catálogo de Proveedores Favoritos -->
+<section class="space-y-sm">
+<div class="flex justify-between items-center px-1">
+<h2 class="font-display-md text-headline-sm text-on-surface">Proveedores Top</h2>
+<span class="material-symbols-outlined text-primary">filter_list</span>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<!-- Provider Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 p-sm rounded-xl shadow-sm flex flex-col gap-2 relative">
+<button class="absolute top-2 right-2 text-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden">
+<img alt="Supplier logo" class="w-full h-full object-cover" data-alt="A macro photograph of vibrant, fresh organic vegetables at a local market stall. The colors are rich and saturated, featuring deep reds of tomatoes and lush greens of spinach. The lighting is bright and clear, emphasizing texture and quality, reflecting the Copiloto brand's focus on freshness and culinary excellence in the restaurant industry." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTel6x9mmwZ5oPcWEk7KGwOEcsMUr5tn6fddLbODFaNX9LuR1xikQznFLnZmfLgIG2r2Sc_tuFdtKRZzVPfUS--2DMRjZtDjE4XOVxDJOk90RigpXWjBWfqvTJ8PGXjJfVzFE_1p2vVVwgXzwA6Eslowy6BIQD7McWFCl151nz9E8rEluFKnKuTXthb2IwVPWlf-W563FElxzj6huyPZHfqxG5eFiBD17wniS9eN0H3tWbz33ClPnw3rQFT4OSnLuxP18lSM6mVQ8"/>
+</div>
+<div>
+<p class="font-bold text-body-sm leading-tight">Frutas Don Pablo</p>
+<div class="flex items-center gap-1 text-[10px] text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-xs text-secondary-container" style="font-variation-settings: 'FILL' 1;">grade</span>
+<span>4.9 (120 pedidos)</span>
+</div>
+</div>
+<div class="mt-1">
+<span class="text-[10px] px-2 py-0.5 bg-green-100 text-green-800 rounded-full font-bold">ENTREGA MAÑANA</span>
+</div>
+</div>
+<!-- Provider Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 p-sm rounded-xl shadow-sm flex flex-col gap-2 relative">
+<button class="absolute top-2 right-2 text-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden">
+<img alt="Supplier logo" class="w-full h-full object-cover" data-alt="A clean, minimalist shot of high-quality kitchen pantry staples like artisan pasta and olive oil bottles. The scene is illuminated by soft, bright daylight in a modern, clean kitchen space with a focus on pristine white surfaces and warm wood accents, representing the premium operational standards of the Copiloto system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCszw5ceUO40dhZEp_bOVJcGq_o87eN5SS4IhmxEY2ZryrPvFhC1ZJb33-vR3rabo3rhGvYKofVtma_4Z--0RkI8TS5K1zQF9fY-ew61RbCkpp6GFNWWXAGYsc2ONVofewSSg51QFBDLsbBq9mgC8v4NGgCTfrVYku0oe8quLFhkFqixiVJB9JXbif5o0FnGnZ9sNpzZm7Ml5HuwamqgGZnsYbMLxVCHkN9abkq5eTvZ3Tp1DQxG0zMtlkITW0DV295mCthMagTWO0"/>
+</div>
+<div>
+<p class="font-bold text-body-sm leading-tight">Abarrotes La Paz</p>
+<div class="flex items-center gap-1 text-[10px] text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-xs text-secondary-container" style="font-variation-settings: 'FILL' 1;">grade</span>
+<span>4.7 (85 pedidos)</span>
+</div>
+</div>
+<div class="mt-1">
+<span class="text-[10px] px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-full font-bold">CIERRA EN 2H</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Marketplace Categories -->
+<section class="space-y-sm">
+<h2 class="font-display-md text-headline-sm text-on-surface px-1">Explorar por Categoría</h2>
+<div class="grid grid-cols-4 gap-xs text-center">
+<div class="space-y-1">
+<div class="w-full aspect-square bg-primary/10 rounded-xl flex items-center justify-center text-primary active:bg-primary/20">
+<span class="material-symbols-outlined text-2xl">eco</span>
+</div>
+<p class="text-[10px] font-semibold text-on-surface-variant">Fresco</p>
+</div>
+<div class="space-y-1">
+<div class="w-full aspect-square bg-secondary-container/10 rounded-xl flex items-center justify-center text-secondary active:bg-secondary-container/20">
+<span class="material-symbols-outlined text-2xl">liquor</span>
+</div>
+<p class="text-[10px] font-semibold text-on-surface-variant">Bebidas</p>
+</div>
+<div class="space-y-1">
+<div class="w-full aspect-square bg-tertiary-container/10 rounded-xl flex items-center justify-center text-tertiary active:bg-tertiary-container/20">
+<span class="material-symbols-outlined text-2xl">sanitizer</span>
+</div>
+<p class="text-[10px] font-semibold text-on-surface-variant">Limpieza</p>
+</div>
+<div class="space-y-1">
+<div class="w-full aspect-square bg-outline-variant/20 rounded-xl flex items-center justify-center text-outline active:bg-outline-variant/40">
+<span class="material-symbols-outlined text-2xl">kitchen</span>
+</div>
+<p class="text-[10px] font-semibold text-on-surface-variant">Equipo</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 glass-panel border-t border-outline-variant/30 flex justify-around items-center px-xs pb-safe z-50">
+<button class="flex flex-col items-center justify-center text-on-surface-variant active:scale-90 duration-200 hover:text-primary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Operaciones</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant active:scale-90 duration-200 hover:text-primary">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Inventario</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-md text-label-md">Copiloto</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant active:scale-90 duration-200 hover:text-primary">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-md text-label-md">CRM</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant active:scale-90 duration-200 hover:text-primary">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-md text-label-md">Staff</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions for scrolling effects
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-md');
+                header.classList.replace('bg-surface/86', 'bg-white/95');
+            } else {
+                header.classList.remove('shadow-md');
+                header.classList.replace('bg-white/95', 'bg-surface/86');
+            }
+        });
+
+        // Simple button active state feedback
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('touchstart', () => {
+                btn.style.opacity = '0.7';
+            });
+            btn.addEventListener('touchend', () => {
+                btn.style.opacity = '1';
+            });
+        });
+    </script>
+</body></html>

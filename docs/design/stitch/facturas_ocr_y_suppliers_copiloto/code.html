@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copiloto - Facturación OCR</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Lexend:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-highest": "#e4e1e6",
+                "error-container": "#ffdad6",
+                "on-surface": "#1b1b1e",
+                "on-error": "#ffffff",
+                "secondary-fixed-dim": "#ffb95f",
+                "secondary-fixed": "#ffddb8",
+                "secondary-container": "#fea619",
+                "on-secondary-fixed-variant": "#653e00",
+                "surface-container-high": "#eae7eb",
+                "on-primary-fixed-variant": "#862200",
+                "tertiary-fixed-dim": "#ffb59f",
+                "on-tertiary": "#ffffff",
+                "tertiary-fixed": "#ffdbd1",
+                "on-error-container": "#93000a",
+                "surface-dim": "#dcd9dd",
+                "surface-container": "#f0edf1",
+                "on-primary-container": "#fffbff",
+                "tertiary": "#a23917",
+                "primary": "#a93107",
+                "on-surface-variant": "#59413b",
+                "outline": "#8d7169",
+                "on-secondary-container": "#684000",
+                "surface": "#fbf8fc",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed": "#3b0a00",
+                "primary-fixed": "#ffdbd1",
+                "surface-variant": "#e4e1e6",
+                "primary-container": "#cb4921",
+                "background": "#fbf8fc",
+                "inverse-on-surface": "#f3f0f4",
+                "on-tertiary-container": "#fffbff",
+                "outline-variant": "#e1bfb6",
+                "on-primary": "#ffffff",
+                "tertiary-container": "#c2512d",
+                "inverse-surface": "#303033",
+                "on-secondary": "#ffffff",
+                "surface-tint": "#ac340a",
+                "primary-fixed-dim": "#ffb5a0",
+                "surface-bright": "#fbf8fc",
+                "error": "#ba1a1a",
+                "surface-container-low": "#f6f2f7",
+                "on-secondary-fixed": "#2a1700",
+                "on-tertiary-fixed-variant": "#842503",
+                "on-tertiary-fixed": "#3a0a00",
+                "secondary": "#855300",
+                "inverse-primary": "#ffb5a0",
+                "on-background": "#1b1b1e"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "base": "4px",
+                "lg": "2rem",
+                "sm": "1rem",
+                "margin-mobile": "16px",
+                "gutter": "24px",
+                "md": "1.5rem",
+                "margin-desktop": "40px",
+                "xs": "0.5rem",
+                "xl": "3rem"
+            },
+            "fontFamily": {
+                "headline-lg-mobile": ["Lexend"],
+                "headline-sm": ["Lexend"],
+                "body-md": ["Inter"],
+                "body-sm": ["Inter"],
+                "numeral-xl": ["Lexend"],
+                "body-lg": ["Inter"],
+                "display-md": ["Lexend"],
+                "label-md": ["Inter"],
+                "headline-lg": ["Lexend"],
+                "display-lg": ["Lexend"]
+            },
+            "fontSize": {
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+      }
+      .ocr-highlight {
+        background-color: rgba(245, 158, 11, 0.2);
+        border: 1px solid #F59E0B;
+        border-radius: 2px;
+        position: absolute;
+      }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #e1bfb6; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-[64px] z-50 flex justify-between items-center px-margin-desktop bg-white/86 backdrop-blur-xl border-b border-surface-variant shadow-sm">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md font-bold text-primary">Copiloto</span>
+<nav class="hidden md:flex gap-md ml-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#">Tablero</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#">Co-piloto</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-2 font-body-md" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#">Recetas</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container-low rounded-full cursor-pointer">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+</div>
+<img alt="Monica" class="w-10 h-10 rounded-full object-cover border-2 border-primary-fixed shadow-sm" data-alt="A professional headshot of a female restaurant manager with a warm smile, set against a blurred modern kitchen background with warm lighting. The aesthetic is professional yet friendly, matching a high-end light-mode UI design with clean, soft-focus details and natural colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAACMKz3mx7ioiZDrP4nNsajEg1QYJjwYiSfxC-3odOWjSeN0ewC5MZg7jLKAl4t8QjsyAIFsYT7xodvFwB-_ics5VzuOlITkFg-i-gNUaLQyRgjTR3tYlB19UPPP1VRH3M5wEut_Wn0zdS9YhMf8VWFlHQjxViu2IVXQZKXlZef4cMvZhAsg_ILzOb00AfuYqCI_B23q01L6dtHZOy3QJ0xCgSeOQoLMeK3nagTGqXSNsjtKWuM-jBPtYyP-B0Mfjrfv-gqCIj2is"/>
+</div>
+</header>
+<!-- SideNavBar (Right) -->
+<aside class="fixed right-0 top-[64px] h-[calc(100vh-64px)] w-80 z-40 bg-surface-container-lowest border-l border-surface-variant flex flex-col py-lg gap-base shadow-lg overflow-y-auto">
+<div class="px-sm mb-lg">
+<div class="flex items-center gap-sm p-sm rounded-xl bg-surface-container-low">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container font-bold">RN</div>
+<div>
+<p class="font-label-md text-label-md">Roma Norte</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gerente de Turno</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2 transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Huespedes</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2 transition-all" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">KPIs</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm bg-primary-container text-on-primary-container rounded-xl mx-2 shadow-sm" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Facturas OCR</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</nav>
+<div class="mt-auto px-sm pt-lg">
+<button class="w-full py-md px-lg bg-gradient-to-r from-tertiary to-primary text-white rounded-xl font-label-md flex items-center justify-center gap-sm shadow-md hover:scale-[1.02] active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                Solicitar IA Insight
+            </button>
+<a class="flex items-center gap-sm px-md py-sm mt-md text-error hover:bg-error-container/20 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Cerrar Sesión</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="pt-[64px] pr-80 h-screen flex overflow-hidden">
+<!-- Left: Facturas List -->
+<section class="w-1/3 min-w-[360px] bg-surface flex flex-col border-r border-surface-variant">
+<div class="p-md bg-white border-b border-surface-variant">
+<h2 class="font-headline-sm text-headline-sm mb-base text-on-surface">Facturas Pendientes</h2>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-body-sm transition-all" placeholder="Buscar proveedor..." type="text"/>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-sm space-y-sm">
+<!-- Sigma Alimentos (Active) -->
+<div class="p-md rounded-xl bg-white border-l-4 border-primary shadow-sm hover:shadow-md transition-all cursor-pointer ring-1 ring-surface-variant">
+<div class="flex justify-between items-start mb-base">
+<span class="font-label-md text-label-md">Sigma Alimentos</span>
+<span class="px-2 py-1 bg-primary-fixed text-on-primary-fixed text-[10px] font-bold rounded-full uppercase">Detectado</span>
+</div>
+<div class="flex justify-between items-end">
+<div class="text-on-surface-variant text-[12px]">
+<p>Ref: INV-2023-098</p>
+<p>Fecha: 24 May 2024</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-primary font-body-lg">$12,450.00</p>
+</div>
+</div>
+</div>
+<!-- Lacteos Polanco -->
+<div class="p-md rounded-xl bg-white border-l-4 border-outline-variant hover:border-primary/50 transition-all cursor-pointer opacity-80">
+<div class="flex justify-between items-start mb-base">
+<span class="font-label-md text-label-md">Lacteos Polanco</span>
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant text-[10px] font-bold rounded-full uppercase">Pendiente</span>
+</div>
+<div class="flex justify-between items-end">
+<div class="text-on-surface-variant text-[12px]">
+<p>Ref: LP-8821</p>
+<p>Fecha: 23 May 2024</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-on-surface font-body-lg">$5,890.50</p>
+</div>
+</div>
+</div>
+<!-- Pan Artesanal MX -->
+<div class="p-md rounded-xl bg-white border-l-4 border-outline-variant hover:border-primary/50 transition-all cursor-pointer opacity-80">
+<div class="flex justify-between items-start mb-base">
+<span class="font-label-md text-label-md">Pan Artesanal MX</span>
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant text-[10px] font-bold rounded-full uppercase">Pendiente</span>
+</div>
+<div class="flex justify-between items-end">
+<div class="text-on-surface-variant text-[12px]">
+<p>Ref: FAC-0021</p>
+<p>Fecha: 22 May 2024</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-on-surface font-body-lg">$2,100.00</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right: Detail Panel -->
+<section class="flex-1 flex flex-col bg-background relative">
+<div class="flex-1 flex flex-row overflow-hidden">
+<!-- PDF Preview -->
+<div class="w-1/2 p-md bg-surface-container flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Preview del Documento</h3>
+<div class="flex gap-xs">
+<button class="p-1 hover:bg-white rounded transition-colors"><span class="material-symbols-outlined text-[20px]">zoom_in</span></button>
+<button class="p-1 hover:bg-white rounded transition-colors"><span class="material-symbols-outlined text-[20px]">zoom_out</span></button>
+</div>
+</div>
+<div class="flex-1 bg-white rounded-lg shadow-inner overflow-hidden relative border border-outline-variant">
+<!-- Simulated PDF Image -->
+<div class="absolute inset-0 bg-white p-lg font-mono text-[10px] text-gray-400 select-none">
+<div class="border-b-2 border-gray-100 pb-md mb-md flex justify-between">
+<div>
+<h4 class="text-[14px] font-bold text-gray-800">SIGMA ALIMENTOS S.A. DE C.V.</h4>
+<p>AV. CONSTITUYENTES 100, CDMX</p>
+</div>
+<div class="text-right">
+<p>FACTURA: INV-2023-098</p>
+<p>FECHA: 24/05/2024</p>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-sm border-b border-gray-100 mb-base pb-base font-bold text-gray-600">
+<span>PRODUCTO</span>
+<span>CANT</span>
+<span>P.U.</span>
+<span>TOTAL</span>
+</div>
+<div class="space-y-md">
+<div class="grid grid-cols-4 relative py-1">
+<span>JAMON PECHUGA PAVO</span>
+<span>20 KG</span>
+<span>$180.00</span>
+<span>$3,600.00</span>
+<!-- OCR Highlights -->
+<div class="ocr-highlight" style="top: 0; left: 0; width: 60%; height: 100%;"></div>
+<div class="ocr-highlight" style="top: 0; left: 65%; width: 10%; height: 100%;"></div>
+</div>
+<div class="grid grid-cols-4 relative py-1">
+<span>AGUACATE HASS 1RA</span>
+<span>30 KG</span>
+<span>$65.00</span>
+<span>$1,950.00</span>
+<div class="ocr-highlight" style="top: 0; left: 0; width: 60%; height: 100%;"></div>
+</div>
+<div class="grid grid-cols-4 relative py-1">
+<span>CEBOLLA BLANCA</span>
+<span>15 KG</span>
+<span>$32.00</span>
+<span>$480.00</span>
+<div class="ocr-highlight" style="top: 0; left: 0; width: 60%; height: 100%;"></div>
+</div>
+</div>
+<div class="mt-lg pt-lg border-t-2 border-gray-100">
+<p class="text-right font-bold text-gray-800 text-[12px]">TOTAL: $12,450.00</p>
+</div>
+</div>
+<!-- Glassy Overlay for AI Visual -->
+<div class="absolute inset-0 bg-primary/5 pointer-events-none flex items-center justify-center">
+<div class="w-full h-[2px] bg-secondary shadow-[0_0_10px_#F59E0B] animate-[scan_3s_infinite] absolute"></div>
+</div>
+</div>
+</div>
+<!-- Editable Data List -->
+<div class="w-1/2 p-md flex flex-col bg-white overflow-hidden border-l border-surface-variant">
+<div class="flex items-center gap-base mb-md">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Extracción IA</h3>
+</div>
+<div class="flex-1 overflow-y-auto space-y-md">
+<!-- Item 1: Aguacate -->
+<div class="p-sm rounded-xl border border-outline-variant bg-surface-container-lowest">
+<div class="flex justify-between items-center mb-xs">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Nombre del Producto</label>
+<button class="text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</div>
+<input class="w-full bg-transparent border-none font-label-md text-label-md p-0 focus:ring-0" type="text" value="Aguacate Hass 1ra"/>
+<div class="grid grid-cols-2 gap-sm mt-sm">
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Cantidad (KG)</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded p-1 text-sm font-body-sm" type="number" value="30"/>
+</div>
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Precio Unit</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded p-1 text-sm font-body-sm" type="text" value="$65.00"/>
+</div>
+</div>
+</div>
+<!-- Item 2: Cebolla (With Alert) -->
+<div class="p-sm rounded-xl border border-secondary bg-secondary-container/5 relative overflow-hidden">
+<div class="absolute top-0 right-0 px-2 py-1 bg-secondary text-on-secondary-fixed text-[10px] font-bold rounded-bl-lg">
+                                ALERTA PRECIO
+                            </div>
+<div class="flex justify-between items-center mb-xs">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Nombre del Producto</label>
+</div>
+<input class="w-full bg-transparent border-none font-label-md text-label-md p-0 focus:ring-0" type="text" value="Cebolla Blanca"/>
+<div class="grid grid-cols-2 gap-sm mt-sm">
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Cantidad (KG)</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded p-1 text-sm font-body-sm" type="number" value="15"/>
+</div>
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Precio Unit</label>
+<input class="w-full bg-surface-container-low border-secondary border rounded p-1 text-sm font-body-sm text-secondary font-bold" type="text" value="$32.00"/>
+</div>
+</div>
+<div class="mt-sm p-xs bg-secondary-container/20 rounded-lg flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary text-[16px]">trending_up</span>
+<p class="text-[11px] text-on-secondary-container font-bold">El precio subió un 11% respecto a la semana pasada.</p>
+</div>
+</div>
+<!-- Item 3: Jamon -->
+<div class="p-sm rounded-xl border border-outline-variant bg-surface-container-lowest">
+<div class="flex justify-between items-center mb-xs">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Nombre del Producto</label>
+</div>
+<input class="w-full bg-transparent border-none font-label-md text-label-md p-0 focus:ring-0" type="text" value="Jamón Pechuga de Pavo"/>
+<div class="grid grid-cols-2 gap-sm mt-sm">
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Cantidad (KG)</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded p-1 text-sm font-body-sm" type="number" value="20"/>
+</div>
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Precio Unit</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded p-1 text-sm font-body-sm" type="text" value="$180.00"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Toolbar -->
+<footer class="h-24 bg-white border-t border-surface-variant px-lg flex items-center justify-between shadow-[0_-4px_10px_rgba(0,0,0,0.03)] z-10">
+<div class="flex items-center gap-xl">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Subtotal</span>
+<span class="font-label-md text-label-md text-on-surface">$10,732.76</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">IVA (16%)</span>
+<span class="font-label-md text-label-md text-on-surface">$1,717.24</span>
+</div>
+<div class="flex flex-col px-md border-l border-surface-variant">
+<span class="text-[10px] font-bold text-primary uppercase">Total Factura</span>
+<span class="font-numeral-xl text-primary">$12,450.00</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-sm px-lg py-md rounded-xl border-2 border-[#25D366] text-[#25D366] font-label-md hover:bg-[#25D366]/5 transition-all">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg>
+                        Pedir Aclaración
+                    </button>
+<button class="px-xl py-md bg-primary text-white rounded-xl font-label-md shadow-lg shadow-primary/20 hover:bg-primary-container transition-all hover:translate-y-[-2px]">
+                        Aprobar y Registrar
+                    </button>
+</div>
+</footer>
+</section>
+</main>
+<style>
+      @keyframes scan {
+        0% { top: 0; opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { top: 100%; opacity: 0; }
+      }
+    </style>
+<script>
+        // Simple interactive feedback
+        document.querySelectorAll('.ocr-highlight').forEach(highlight => {
+            highlight.addEventListener('mouseover', () => {
+                highlight.style.backgroundColor = 'rgba(245, 158, 11, 0.4)';
+                highlight.style.cursor = 'help';
+            });
+            highlight.addEventListener('mouseout', () => {
+                highlight.style.backgroundColor = 'rgba(245, 158, 11, 0.2)';
+            });
+        });
+
+        // Toggle focus state visual
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('ring-2', 'ring-primary/20');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.classList.remove('ring-2', 'ring-primary/20');
+            });
+        });
+    </script>
+</body></html>

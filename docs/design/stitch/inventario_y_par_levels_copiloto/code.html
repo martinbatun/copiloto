@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Inventario | Copiloto AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#1b1b1e",
+                    "primary-fixed-dim": "#ffb5a0",
+                    "on-primary-container": "#fffbff",
+                    "on-surface-variant": "#59413b",
+                    "surface-bright": "#fbf8fc",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#e1bfb6",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#e4e1e6",
+                    "primary": "#a93107",
+                    "on-tertiary-fixed": "#3a0a00",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#862200",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#f0edf1",
+                    "secondary-fixed": "#ffddb8",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "tertiary": "#a23917",
+                    "secondary-container": "#fea619",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#c2512d",
+                    "tertiary-fixed": "#ffdbd1",
+                    "inverse-on-surface": "#f3f0f4",
+                    "on-primary-fixed": "#3b0a00",
+                    "background": "#fbf8fc",
+                    "on-surface": "#1b1b1e",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e4e1e6",
+                    "primary-fixed": "#ffdbd1",
+                    "on-tertiary-container": "#fffbff",
+                    "secondary": "#855300",
+                    "outline": "#8d7169",
+                    "surface-tint": "#ac340a",
+                    "inverse-primary": "#ffb5a0",
+                    "surface-dim": "#dcd9dd",
+                    "surface-container-high": "#eae7eb",
+                    "tertiary-fixed-dim": "#ffb59f",
+                    "surface": "#fbf8fc",
+                    "on-secondary-container": "#684000",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#f6f2f7",
+                    "primary-container": "#cb4921",
+                    "on-tertiary-fixed-variant": "#842503",
+                    "on-secondary-fixed": "#2a1700",
+                    "inverse-surface": "#303033"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "2rem",
+                    "margin-mobile": "16px",
+                    "sm": "1rem",
+                    "base": "4px",
+                    "xs": "0.5rem",
+                    "md": "1.5rem",
+                    "gutter": "24px",
+                    "xl": "3rem",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Lexend"],
+                    "numeral-xl": ["Lexend"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "display-md": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #a93107 0%, #862200 100%);
+        }
+        .ai-card {
+            background: linear-gradient(to bottom right, #ffffff, #fffbeb);
+            border-left: 4px solid #f59e0b;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e1bfb6;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-[#F8F6F3] text-on-surface font-body-md min-h-screen">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full h-[64px] z-50 glass-nav border-b border-surface-variant flex justify-between items-center px-margin-desktop shadow-sm">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-[24px] font-bold text-primary tracking-tight">Copiloto</span>
+<div class="hidden md:flex gap-sm ml-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Tablero</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Forecast</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Schedule</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-2 font-label-md text-label-md" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Recetas</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative group">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full border-2 border-white"></span>
+</div>
+<div class="flex items-center gap-xs">
+<img alt="Monica" class="w-8 h-8 rounded-full border border-surface-variant" data-alt="A professional close-up portrait of a female restaurant manager named Monica with a warm, friendly expression. She is in a brightly lit, modern commercial kitchen environment with soft bokeh background. The lighting is high-key and clean, matching a premium light-mode UI aesthetic with natural skin tones and a focus on operational excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv9lOHIy8Q3WzRW1IaTFIxknEuLxiHu3bpjlhEq03KGDR3F8Mf1dnhImfYdocomAc0NvtVwmxpf6zyJePhDf03xKvSLmu0DlSa0uIzwcAq3zD8wZja50eyg1zdsJYz4k2F6h5AulkUDhzrX_JpMQDVyEoifvShlySIrAMOlasdQ771qMsFe5ftrnqmQxf4BMHl_0roQGCWkRV9NFclLfGHXSMeGGscrPTyQ3MdfLX5E7FPaxciAP2sxRTJrtNJ_BBF1t86LTVsc0I"/>
+<span class="font-label-md text-label-md hidden sm:block">Monica</span>
+</div>
+</div>
+</nav>
+<!-- Side Navigation Bar (Right) -->
+<aside class="fixed right-0 top-[64px] h-[calc(100vh-64px)] w-80 z-40 bg-surface-container-lowest border-l border-surface-variant flex flex-col py-lg gap-base shadow-lg hidden lg:flex">
+<div class="px-md mb-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Roma Norte</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gerente de Turno</p>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-sm px-md py-3 text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Huespedes</span>
+</a>
+<a class="flex items-center gap-sm px-md py-3 text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">KPIs</span>
+</a>
+<a class="flex items-center gap-sm px-md py-3 bg-primary-container text-on-primary-container mx-2 rounded-xl shadow-sm" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Inventario</span>
+</a>
+<a class="flex items-center gap-sm px-md py-3 text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+<a class="flex items-center gap-sm px-md py-3 text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Ayuda</span>
+</a>
+</div>
+<div class="px-md mt-auto pt-lg border-t border-surface-variant/30">
+<button class="ai-gradient w-full py-md rounded-xl text-white font-label-md flex items-center justify-center gap-sm shadow-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                Solicitar IA Insight
+            </button>
+<button class="w-full mt-base py-md text-error font-label-md flex items-center justify-center gap-sm hover:bg-error-container/20 rounded-xl transition-colors">
+<span class="material-symbols-outlined">logout</span>
+                Cerrar Sesión
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-[64px] lg:mr-80 min-h-screen px-margin-mobile md:px-margin-desktop py-lg">
+<!-- Header Section -->
+<header class="mb-xl">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Inventario · Roma Norte</h1>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs">
+                142 SKUs activos <span class="text-primary font-bold">· 8 alertas</span> · merma del mes 2.1% (objetivo 2.5%)
+            </p>
+</header>
+<!-- KPI Strip -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm">
+<p class="text-on-surface-variant font-label-md text-label-md">Valor Total Stock</p>
+<div class="flex items-baseline gap-xs">
+<span class="font-numeral-xl text-numeral-xl text-on-surface">$184,720</span>
+</div>
+<div class="mt-xs text-primary font-bold text-sm">+3.2% vs semana pasada</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm border-l-4 border-l-tertiary">
+<p class="text-on-surface-variant font-label-md text-label-md">Merma Actual</p>
+<div class="flex items-baseline gap-xs">
+<span class="font-numeral-xl text-numeral-xl text-tertiary">2.1%</span>
+</div>
+<div class="mt-xs text-on-surface-variant text-sm">Debajo del límite (2.5%)</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm">
+<p class="text-on-surface-variant font-label-md text-label-md">Stockouts Evitados</p>
+<div class="flex items-baseline gap-xs">
+<span class="font-numeral-xl text-numeral-xl text-secondary">14</span>
+</div>
+<div class="mt-xs text-secondary font-bold text-sm">Optimización vía IA</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm border-l-4 border-l-primary">
+<p class="text-on-surface-variant font-label-md text-label-md">SKUs en Alerta</p>
+<div class="flex items-baseline gap-xs">
+<span class="font-numeral-xl text-numeral-xl text-primary">8</span>
+</div>
+<div class="mt-xs text-error font-bold text-sm">Requiere acción inmediata</div>
+</div>
+</div>
+<!-- Inventory Table Section -->
+<section class="bg-white rounded-xl border border-surface-variant shadow-sm mb-xl overflow-hidden">
+<div class="p-md border-b border-surface-variant flex justify-between items-center bg-surface-container-low">
+<div class="flex items-center gap-sm">
+<h2 class="font-headline-sm text-headline-sm">Control de Existencias</h2>
+<span class="bg-surface-container-highest px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Filtros Activos</span>
+</div>
+<div class="flex gap-sm">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="pl-10 pr-md py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all w-64 bg-white" placeholder="Buscar SKU o Categoría..." type="text"/>
+</div>
+<button class="bg-primary text-white px-md py-2 rounded-lg font-label-md flex items-center gap-xs hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span> Nuevo Registro
+                    </button>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50 border-b border-surface-variant">
+<th class="px-md py-4 font-label-md text-on-surface-variant">SKU</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">Categoría</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant w-48">Stock Actual</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">Par Level</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">Costo Prom.</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">Proveedor</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">Estado</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-md py-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Aguacate Hass</span>
+<span class="text-xs text-on-surface-variant">#AVO-001</span>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="bg-surface-container px-2 py-1 rounded text-xs text-on-surface-variant">Perecederos</span>
+</td>
+<td class="px-md py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-bold">10.4 kg</span>
+<span class="text-on-surface-variant">58%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-secondary h-2 rounded-full" style="width: 58%"></div>
+</div>
+</div>
+</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-xs">
+<span class="text-body-sm">12kg</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">arrow_forward</span>
+<span class="bg-secondary-container/20 text-on-secondary-container px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span> 18kg
+                                    </span>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm">$84.50 /kg</td>
+<td class="px-md py-4 text-body-sm text-on-surface-variant">Sigma Alimentos</td>
+<td class="px-md py-4">
+<span class="bg-secondary-container/10 text-secondary px-2 py-1 rounded-full text-xs font-bold">ALERTA PAR</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-md py-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Tortilla Nixtamal</span>
+<span class="text-xs text-on-surface-variant">#TOR-024</span>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="bg-surface-container px-2 py-1 rounded text-xs text-on-surface-variant">Insumos</span>
+</td>
+<td class="px-md py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-bold">24 kg</span>
+<span class="text-on-surface-variant">85%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm">30kg</td>
+<td class="px-md py-4 text-body-sm">$18.20 /kg</td>
+<td class="px-md py-4 text-body-sm text-on-surface-variant">Local Nayarit</td>
+<td class="px-md py-4">
+<span class="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-bold uppercase">Óptimo</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors bg-error-container/5">
+<td class="px-md py-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Mango Ataulfo</span>
+<span class="text-xs text-on-surface-variant">#MAN-008</span>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="bg-surface-container px-2 py-1 rounded text-xs text-on-surface-variant">Perecederos</span>
+</td>
+<td class="px-md py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-bold text-error">3.2 kg</span>
+<span class="text-error">22%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-error h-2 rounded-full" style="width: 22%"></div>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm">15kg</td>
+<td class="px-md py-4 text-body-sm">$45.00 /kg</td>
+<td class="px-md py-4 text-body-sm text-on-surface-variant">Frutas Selectas</td>
+<td class="px-md py-4">
+<div class="flex flex-col gap-1">
+<span class="bg-error text-white px-2 py-0.5 rounded-full text-[10px] font-bold text-center">BAJO PAR</span>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded-full text-[10px] font-bold text-center">CADUCA</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- AI Alerts Section -->
+<section>
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h2 class="font-headline-sm text-headline-sm">Copiloto AI Insights</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Alert 1 -->
+<div class="ai-card p-md rounded-xl shadow-sm flex justify-between items-center group hover:-translate-y-1 transition-all">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[28px]">trending_down</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Aguacate corto 13-15h</h4>
+<p class="text-body-sm text-on-surface-variant">Demanda proyectada supera stock actual por 2.4kg</p>
+</div>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-label-md hover:brightness-110 active:scale-95 transition-all text-xs">
+                        Pedir Refuerzo
+                    </button>
+</div>
+<!-- Alert 2 -->
+<div class="ai-card p-md rounded-xl shadow-sm flex justify-between items-center group hover:-translate-y-1 transition-all" style="border-left-color: #ba1a1a;">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[28px]">event_busy</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Mango caduca 2 días</h4>
+<p class="text-body-sm text-on-surface-variant">Lote #MAN-008 tiene riesgo de merma inminente</p>
+</div>
+</div>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded-lg font-label-md hover:brightness-110 active:scale-95 transition-all text-xs">
+                        Crear Especial
+                    </button>
+</div>
+<!-- Alert 3 -->
+<div class="ai-card p-md rounded-xl shadow-sm flex justify-between items-center group hover:-translate-y-1 transition-all" style="border-left-color: #855300;">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[28px]">inventory</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Tomate excedente (112%)</h4>
+<p class="text-body-sm text-on-surface-variant">Sobre-inventariado. Recomendable detener órdenes</p>
+</div>
+</div>
+<button class="border border-secondary text-secondary px-4 py-2 rounded-lg font-label-md hover:bg-secondary/10 active:scale-95 transition-all text-xs">
+                        Ajustar Par
+                    </button>
+</div>
+<!-- Alert 4 -->
+<div class="ai-card p-md rounded-xl shadow-sm flex justify-between items-center group hover:-translate-y-1 transition-all">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">payments</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Cebolla subió precio 8%</h4>
+<p class="text-body-sm text-on-surface-variant">Impacto estimado en costo de platillo: $1.20 MXN</p>
+</div>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-label-md hover:brightness-110 active:scale-95 transition-all text-xs">
+                        Ver Proveedores
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB for quick actions (Contextual) -->
+<button class="fixed bottom-8 right-margin-mobile lg:right-[360px] w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-50 group">
+<span class="material-symbols-outlined text-[24px]">qr_code_scanner</span>
+<span class="absolute right-16 bg-on-background text-white px-4 py-2 rounded-lg text-sm font-bold opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap">Scan para Inventariar</span>
+</button>
+</body></html>

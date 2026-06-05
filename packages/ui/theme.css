@@ -1,77 +1,204 @@
-/* Copiloto — tokens de diseño. Estilo "kitchen ops": confiable, oscuro
-   adaptable a claro, con un acento cálido que refuerza la idea de cocina. */
+/* Copiloto Design System
+   Material 3 tokens + helpers visuales del DS Stitch.
+   Paleta "Premium Modern": Terracotta + Saffron sobre off-white cálido,
+   tipografia dual Lexend (display) + Inter (UI). */
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222 22% 12%;
+  /* Surface */
+  --surface: #fbf8fc;
+  --surface-dim: #dcd9dd;
+  --surface-bright: #fbf8fc;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f6f2f7;
+  --surface-container: #f0edf1;
+  --surface-container-high: #eae7eb;
+  --surface-container-highest: #e4e1e6;
+  --surface-variant: #e4e1e6;
+  --surface-tint: #ac340a;
 
-  --card: 0 0% 100%;
-  --card-foreground: 222 22% 12%;
+  /* On / inverse surface */
+  --on-surface: #1b1b1e;
+  --on-surface-variant: #59413b;
+  --inverse-surface: #303033;
+  --inverse-on-surface: #f3f0f4;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 22% 12%;
+  /* Outline */
+  --outline: #8d7169;
+  --outline-variant: #e1bfb6;
 
-  /* Primary: terracota cálida — evoca cocina sin gritar "rojo". */
-  --primary: 14 78% 48%;
-  --primary-foreground: 0 0% 100%;
+  /* Primary (Terracotta) */
+  --primary: #a93107;
+  --on-primary: #ffffff;
+  --primary-container: #cb4921;
+  --on-primary-container: #fffbff;
+  --inverse-primary: #ffb5a0;
+  --primary-fixed: #ffdbd1;
+  --primary-fixed-dim: #ffb5a0;
+  --on-primary-fixed: #3b0a00;
+  --on-primary-fixed-variant: #862200;
 
-  --secondary: 215 25% 96%;
-  --secondary-foreground: 222 22% 12%;
+  /* Secondary (Saffron) */
+  --secondary: #855300;
+  --on-secondary: #ffffff;
+  --secondary-container: #fea619;
+  --on-secondary-container: #684000;
+  --secondary-fixed: #ffddb8;
+  --secondary-fixed-dim: #ffb95f;
+  --on-secondary-fixed: #2a1700;
+  --on-secondary-fixed-variant: #653e00;
 
-  --muted: 215 20% 95%;
-  --muted-foreground: 222 12% 40%;
+  /* Tertiary */
+  --tertiary: #a23917;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #c2512d;
+  --on-tertiary-container: #fffbff;
+  --tertiary-fixed: #ffdbd1;
+  --tertiary-fixed-dim: #ffb59f;
+  --on-tertiary-fixed: #3a0a00;
+  --on-tertiary-fixed-variant: #842503;
 
-  --accent: 38 92% 50%; /* azafrán para highlights de "recommended action" */
-  --accent-foreground: 222 30% 12%;
+  /* Error */
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
 
-  --destructive: 0 75% 50%;
-  --destructive-foreground: 0 0% 100%;
+  /* Background */
+  --background: #fbf8fc;
+  --on-background: #1b1b1e;
 
-  --border: 215 20% 88%;
-  --input: 215 20% 88%;
-  --ring: 14 78% 48%;
+  /* Off-white "canvas" del operador (warm minimalism) */
+  --canvas: #f8f6f3;
 
-  --radius: 0.625rem;
-
+  /* Tipografia */
   --font-display: "Lexend", system-ui, sans-serif;
   --font-sans: "Inter", system-ui, sans-serif;
 
-  --sidebar-background: 222 28% 10%;
-  --sidebar-foreground: 0 0% 96%;
-  --sidebar-primary: 14 78% 48%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 222 22% 16%;
-  --sidebar-accent-foreground: 0 0% 96%;
-  --sidebar-border: 222 22% 18%;
-  --sidebar-ring: 14 78% 48%;
+  /* shadcn-compatible HSL aliases (algunos componentes de @copiloto/ui los usan) */
+  --background-hsl: 290 33% 98%;
+  --foreground-hsl: 240 6% 11%;
+  --card-hsl: 0 0% 100%;
+  --card-foreground-hsl: 240 6% 11%;
+  --popover-hsl: 0 0% 100%;
+  --popover-foreground-hsl: 240 6% 11%;
+  --primary-hsl: 15 92% 35%;
+  --primary-foreground-hsl: 0 0% 100%;
+  --secondary-hsl: 36 100% 55%;
+  --secondary-foreground-hsl: 32 100% 20%;
+  --muted-hsl: 285 8% 94%;
+  --muted-foreground-hsl: 14 21% 29%;
+  --accent-hsl: 36 100% 55%;
+  --accent-foreground-hsl: 32 100% 20%;
+  --destructive-hsl: 0 75% 42%;
+  --destructive-foreground-hsl: 0 0% 100%;
+  --border-hsl: 13 51% 80%;
+  --input-hsl: 13 51% 80%;
+  --ring-hsl: 15 92% 35%;
+  --radius: 0.75rem;
 }
 
-.dark {
-  --background: 222 28% 8%;
-  --foreground: 0 0% 96%;
+/* ------- Helpers visuales del DS Stitch ------- */
 
-  --card: 222 28% 10%;
-  --card-foreground: 0 0% 96%;
+/* Talavera-inspired pattern sobre off-white (login, splash) */
+.talavera-pattern {
+  background-color: var(--surface);
+  background-image:
+    radial-gradient(var(--outline-variant) 0.8px, transparent 0.8px),
+    radial-gradient(var(--outline-variant) 0.8px, var(--surface) 0.8px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+  opacity: 0.15;
+}
 
-  --popover: 222 28% 10%;
-  --popover-foreground: 0 0% 96%;
+.terracotta-orb {
+  filter: blur(120px);
+  background: radial-gradient(circle, var(--primary) 0%, rgba(169, 49, 7, 0) 70%);
+}
 
-  --primary: 14 84% 56%;
-  --primary-foreground: 222 28% 8%;
+/* Glassmorphic surface — top nav, floating action layers */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid #e7e5e4;
+}
 
-  --secondary: 222 22% 16%;
-  --secondary-foreground: 0 0% 96%;
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(169, 49, 7, 0.05);
+}
 
-  --muted: 222 22% 16%;
-  --muted-foreground: 222 12% 65%;
+/* Canvas: el "lienzo Notion-like" detras del shell */
+.main-canvas {
+  background-color: var(--canvas);
+  min-height: 100vh;
+}
 
-  --accent: 38 92% 56%;
-  --accent-foreground: 222 28% 8%;
+/* Card elevation (Surface 1) */
+.card-shadow {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
 
-  --destructive: 0 70% 55%;
-  --destructive-foreground: 0 0% 100%;
+/* Highlight gradient sutil para zonas con tono Copiloto */
+.copiloto-gradient {
+  background: linear-gradient(135deg, rgba(217, 83, 42, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+}
 
-  --border: 222 22% 22%;
-  --input: 222 22% 22%;
-  --ring: 14 84% 56%;
+/* Insight de IA — fondo blanco con tono Terracota muy ligero */
+.ai-insight-bg {
+  background: linear-gradient(135deg, #ffffff 0%, rgba(217, 83, 42, 0.03) 100%);
+}
+
+/* Boton Terracota con gradient (login + CTAs primarios) */
+.btn-terracota-gradient {
+  background: linear-gradient(135deg, #a93107 0%, #cb4921 100%);
+  box-shadow: 0 4px 14px 0 rgba(169, 49, 7, 0.39);
+  transition: all 0.3s ease;
+  color: #ffffff;
+}
+.btn-terracota-gradient:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px 0 rgba(169, 49, 7, 0.45);
+}
+
+/* Tab/pill activo en el top nav */
+.tab-active {
+  background-color: rgba(217, 83, 42, 0.09);
+  color: #d9532a;
+}
+
+/* Material Symbols Outlined */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  vertical-align: middle;
+}
+
+/* Animaciones del DS (login, floating chips) */
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+.animate-float         { animation: float 6s ease-in-out infinite; }
+.animate-float-delayed { animation: float 8s ease-in-out infinite 1s; }
+.animate-float-slow    { animation: float 10s ease-in-out infinite 2s; }
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
 }

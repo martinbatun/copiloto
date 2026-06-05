@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Lexend:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#842503",
+                    "secondary-container": "#fea619",
+                    "surface-container-high": "#eae7eb",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#fffbff",
+                    "tertiary-fixed-dim": "#ffb59f",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "on-tertiary-fixed": "#3a0a00",
+                    "tertiary-container": "#c2512d",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "surface-variant": "#e4e1e6",
+                    "surface-tint": "#ac340a",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#a23917",
+                    "primary": "#a93107",
+                    "surface-container-low": "#f6f2f7",
+                    "primary-fixed-dim": "#ffb5a0",
+                    "on-secondary-container": "#684000",
+                    "inverse-primary": "#ffb5a0",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#862200",
+                    "surface-dim": "#dcd9dd",
+                    "surface-bright": "#fbf8fc",
+                    "on-error": "#ffffff",
+                    "on-background": "#1b1b1e",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#f0edf1",
+                    "tertiary-fixed": "#ffdbd1",
+                    "on-primary-container": "#fffbff",
+                    "secondary-fixed": "#ffddb8",
+                    "on-surface": "#1b1b1e",
+                    "on-primary-fixed": "#3b0a00",
+                    "primary-container": "#cb4921",
+                    "on-secondary-fixed": "#2a1700",
+                    "on-surface-variant": "#59413b",
+                    "surface": "#fbf8fc",
+                    "secondary": "#855300",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e1bfb6",
+                    "primary-fixed": "#ffdbd1",
+                    "inverse-surface": "#303033",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e4e1e6",
+                    "outline": "#8d7169",
+                    "inverse-on-surface": "#f3f0f4",
+                    "background": "#fbf8fc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "xs": "0.5rem",
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "gutter": "24px",
+                    "lg": "2rem",
+                    "md": "1.5rem",
+                    "xl": "3rem",
+                    "sm": "1rem"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "label-md": ["Inter"],
+                    "numeral-xl": ["Lexend"],
+                    "headline-sm": ["Lexend"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-md": ["Lexend"],
+                    "headline-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(225, 191, 182, 0.3);
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #e4e1e6;
+            border-radius: 5px;
+            background-image: linear-gradient(#a93107, #a93107);
+            background-repeat: no-repeat;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #a93107;
+            cursor: pointer;
+            box-shadow: 0 0 2px 0 rgba(0,0,0,0.5);
+            transition: transform 0.2s ease-in-out;
+        }
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #a93107 0%, #a23917 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-lg z-40 bg-surface-container-lowest border-r border-outline-variant/30 w-64">
+<div class="px-6 mb-10">
+<h1 class="font-display-md text-display-md font-extrabold text-primary">Copiloto</h1>
+<p class="font-body-sm text-on-surface-variant">Operations Sandbox</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<div class="flex items-center gap-xs text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 px-4 py-3 rounded-lg cursor-pointer active:translate-x-1">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md">Overview</span>
+</div>
+<div class="flex items-center gap-xs bg-primary/10 text-primary font-bold rounded-lg px-4 py-3 cursor-pointer active:translate-x-1">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md">Simulation</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 px-4 py-3 rounded-lg cursor-pointer active:translate-x-1">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md">Inventory</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 px-4 py-3 rounded-lg cursor-pointer active:translate-x-1">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md">Labor</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 px-4 py-3 rounded-lg cursor-pointer active:translate-x-1">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-md">AI Insights</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 px-4 py-3 rounded-lg cursor-pointer active:translate-x-1">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md">Settings</span>
+</div>
+</nav>
+<div class="px-4 mt-auto space-y-1">
+<div class="flex items-center gap-xs text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 px-4 py-3 rounded-lg cursor-pointer active:translate-x-1">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-md">Help Center</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 px-4 py-3 rounded-lg cursor-pointer active:translate-x-1">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md">Sign Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar (Simulated Shell) -->
+<header class="h-16 flex items-center justify-between px-margin-desktop border-b border-outline-variant/30 sticky top-0 bg-surface/80 backdrop-blur-md z-30">
+<div class="flex items-center gap-sm">
+<nav class="flex items-center text-on-surface-variant font-label-md">
+<span>Estrategia</span>
+<span class="material-symbols-outlined text-sm mx-2">chevron_right</span>
+<span class="text-on-surface">Simulador</span>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">help_outline</span>
+<div class="w-8 h-8 rounded-full bg-outline-variant overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcT74-wEpFSOaLqqZnXNxS1_pgVeCSgxeMUAhlqP1evjcF9x8MbBja713iEkAGGbBsZkclc8rsToafgMfDG8OU_UiPvcASwnC2hJ14ka3nJj6exD8_pOCImxtN2NK8Htd89NgEIKzxwKigYLWgAmNUaBuvEzRI3DKoput10QIbr08qwEtmZtpH_d_Qg14d-Oi1XrzY7sLggfgtwU_kFJrGaAkdYDDHXr2E4BbfpZKgaLtwP81fzgwRmTPHbZxzscaB_wctsGP-zrw"/>
+</div>
+</div>
+</header>
+<div class="p-margin-desktop space-y-lg max-w-[1400px] mx-auto">
+<!-- Header Section -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div class="space-y-xs">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Simulador de Escenarios</h2>
+<div class="flex items-center gap-sm">
+<div class="relative">
+<select class="appearance-none bg-surface-container-lowest border border-outline-variant/50 rounded-lg px-4 py-2 pr-10 font-label-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option>Optimización de Menú Q3</option>
+<option>Cambio de Proveedor Carne</option>
+<option>Ajuste Inflacionario 2024</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+<button class="flex items-center gap-xs px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest transition-colors font-label-md text-on-surface">
+<span class="material-symbols-outlined text-sm">add</span>
+                            Nuevo Escenario
+                        </button>
+</div>
+</div>
+<button class="bg-primary hover:bg-primary-container text-on-primary font-label-md px-6 py-3 rounded-lg shadow-sm transition-all active:scale-95 flex items-center gap-xs">
+<span class="material-symbols-outlined">save</span>
+                    Guardar Escenario
+                </button>
+</section>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Parameters Panel (Left/Center) -->
+<div class="lg:col-span-5 space-y-gutter">
+<!-- Menu & Pricing -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm border-l-4 border-l-secondary-container">
+<h3 class="font-headline-sm text-headline-sm mb-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary">restaurant_menu</span>
+                            Menu &amp; Pricing
+                        </h3>
+<div class="space-y-lg">
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-on-surface-variant">Incremento de Precios (%)</label>
+<span class="font-numeral-xl text-headline-sm text-primary">+4.5%</span>
+</div>
+<input class="accent-primary" max="20" min="0" step="0.5" type="range" value="4.5"/>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-on-surface-variant">Cambio en Mix de Ventas</label>
+<span class="font-label-md text-on-surface">Agresivo</span>
+</div>
+<input class="accent-primary" max="3" min="1" type="range" value="2"/>
+</div>
+</div>
+</div>
+<!-- Supply Chain -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm border-l-4 border-l-primary">
+<h3 class="font-headline-sm text-headline-sm mb-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
+                            Supply Chain
+                        </h3>
+<div class="space-y-lg">
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-on-surface-variant">Variación Costo Insumos (%)</label>
+<span class="font-numeral-xl text-headline-sm text-error">+2.0%</span>
+</div>
+<input class="accent-primary" max="10" min="-10" type="range" value="2"/>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-on-surface-variant">Ahorro por Nuevo Proveedor</label>
+<span class="font-numeral-xl text-headline-sm text-secondary-container">-$1.2k</span>
+</div>
+<input class="accent-primary" max="5000" min="0" type="range" value="1200"/>
+</div>
+</div>
+</div>
+<!-- Labor & Ops -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm border-l-4 border-l-tertiary">
+<h3 class="font-headline-sm text-headline-sm mb-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-tertiary">engineering</span>
+                            Labor &amp; Ops
+                        </h3>
+<div class="space-y-lg">
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-on-surface-variant">Ajuste de Plantilla (Horas)</label>
+<span class="font-numeral-xl text-headline-sm text-on-surface-variant">-12h</span>
+</div>
+<input class="accent-primary" max="40" min="-40" type="range" value="-12"/>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-on-surface-variant">Eficiencia Operativa</label>
+<span class="font-label-md text-secondary">+8% Optimización</span>
+</div>
+<input class="accent-primary" max="15" min="0" type="range" value="8"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Impact Visualization (Right) -->
+<div class="lg:col-span-7 space-y-gutter">
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-sm">
+<div class="bg-surface-container-lowest p-sm rounded-xl border border-outline-variant/20 shadow-sm flex flex-col items-center justify-center text-center">
+<span class="font-label-md text-on-surface-variant">Impacto Margen</span>
+<span class="font-numeral-xl text-primary mt-1">+2.4%</span>
+<div class="mt-2 text-[12px] text-primary flex items-center">
+<span class="material-symbols-outlined text-sm">trending_up</span> vs Actual
+                            </div>
+</div>
+<div class="bg-surface-container-lowest p-sm rounded-xl border border-outline-variant/20 shadow-sm flex flex-col items-center justify-center text-center">
+<span class="font-label-md text-on-surface-variant">Punto Equilibrio</span>
+<span class="font-numeral-xl text-on-surface mt-1">1,450</span>
+<div class="mt-2 text-[12px] text-on-surface-variant">Platos / Mes</div>
+</div>
+<div class="bg-surface-container-lowest p-sm rounded-xl border border-outline-variant/20 shadow-sm flex flex-col items-center justify-center text-center">
+<span class="font-label-md text-on-surface-variant">Proyección Mensual</span>
+<span class="font-numeral-xl text-secondary-container mt-1">$42.8k</span>
+<div class="mt-2 text-[12px] text-secondary-container">Utilidad Bruta</div>
+</div>
+</div>
+<!-- Chart Section -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant/30 shadow-sm min-h-[400px] flex flex-col">
+<div class="flex justify-between items-center mb-lg">
+<div>
+<h3 class="font-headline-sm text-headline-sm">Tendencia Proyectada (6 meses)</h3>
+<p class="font-body-sm text-on-surface-variant">Comparativa Real vs Simulado</p>
+</div>
+<div class="flex gap-md">
+<div class="flex items-center gap-base">
+<span class="w-3 h-3 rounded-full bg-outline-variant"></span>
+<span class="font-label-md text-on-surface-variant text-xs">Actual</span>
+</div>
+<div class="flex items-center gap-base">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="font-label-md text-on-surface text-xs">Simulado</span>
+</div>
+</div>
+</div>
+<!-- Line Chart Simulation (CSS/SVG) -->
+<div class="flex-1 relative mt-4">
+<svg class="w-full h-full min-h-[250px]" preserveaspectratio="none" viewbox="0 0 800 250">
+<!-- Grid Lines -->
+<line stroke="#e4e1e6" stroke-dasharray="4" x1="0" x2="800" y1="50" y2="50"></line>
+<line stroke="#e4e1e6" stroke-dasharray="4" x1="0" x2="800" y1="100" y2="100"></line>
+<line stroke="#e4e1e6" stroke-dasharray="4" x1="0" x2="800" y1="150" y2="150"></line>
+<line stroke="#e4e1e6" stroke-dasharray="4" x1="0" x2="800" y1="200" y2="200"></line>
+<!-- Data Line: Actual -->
+<polyline fill="none" points="0,180 133,175 266,182 399,178 532,185 665,180 800,183" stroke="#e4e1e6" stroke-width="3"></polyline>
+<!-- Data Line: Simulado -->
+<polyline fill="none" points="0,180 133,160 266,145 399,120 532,105 665,95 800,85" stroke="#a93107" stroke-linecap="round" stroke-width="4"></polyline>
+<!-- Gradient Area for Simulado -->
+<path d="M0,180 133,160 266,145 399,120 532,105 665,95 800,85 L800,250 L0,250 Z" fill="url(#simulatedGradient)" opacity="0.1"></path>
+<defs>
+<lineargradient id="simulatedGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#a93107"></stop>
+<stop offset="100%" stop-color="transparent"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="flex justify-between px-2 mt-2 font-label-md text-on-surface-variant text-xs">
+<span>Mes 1</span>
+<span>Mes 2</span>
+<span>Mes 3</span>
+<span>Mes 4</span>
+<span>Mes 5</span>
+<span>Mes 6</span>
+</div>
+</div>
+<div class="mt-md pt-md border-t border-outline-variant/20 grid grid-cols-2 gap-md">
+<div>
+<span class="font-label-md text-on-surface-variant block">Facturación Estimada</span>
+<span class="font-headline-sm text-on-surface">$1.2M MXN</span>
+</div>
+<div>
+<span class="font-label-md text-on-surface-variant block">Retorno sobre Inversión</span>
+<span class="font-headline-sm text-secondary">18.4%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Scenario Insights (Bottom/Floating) -->
+<section class="mt-gutter">
+<div class="glass-card rounded-2xl p-lg flex flex-col md:flex-row gap-lg items-center relative overflow-hidden group">
+<!-- Subtle AI Background Glow -->
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-secondary-container/10 blur-[80px] rounded-full group-hover:bg-secondary-container/20 transition-all duration-700"></div>
+<div class="w-16 h-16 rounded-2xl ai-gradient flex items-center justify-center text-on-primary shadow-lg flex-shrink-0">
+<span class="material-symbols-outlined text-4xl" data-weight="fill">psychology</span>
+</div>
+<div class="flex-1 space-y-xs">
+<h4 class="font-headline-sm text-headline-sm text-tertiary">Copiloto AI: Análisis de Simulación</h4>
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+<span class="font-bold text-primary">Sugerencia Estratégica:</span> Un incremento del <span class="underline decoration-secondary decoration-2">4% en el precio de las bebidas</span> compensaría el alza del costo del aguacate proyectada sin afectar el volumen de ventas, manteniendo un margen saludable del 22%. Los datos sugieren que la elasticidad del precio en coctelería es baja los fines de semana.
+                        </p>
+<div class="flex gap-sm mt-md">
+<button class="bg-surface-container-highest/50 hover:bg-surface-container-highest px-4 py-2 rounded-full font-label-md text-on-surface-variant flex items-center gap-xs transition-all">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+                                Aplicar Recomendación
+                            </button>
+<button class="bg-surface-container-highest/50 hover:bg-surface-container-highest px-4 py-2 rounded-full font-label-md text-on-surface-variant flex items-center gap-xs transition-all">
+<span class="material-symbols-outlined text-sm">share</span>
+                                Exportar Reporte
+                            </button>
+</div>
+</div>
+<div class="hidden xl:block w-48 flex-shrink-0">
+<img alt="Chef analyzing data" class="rounded-xl object-cover h-32 w-full shadow-md" data-alt="A cinematic, high-key shot of a professional restaurant manager using a tablet in a bright, modern Mexican kitchen. Warm sunlight filters through, highlighting a sophisticated, clean workspace with high-radius white minimalist surfaces. The mood is focused and data-driven, blending culinary warmth with technological precision. The lighting is soft and airy, emphasizing a premium light-mode aesthetic with subtle terracotta accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3-88K_HftUGOTYtjRuTDqv6-ZSLfXGbwKPEzVGCZzox06D62lgMjY3G0EMcDb-vqn7iJAR8lAnXARGtwH89R58rF_Vm0BXY_yOCA6g4KnTRPLwAQoHnbuKNyyx8doBdbCVxCf1VhWUze4D80Oy9K6cKjtQfloMfTI7JdFl7gjamI14ZF4exHXDgmPIiaM_Ucnk8JwGVStNzoAf2uuCshb1K50qEaI7PfFhIVZxmzfg03G0Zb-NQWMpNtQFxt8xxE4vj_NDki-dnI"/>
+</div>
+</div>
+</section>
+</div>
+</main>
+<script>
+        // Simple Interaction: range slider visual progress
+        const sliders = document.querySelectorAll('input[type="range"]');
+        sliders.forEach(slider => {
+            slider.addEventListener('input', function() {
+                const value = (this.value - this.min) / (this.max - this.min) * 100;
+                this.style.backgroundSize = value + '% 100%';
+            });
+            // Init progress
+            const value = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+            slider.style.backgroundSize = value + '% 100%';
+        });
+    </script>
+</body></html>

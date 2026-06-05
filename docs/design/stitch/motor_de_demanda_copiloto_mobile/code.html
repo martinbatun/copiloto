@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "surface-container": "#f0edf1",
+                        "surface-bright": "#fbf8fc",
+                        "on-secondary-fixed": "#2a1700",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#59413b",
+                        "surface-dim": "#dcd9dd",
+                        "primary-fixed-dim": "#ffb5a0",
+                        "on-background": "#1b1b1e",
+                        "on-tertiary-fixed-variant": "#842503",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#c2512d",
+                        "surface-variant": "#e4e1e6",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "tertiary": "#a23917",
+                        "secondary-container": "#fea619",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#a93107",
+                        "inverse-on-surface": "#f3f0f4",
+                        "on-primary-fixed": "#3b0a00",
+                        "surface-container-high": "#eae7eb",
+                        "outline-variant": "#e1bfb6",
+                        "outline": "#8d7169",
+                        "tertiary-fixed": "#ffdbd1",
+                        "background": "#fbf8fc",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#1b1b1e",
+                        "surface-container-highest": "#e4e1e6",
+                        "on-secondary-container": "#684000",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#ac340a",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "secondary-fixed": "#ffddb8",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "on-primary-fixed-variant": "#862200",
+                        "primary-container": "#cb4921",
+                        "surface-container-low": "#f6f2f7",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "surface": "#fbf8fc",
+                        "secondary": "#855300",
+                        "primary-fixed": "#ffdbd1",
+                        "inverse-primary": "#ffb5a0",
+                        "on-tertiary-container": "#fffbff",
+                        "inverse-surface": "#303033"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "3rem",
+                        "sm": "1rem",
+                        "md": "1.5rem",
+                        "xs": "0.5rem",
+                        "margin-desktop": "40px",
+                        "base": "4px",
+                        "lg": "2rem",
+                        "margin-mobile": "16px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-md": ["Lexend"],
+                        "numeral-xl": ["Lexend"],
+                        "headline-sm": ["Lexend"],
+                        "display-lg": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(169, 49, 7, 0.1) 0%, rgba(169, 49, 7, 0) 100%);
+        }
+        .copiloto-gradient {
+            background: linear-gradient(135deg, #B9532A 0%, #9A3412 100%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+        }
+        body {
+            overscroll-behavior-y: contain;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed-dim">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/86 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-xs">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant/50">
+<img alt="Profile photo of restaurant manager" class="w-full h-full object-cover" data-alt="A professional restaurant manager wearing a clean, modern apron in a brightly lit, contemporary kitchen setting. The environment reflects the high-end warm minimalism of the brand with soft off-white walls and strategic terracotta accents. The image is a sharp, high-key portrait showing expertise and culinary focus, maintaining a warm and welcoming professional atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFLCHmMNDXJOmOuSVinLdBIznAJAMgsZqePk5KxUAn39IAQooKMIIzA9T614SUXPQ0PeIBq0IPUQg6tIeXObr2KHaUOAnl61xCQm2iODXTnd3m6wGphtJGuELUJlNSSXmlBX3XfT47JNGvviXxnjAWETb5oWE68a2Kq6uFhxKMZETL4nE6_SDhDJeyRrSejoKyr77_LwDTw3Wr7EkhOg0FjCmWRav6ERxwVhKZS48JBR4OndJ3OHjNKyGjsIToMbFUEMI_XRi5uuM"/>
+</div>
+<h1 class="font-display-md text-headline-sm text-primary tracking-tight">Copiloto</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-primary hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+</header>
+<main class="pt-20 pb-28 px-margin-mobile">
+<!-- Welcome & Current Status -->
+<section class="mb-lg">
+<h2 class="font-display-md text-headline-lg-mobile text-on-surface mb-xs">Motor de Demanda</h2>
+<p class="font-body-md text-on-surface-variant">Pronóstico para hoy, 24 de Octubre</p>
+</section>
+<!-- Bento Grid: Main Metrics -->
+<section class="grid grid-cols-2 gap-sm mb-lg">
+<div class="col-span-1 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm border-l-4 border-l-primary">
+<p class="font-label-md text-on-surface-variant mb-xs">Órdenes est.</p>
+<p class="font-display-md text-headline-lg text-primary">142</p>
+<div class="flex items-center gap-xs text-secondary mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span class="text-xs font-bold">+12% vs ayer</span>
+</div>
+</div>
+<div class="col-span-1 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm border-l-4 border-l-secondary-container">
+<p class="font-label-md text-on-surface-variant mb-xs">Pico estimado</p>
+<p class="font-display-md text-headline-lg text-secondary">14:30</p>
+<p class="text-xs text-on-surface-variant mt-1">Alta densidad</p>
+</div>
+</section>
+<!-- Prediction Graph Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-sm mb-lg overflow-hidden">
+<div class="p-md flex justify-between items-center">
+<h3 class="font-headline-sm text-on-surface">Curva de Demanda</h3>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded-lg text-xs font-semibold">POR HORA</span>
+</div>
+<div class="h-56 w-full px-md pb-md relative flex items-end justify-between gap-1">
+<!-- Simple representative bar chart for demand forecast -->
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-12 relative group">
+<div class="absolute bottom-0 w-full bg-primary/40 rounded-t-sm" style="height: 60%"></div>
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-active:opacity-100 transition-opacity text-[10px] bg-on-surface text-surface px-1 rounded">11a</div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-16 relative group">
+<div class="absolute bottom-0 w-full bg-primary/40 rounded-t-sm" style="height: 75%"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-28 relative group">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-sm" style="height: 85%"></div>
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary">13h</div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-40 relative group">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-sm" style="height: 95%"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-32 relative group">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-sm" style="height: 70%"></div>
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary">15h</div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-20 relative group">
+<div class="absolute bottom-0 w-full bg-primary/40 rounded-t-sm" style="height: 50%"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-14 relative group">
+<div class="absolute bottom-0 w-full bg-primary/40 rounded-t-sm" style="height: 30%"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-28 relative group">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-sm" style="height: 80%"></div>
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary">18h</div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-44 relative group">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-sm" style="height: 100%"></div>
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary">19h</div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-36 relative group">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-sm" style="height: 85%"></div>
+</div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm h-16 relative group">
+<div class="absolute bottom-0 w-full bg-primary/40 rounded-t-sm" style="height: 40%"></div>
+</div>
+</div>
+<div class="px-md py-xs bg-surface-container-low border-t border-outline-variant/20">
+<p class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Alta probabilidad de "Peak" a las 19:30
+                </p>
+</div>
+</section>
+<!-- Copiloto AI Insights -->
+<section class="copiloto-gradient p-md rounded-xl shadow-xl mb-lg relative overflow-hidden">
+<!-- Decorative Glow -->
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-secondary-container/20 blur-3xl rounded-full"></div>
+<div class="flex items-center gap-sm mb-md">
+<div class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-lg backdrop-blur-md">
+<span class="material-symbols-outlined text-white" data-icon="smart_toy">smart_toy</span>
+</div>
+<h3 class="font-headline-sm text-white">Sugerencias del Copiloto</h3>
+</div>
+<div class="space-y-sm">
+<!-- Insight Card 1 -->
+<div class="bg-white/10 backdrop-blur-md border border-white/20 p-sm rounded-lg flex items-start gap-sm active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-secondary-container mt-1" data-icon="restaurant">restaurant</span>
+<div>
+<p class="font-label-md text-white">Prep-list Recomendada</p>
+<p class="text-xs text-white/80 leading-relaxed">Incrementa prep de Salsa Verde (+3L) y Base Taco (+5kg) para cubrir el pico de las 14:00.</p>
+</div>
+</div>
+<!-- Insight Card 2 -->
+<div class="bg-white/10 backdrop-blur-md border border-white/20 p-sm rounded-lg flex items-start gap-sm active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-secondary-container mt-1" data-icon="group_add">group_add</span>
+<div>
+<p class="font-label-md text-white">Refuerzo de Staff</p>
+<p class="text-xs text-white/80 leading-relaxed">Considera mover a 1 persona de Almacén a Línea a las 18:45 para mitigar cuellos de botella.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Prep-List Tasks -->
+<section>
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-sm text-on-surface">Lista de Preparación</h3>
+<button class="text-primary font-label-md">Ver todo</button>
+</div>
+<div class="space-y-xs">
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-sm flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" data-icon="skillet">skillet</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Proteína Res (Marinado)</p>
+<p class="text-[10px] text-on-surface-variant">META: 12 KG | ACTUAL: 4 KG</p>
+</div>
+</div>
+<div class="w-12 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[33%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-sm flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="liquor">liquor</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Mix Aguas del Día</p>
+<p class="text-[10px] text-on-surface-variant">META: 20 L | ACTUAL: 18 L</p>
+</div>
+</div>
+<div class="w-12 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full w-[90%]"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 glass-panel border-t border-outline-variant/30 flex justify-around items-center px-xs pb-safe z-50 rounded-t-xl shadow-lg">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Operaciones</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Staff</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Inventario</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md font-bold">Copiloto</span>
+</button>
+</nav>
+<script>
+        // Light haptic feedback simulation on interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
+            });
+        });
+
+        // Simple animation for the graph bars on load
+        window.addEventListener('load', () => {
+            const bars = document.querySelectorAll('.bg-primary, .bg-primary\\/40');
+            bars.forEach((bar, index) => {
+                const originalHeight = bar.style.height;
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.transition = 'height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    bar.style.height = originalHeight;
+                }, index * 50);
+            });
+        });
+    </script>
+</body></html>

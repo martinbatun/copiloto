@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "surface-container": "#f0edf1",
+                    "surface-bright": "#fbf8fc",
+                    "on-secondary-fixed": "#2a1700",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#59413b",
+                    "surface-dim": "#dcd9dd",
+                    "primary-fixed-dim": "#ffb5a0",
+                    "on-background": "#1b1b1e",
+                    "on-tertiary-fixed-variant": "#842503",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#c2512d",
+                    "surface-variant": "#e4e1e6",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#3a0a00",
+                    "tertiary": "#a23917",
+                    "secondary-container": "#fea619",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#a93107",
+                    "inverse-on-surface": "#f3f0f4",
+                    "on-primary-fixed": "#3b0a00",
+                    "surface-container-high": "#eae7eb",
+                    "outline-variant": "#e1bfb6",
+                    "outline": "#8d7169",
+                    "tertiary-fixed": "#ffdbd1",
+                    "background": "#fbf8fc",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1b1b1e",
+                    "surface-container-highest": "#e4e1e6",
+                    "on-secondary-container": "#684000",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#ac340a",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "secondary-fixed": "#ffddb8",
+                    "on-primary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "on-primary-fixed-variant": "#862200",
+                    "primary-container": "#cb4921",
+                    "surface-container-low": "#f6f2f7",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb59f",
+                    "surface": "#fbf8fc",
+                    "secondary": "#855300",
+                    "primary-fixed": "#ffdbd1",
+                    "inverse-primary": "#ffb5a0",
+                    "on-tertiary-container": "#fffbff",
+                    "inverse-surface": "#303033"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "3rem",
+                    "sm": "1rem",
+                    "md": "1.5rem",
+                    "xs": "0.5rem",
+                    "margin-desktop": "40px",
+                    "base": "4px",
+                    "lg": "2rem",
+                    "margin-mobile": "16px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-md": ["Lexend"],
+                    "numeral-xl": ["Lexend"],
+                    "headline-sm": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #F8F6F3; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-nav { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+        .bento-card { border-left: 4px solid transparent; }
+        .bento-card.vip { border-left-color: #a93107; }
+        .copiloto-gradient { background: linear-gradient(135deg, #B9532A 0%, #9A3412 100%); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface mb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/86 backdrop-blur-xl dark:bg-surface-dim/86 shadow-sm border-b border-outline-variant/30 h-16 flex justify-between items-center px-margin-mobile">
+<div class="flex items-center gap-sm">
+<img alt="Profile" class="w-8 h-8 rounded-full bg-surface-container" data-alt="A professional close-up portrait of a refined restaurant manager in a high-end culinary environment. The lighting is warm and cinematic, emphasizing a clean, modern aesthetic with soft terracotta and off-white tones. The background is a softly blurred, sophisticated dining room with elegant architectural details, maintaining a premium and organized professional atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOoxvCIrJXbDVHxSvuBS9XR6OtkusVQyymNreqD3oVtGsJc-Jale42AVZArXErpQ2lTs6wBpQicoBkQ1hP5OdYOhJJMk8ho07z52YCoynviHsqVSVtUf20Bh8CBrFnK-cpAE_DItHHRfOhQgA8saLcwLf1wfqA7kNId4y--8YfSyYkcZtLwwO5gtqPDii89LZoZ9JJoJuimG5FY7rlcSD3Le1QZhNtPkqiEuEi1mfjTiOpb8QA07zjjRv1fySRaCXHJows0YFpkPo"/>
+<span class="font-display-md text-headline-sm text-primary dark:text-primary-fixed-dim tracking-tight">Copiloto</span>
+</div>
+<button class="text-primary dark:text-primary-fixed-dim active:scale-95 transition-transform p-xs rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+</header>
+<main class="mt-20 px-margin-mobile space-y-md">
+<!-- Search & Filter Section -->
+<section class="space-y-sm">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md" placeholder="Buscar huésped VIP..." type="text"/>
+</div>
+<div class="flex gap-xs overflow-x-auto pb-xs no-scrollbar">
+<span class="px-4 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md whitespace-nowrap">Todos</span>
+<span class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md whitespace-nowrap">VIP Diamond</span>
+<span class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md whitespace-nowrap">Frecuentes</span>
+<span class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md whitespace-nowrap">Nuevos</span>
+</div>
+</section>
+<!-- AI Insights Banner -->
+<section class="copiloto-gradient p-md rounded-xl text-on-primary-container shadow-md relative overflow-hidden">
+<div class="relative z-10 flex items-start gap-sm">
+<span class="material-symbols-outlined text-secondary-container" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<div class="space-y-xs">
+<h3 class="font-headline-sm text-headline-sm leading-tight">Insight de Copiloto</h3>
+<p class="font-body-sm text-body-sm opacity-90">3 Huéspedes VIP tienen aniversario esta semana. ¿Preparar cortesía de cortesía personalizada?</p>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</section>
+<!-- Featured Guest Profile Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-sm bento-card vip p-md space-y-md">
+<div class="flex justify-between items-start">
+<div class="flex gap-md">
+<img alt="Sofia Alarcón" class="w-16 h-16 rounded-xl object-cover" data-alt="A high-resolution, professional portrait of a sophisticated woman in her 40s, exuding an air of success and elegance. She is set against a minimalist, warm-toned background with soft, diffused natural lighting. The color palette consists of creamy whites and subtle terracotta accents, reflecting a luxury lifestyle and premium hospitality service standard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpnj8ub0I37EUJyWxMkj1-5KL0pe60Zmic1z_Svyo7z3lEb1FkX02MRXjt4w36sgUKYMd-EJF6Lhe_CuaEPSBF5TbEtFVHhItssm-f_uLDLp6cfb0G1ZRySgfQQLSPfXpANwKHFk0BeoPcbrhXVepG5ThdYBlEW_1S8fTLBseuywhtRoDmBhb1XQmZ_f8TMBMn6OzyeK9aQ65Sqyx36HllzxQZadLxjrrUO1E9nxQQCrIrChsV88DmUdqFiK71dmpcjHDldO5ePuw"/>
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Sofia Alarcón</h2>
+<div class="flex items-center gap-xs mt-1">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="stars" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label-md text-label-md text-secondary">VIP Diamond</span>
+</div>
+</div>
+</div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<!-- Segmentación IA -->
+<div class="flex flex-wrap gap-xs">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-lg font-label-md text-label-md flex items-center gap-xs border border-outline-variant/20">
+<span class="material-symbols-outlined text-[16px]" data-icon="wine_bar">wine_bar</span> Amante del Malbec
+                </span>
+<span class="bg-secondary-fixed text-on-secondary-fixed-variant px-3 py-1 rounded-lg font-label-md text-label-md flex items-center gap-xs border border-outline-variant/20">
+<span class="material-symbols-outlined text-[16px]" data-icon="event">event</span> Fin de semana
+                </span>
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded-lg font-label-md text-label-md flex items-center gap-xs border border-outline-variant/20">
+<span class="material-symbols-outlined text-[16px]" data-icon="chat_bubble">chat_bubble</span> Prefiere Terraza
+                </span>
+</div>
+<!-- Historial Rápido -->
+<div class="bg-surface-container-low rounded-lg p-sm space-y-sm">
+<div class="flex justify-between items-center border-b border-outline-variant/20 pb-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Última Visita</span>
+<span class="font-body-sm text-body-sm font-semibold">Hace 4 días</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Gasto Promedio</span>
+<span class="font-numeral-xl text-lg text-primary">$4,250 MXN</span>
+</div>
+</div>
+<button class="w-full py-3 bg-primary text-on-primary rounded-xl font-label-md text-label-md active:scale-95 transition-transform flex justify-center items-center gap-sm shadow-md">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+                Ver Historial Completo
+            </button>
+</section>
+<!-- Secondary Profiles List -->
+<section class="space-y-sm">
+<h3 class="font-label-md text-label-md text-outline uppercase tracking-widest px-xs">Próximas Reservas</h3>
+<!-- List Item 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-sm border border-outline-variant/30 flex items-center gap-md hover:bg-surface-container transition-colors active:scale-[0.98]">
+<img alt="Marco Ruiz" class="w-12 h-12 rounded-lg" data-alt="A clean and professional portrait of a middle-aged businessman, looking approachable and confident. The setting is a bright, modern office with soft, warm lighting. The aesthetic uses a palette of light grays and warm whites, consistent with a high-end SaaS platform interface for restaurant management in Mexico." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQQ7MxiAW54fA87TehiWRzl5WEF9SI74FvPUdh1YAyjDLfSzEai3y9B6BqMymi0NGXPsDTWCycE2nM8Guntlw6zjr0cW3H666GaBOg0BCoEh21wyNfYPIn24CqN5AxYu123sDSMY6mxawt1KhPIhuIx_C6JxZWoenyrAYYxJRQ8iRJuPhD047OMvwDyCsdW1UGfsV3maUj4G5ZqRcuE7ABjukdmSuPELgSdBVfv7MbUyIO13fCNKT3qwz8s5_FNn0jS029mTrLvls"/>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface">Marco Ruiz</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Hoy, 20:30 • 4 Personas</p>
+</div>
+<div class="text-right">
+<span class="bg-secondary-container/20 text-on-secondary-container px-2 py-0.5 rounded text-[12px] font-bold">ALERGIA: NUECES</span>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-sm border border-outline-variant/30 flex items-center gap-md hover:bg-surface-container transition-colors active:scale-[0.98]">
+<img alt="Elena Gomez" class="w-12 h-12 rounded-lg" data-alt="A stylish portrait of a young professional woman with a welcoming smile. She is framed in a bright, contemporary setting with warm ambient lighting that suggests a premium lounge or restaurant environment. The visual style is crisp and modern, featuring soft off-white tones and subtle warm accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoEQV7D61eFBl_gggsx3nebFBIo1K43wMTVIH_0VWXPXWd0NJtDRPZOUK__yhfBNieAksiJH7pRjS5fWbwxrYpEcIO4_sPGq-QFmCvfg2nF2PHXJZiEg-LPTWh45e0RVTKXnRJA_nxnjPYE1UBxAn_n6OpIGxSsBnVuClOuzJI91ZUbw4FNhoQgvCRux0GB3T4LPA_x18AJu0rLSL4_y6M-bDycs2etNo_YzcFcyNmy2ruHL__E_WOHF8yL0BJ-PVcnZmXLcr-Avw"/>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface">Elena Gomez</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Mañana, 14:00 • 2 Personas</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="cake">cake</span>
+<span class="text-[10px] font-bold text-primary">CUMPLEAÑOS</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-surface/86 backdrop-blur-xl dark:bg-surface-dim/86 flex justify-around items-center px-xs pb-safe z-50 border-t border-outline-variant/30 shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Operaciones</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Staff</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Inventario</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-label-md text-label-md">CRM</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md">Copiloto</span>
+</a>
+</nav>
+<!-- Floating Action Button - Only for CRM actions -->
+<button class="fixed right-6 bottom-24 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-all z-40">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+</button>
+<script>
+        // Micro-interaction: Tonal layering shift on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
+
+        // Simple active state toggle for filter pills
+        const pills = document.querySelectorAll('span.whitespace-nowrap');
+        pills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                pills.forEach(p => {
+                    p.classList.remove('bg-primary', 'text-on-primary');
+                    p.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                });
+                pill.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                pill.classList.add('bg-primary', 'text-on-primary');
+            });
+        });
+    </script>
+</body></html>

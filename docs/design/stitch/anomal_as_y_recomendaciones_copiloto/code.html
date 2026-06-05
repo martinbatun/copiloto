@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copiloto - Anomalías y Recomendaciones</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e4e1e6",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#1b1b1e",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#ffb95f",
+                      "secondary-fixed": "#ffddb8",
+                      "secondary-container": "#fea619",
+                      "on-secondary-fixed-variant": "#653e00",
+                      "surface-container-high": "#eae7eb",
+                      "on-primary-fixed-variant": "#862200",
+                      "tertiary-fixed-dim": "#ffb59f",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed": "#ffdbd1",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#dcd9dd",
+                      "surface-container": "#f0edf1",
+                      "on-primary-container": "#fffbff",
+                      "tertiary": "#a23917",
+                      "primary": "#a93107",
+                      "on-surface-variant": "#59413b",
+                      "outline": "#8d7169",
+                      "on-secondary-container": "#684000",
+                      "surface": "#fbf8fc",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed": "#3b0a00",
+                      "primary-fixed": "#ffdbd1",
+                      "surface-variant": "#e4e1e6",
+                      "primary-container": "#cb4921",
+                      "background": "#fbf8fc",
+                      "inverse-on-surface": "#f3f0f4",
+                      "on-tertiary-container": "#fffbff",
+                      "outline-variant": "#e1bfb6",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#c2512d",
+                      "inverse-surface": "#303033",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#ac340a",
+                      "primary-fixed-dim": "#ffb5a0",
+                      "surface-bright": "#fbf8fc",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f6f2f7",
+                      "on-secondary-fixed": "#2a1700",
+                      "on-tertiary-fixed-variant": "#842503",
+                      "on-tertiary-fixed": "#3a0a00",
+                      "secondary": "#855300",
+                      "inverse-primary": "#ffb5a0",
+                      "on-background": "#1b1b1e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "lg": "2rem",
+                      "sm": "1rem",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "md": "1.5rem",
+                      "margin-desktop": "40px",
+                      "xs": "0.5rem",
+                      "xl": "3rem"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Lexend"],
+                      "headline-sm": ["Lexend"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "numeral-xl": ["Lexend"],
+                      "body-lg": ["Inter"],
+                      "display-md": ["Lexend"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Lexend"],
+                      "display-lg": ["Lexend"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #B9532A 0%, #9A3412 100%);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-[#F8F6F3] text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-[64px] z-50 glass-nav border-b border-outline-variant shadow-sm flex justify-between items-center px-margin-desktop">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md font-bold text-primary">Copiloto</span>
+<nav class="hidden md:flex gap-md ml-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#">Tablero</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-2 font-body-md" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#">Forecast</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#">Recetas</a>
+</nav>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-base hover:bg-surface-container-low rounded-full transition-all">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Monica" class="w-full h-full object-cover" data-alt="A professional headshot of a Latina restaurant manager with a warm smile, wearing a stylish minimalist professional outfit. The background is a blurred, high-end modern kitchen with warm wooden textures and soft ambient lighting. The visual style is premium, bright, and polished, reflecting operational excellence and culinary warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5nm6JCpUog5h-3-nYK5awY0-3MLHM8EV7YVq0TnFCCIaRl4f13LR0050Ad1nP7uQCFT-i4fpFxWt_PQbPpthycyWv5zo7XGPF-_ofxP6B3XO2sQGmk2V_BT4PLnNaH93sPb7xV8zV-Amz75xt0baEp29MKHRgqjLWD6Z1j9xmgwW3dw-OmZcS84MunKg9XF1DAmDJFrRJxtScRH6OzltTmgdSG9mq09rqQTERqQ2LXYXaJKN4SIeDsm9YmSGl0Rhuqjc5peMYTxo"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Right) -->
+<aside class="fixed right-0 top-[64px] h-[calc(100vh-64px)] w-80 z-40 bg-surface-container-lowest border-l border-outline-variant flex flex-col py-lg gap-base">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-sm mb-xs">
+<span class="font-headline-sm text-headline-sm text-primary">Roma Norte</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant">Gerente de Turno</p>
+</div>
+<nav class="flex-1 px-2">
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Huespedes</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">KPIs</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Ayuda</span>
+</a>
+</nav>
+<div class="px-md mt-auto">
+<button class="w-full ai-gradient text-white py-md px-lg rounded-xl font-bold flex items-center justify-center gap-sm hover:scale-[1.02] active:scale-95 transition-all shadow-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                Solicitar IA Insight
+            </button>
+<a class="flex items-center gap-sm px-md py-sm mt-md text-error hover:bg-error-container/20 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Cerrar Sesión</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-[88px] pr-80 pb-xl px-margin-desktop min-h-screen">
+<div class="max-w-[1100px] mx-auto">
+<!-- Header Section -->
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Anomalías y recomendaciones</h1>
+<p class="text-on-surface-variant font-body-md mt-base">Acciones inteligentes basadas en la operación en tiempo real.</p>
+</div>
+<div class="flex gap-sm">
+<button class="bg-white border border-outline-variant px-md py-sm rounded-lg flex items-center gap-xs text-on-surface-variant hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        Hoy, 24 Oct
+                    </button>
+</div>
+</div>
+<!-- KPI Strip -->
+<div class="grid grid-cols-2 gap-gutter mb-lg">
+<div class="bg-white p-lg rounded-xl shadow-sm border border-outline-variant relative overflow-hidden group">
+<div class="absolute left-0 top-0 h-full w-1 bg-error"></div>
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Anomalías hoy</p>
+<h2 class="font-numeral-xl text-numeral-xl text-on-surface mt-xs">12</h2>
+</div>
+<div class="bg-error-container p-sm rounded-lg text-error">
+<span class="material-symbols-outlined">warning</span>
+</div>
+</div>
+<p class="text-error font-label-md mt-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> +4 vs promedio diario
+                    </p>
+</div>
+<div class="bg-white p-lg rounded-xl shadow-sm border border-outline-variant relative overflow-hidden group">
+<div class="absolute left-0 top-0 h-full w-1 bg-secondary-container"></div>
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ROI mes proyectado</p>
+<h2 class="font-numeral-xl text-numeral-xl text-on-surface mt-xs">$18,420</h2>
+</div>
+<div class="bg-secondary-fixed p-sm rounded-lg text-on-secondary-container">
+<span class="material-symbols-outlined">attach_money</span>
+</div>
+</div>
+<p class="text-on-secondary-fixed-variant font-label-md mt-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">verified</span> 18 recomendaciones aplicadas
+                    </p>
+</div>
+</div>
+<!-- Recommendations Stack -->
+<section class="mb-xl">
+<h3 class="font-headline-sm text-headline-sm mb-md flex items-center gap-sm">
+                    Recomendaciones Prioritarias
+                    <span class="bg-primary-container text-white text-[12px] px-2 py-0.5 rounded-full">IA Activa</span>
+</h3>
+<div class="flex flex-col gap-sm">
+<!-- Card 1: Prioridad Alta (AI Opportunity) -->
+<div class="bg-white border-l-4 border-secondary-container p-md rounded-xl shadow-sm flex items-center gap-lg hover:translate-x-1 transition-transform cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-xs mb-xs">
+<span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold px-2 py-0.5 rounded uppercase">Alta Prioridad</span>
+<span class="text-on-surface-variant font-label-md">• Vence en 2h</span>
+</div>
+<h4 class="font-headline-sm text-[18px] text-on-surface">Promo flash: agua de tomate cortesía</h4>
+<p class="text-on-surface-variant text-body-sm">Exceso de inventario de tomate Cherry detected. Incrementar lealtad en mesas de +4 personas.</p>
+</div>
+<div class="text-right shrink-0">
+<div class="text-secondary font-bold text-headline-sm">+$2,840</div>
+<div class="text-on-surface-variant text-[12px]">ROI Est.</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Card 2: Anomalía (Warning) -->
+<div class="bg-white border-l-4 border-error p-md rounded-xl shadow-sm flex items-center gap-lg hover:translate-x-1 transition-transform cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-error">report</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-xs mb-xs">
+<span class="bg-error-container text-on-error-container text-[10px] font-bold px-2 py-0.5 rounded uppercase">Anomalía</span>
+</div>
+<h4 class="font-headline-sm text-[18px] text-on-surface">Spike de voids en mesa 4 — Jose Nuñez</h4>
+<p class="text-on-surface-variant text-body-sm">3 cancelaciones consecutivas en los últimos 15 min. Posible problema en cocina o error de sistema.</p>
+</div>
+<button class="bg-primary text-white px-md py-sm rounded-lg font-bold text-body-sm hover:bg-primary-container transition-all">Intervenir</button>
+</div>
+<!-- Card 3: Oportunidad (Guest Churn) -->
+<div class="bg-white border-l-4 border-primary p-md rounded-xl shadow-sm flex items-center gap-lg hover:translate-x-1 transition-transform cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">person_alert</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-xs mb-xs">
+<span class="bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold px-2 py-0.5 rounded uppercase">Oportunidad</span>
+</div>
+<h4 class="font-headline-sm text-[18px] text-on-surface">184 huéspedes en riesgo de churn</h4>
+<p class="text-on-surface-variant text-body-sm">Clientes frecuentes sin visita en &gt;21 días. Se sugiere campaña de re-engagement.</p>
+</div>
+<div class="flex flex-col gap-1 items-end">
+<div class="flex -space-x-2">
+<img alt="User" class="w-8 h-8 rounded-full border-2 border-white" data-alt="A close-up portrait of a satisfied restaurant customer, high-end photography, cinematic lighting, warm colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD79OvpsAtaFas8VDMKPboVBpOiOcNQKySH6UuJcEXlmRX-XmlEurFgfjIJIqD_sU-uNiDxDnB7OaRAuUbx3Ax9KUHAPlrYEO16EJt_GVV3cQ8-FsCore1fYNSR2MnFiIuuWQgaue1UUJGBAGz7cNfVvEXnuE0qBr4M3FIAqBZgE4Ix-zSRkVFHUlbqrECwbGaH26F0xch9v8PZ4XfrEvUy4BXU1cTiBri6G6DqMLu5gdnHCsufTWP-Tncy6-PHf0SWbZybuUFUw-w"/>
+<img alt="User" class="w-8 h-8 rounded-full border-2 border-white" data-alt="A close-up portrait of a cheerful female restaurant guest, natural lighting, modern lifestyle aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1b5ryCfH2VWvcLj31mfFdZZ8kURt8btCPSbRzrzxyNQoq562qq9aqCSqBbxlujVExgp6HVXYtMJcmQW48XxbVdw24_N20P6SlAcp5WhItxClThJla1Tlr6Jq0fT-xYMCsnNIfpxw35NcecBSvw5W6SLHhP-8bo5P6hu4-cR7wNn78WZAh8HwDgewRfocsWLDHBA44irBxXCh_efGU9nVcg09nGxeRvIQC9mspJCrtYRHBMyMZ42ZAb7aDNptln3rwhaJZ88OreMk"/>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container flex items-center justify-center text-[10px] font-bold">+182</div>
+</div>
+</div>
+</div>
+<!-- Card 6: Ejecutada (Success) -->
+<div class="bg-surface-container-low border-l-4 border-outline p-md rounded-xl opacity-80 flex items-center gap-lg grayscale-[0.5]">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-xs mb-xs">
+<span class="bg-outline text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Ejecutada</span>
+<span class="text-on-surface-variant font-label-md">• Hace 3 horas</span>
+</div>
+<h4 class="font-headline-sm text-[18px] text-outline">Subir par level aguacate</h4>
+<p class="text-on-surface-variant text-body-sm">Ajustado a 45kg/día basado en pronóstico de fin de semana largo.</p>
+</div>
+<div class="text-right text-outline">
+<span class="material-symbols-outlined">verified</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Section: Action Ledger -->
+<section class="bg-white p-lg rounded-xl shadow-sm border border-outline-variant">
+<div class="flex justify-between items-center mb-lg">
+<div>
+<h3 class="font-headline-sm text-headline-sm">Action Ledger</h3>
+<p class="text-on-surface-variant text-body-sm">Seguimiento de impactos financieros últimos 30 días.</p>
+</div>
+<div class="flex gap-base">
+<button class="px-md py-base text-label-md text-on-surface-variant hover:bg-surface-container rounded-lg">Impacto ($)</button>
+<button class="px-md py-base text-label-md bg-primary-container text-white rounded-lg">Frecuencia</button>
+</div>
+</div>
+<!-- Visualization Mockup -->
+<div class="h-64 flex items-end justify-between gap-base pt-md">
+<!-- Bars -->
+<div class="flex-1 bg-surface-container group relative h-[40%] rounded-t-sm hover:bg-primary-container transition-all">
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-base bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">Sept 24: $420</div>
+</div>
+<div class="flex-1 bg-surface-container group relative h-[55%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-primary group relative h-[85%] rounded-t-sm hover:bg-primary-container transition-all">
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-base bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">Oct 02: $1,200 (Promo)</div>
+</div>
+<div class="flex-1 bg-surface-container group relative h-[60%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-surface-container group relative h-[45%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-surface-container group relative h-[30%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-secondary-container group relative h-[95%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-surface-container group relative h-[70%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-surface-container group relative h-[50%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-primary-container group relative h-[100%] rounded-t-sm hover:bg-primary transition-all"></div>
+<div class="flex-1 bg-surface-container group relative h-[65%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-surface-container group relative h-[40%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-surface-container group relative h-[55%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+<div class="flex-1 bg-surface-container group relative h-[35%] rounded-t-sm hover:bg-primary-container transition-all"></div>
+</div>
+<div class="flex justify-between mt-sm border-t border-outline-variant pt-base text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">
+<span>Semana 1</span>
+<span>Semana 2</span>
+<span>Semana 3</span>
+<span>Semana 4</span>
+</div>
+</section>
+</div>
+</main>
+<!-- Micro-interaction for hover effects -->
+<script>
+        document.querySelectorAll('.hover\\:translate-x-1').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateX(4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateX(0)';
+            });
+        });
+    </script>
+</body></html>

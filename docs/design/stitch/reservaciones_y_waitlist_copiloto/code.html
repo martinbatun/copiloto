@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reservaciones — Roma Norte | Copiloto</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Lexend:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e4e1e6",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#1b1b1e",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#ffb95f",
+                      "secondary-fixed": "#ffddb8",
+                      "secondary-container": "#fea619",
+                      "on-secondary-fixed-variant": "#653e00",
+                      "surface-container-high": "#eae7eb",
+                      "on-primary-fixed-variant": "#862200",
+                      "tertiary-fixed-dim": "#ffb59f",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed": "#ffdbd1",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#dcd9dd",
+                      "surface-container": "#f0edf1",
+                      "on-primary-container": "#fffbff",
+                      "tertiary": "#a23917",
+                      "primary": "#a93107",
+                      "on-surface-variant": "#59413b",
+                      "outline": "#8d7169",
+                      "on-secondary-container": "#684000",
+                      "surface": "#fbf8fc",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed": "#3b0a00",
+                      "primary-fixed": "#ffdbd1",
+                      "surface-variant": "#e4e1e6",
+                      "primary-container": "#cb4921",
+                      "background": "#fbf8fc",
+                      "inverse-on-surface": "#f3f0f4",
+                      "on-tertiary-container": "#fffbff",
+                      "outline-variant": "#e1bfb6",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#c2512d",
+                      "inverse-surface": "#303033",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#ac340a",
+                      "primary-fixed-dim": "#ffb5a0",
+                      "surface-bright": "#fbf8fc",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f6f2f7",
+                      "on-secondary-fixed": "#2a1700",
+                      "on-tertiary-fixed-variant": "#842503",
+                      "on-tertiary-fixed": "#3a0a00",
+                      "secondary": "#855300",
+                      "inverse-primary": "#ffb5a0",
+                      "on-background": "#1b1b1e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "lg": "2rem",
+                      "sm": "1rem",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "md": "1.5rem",
+                      "margin-desktop": "40px",
+                      "xs": "0.5rem",
+                      "xl": "3rem"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Lexend"],
+                      "headline-sm": ["Lexend"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "numeral-xl": ["Lexend"],
+                      "body-lg": ["Inter"],
+                      "display-md": ["Lexend"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Lexend"],
+                      "display-lg": ["Lexend"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .timeline-grid {
+            background-image: linear-gradient(to right, #e1bfb6 1px, transparent 1px);
+            background-size: 100px 100%;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(24px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e1bfb6;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full h-[64px] z-50 flex justify-between items-center px-margin-desktop w-full max-w-full border-b border-surface-variant bg-white/86 backdrop-blur-md shadow-sm">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md font-bold text-primary">Copiloto</span>
+<div class="hidden md:flex gap-sm items-center">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Tablero</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Co-piloto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Forecast</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-2 font-body-md text-body-md" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Recetas</a>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<div class="relative flex items-center bg-surface-container px-sm py-xs rounded-full">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48" placeholder="Buscar reservación..." type="text"/>
+</div>
+<button class="material-symbols-outlined p-xs text-on-surface-variant hover:bg-surface-container-low rounded-full">notifications</button>
+<img alt="Monica" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSpN33uCo3P5-NoHMx-Yz0wFC12DdECWCvS6Z_Prri9N27Dw_UOQ2z16WtiHyQRT1A8ehu9zkCGWGblkH6A41aJr5kd7mWJIdsMzXrTbmjJhRImjgchbDUJc1Byy8clD4srEx_VD4mfKM0znUm-sIJf-O-rdjSwGYElLRllTTdjGrs-AxiaegpQ52MrQ0TyC2WkrWKTA0GwIbTo2dZRcIiP-bldDBY7xRqymJagSfdG5pTrOlRwQlBqIy2tX9Katykn-By3L_lEcc"/>
+</div>
+</nav>
+<!-- SideNavBar (Right) -->
+<aside class="fixed right-0 top-[64px] h-[calc(100vh-64px)] w-80 z-40 bg-surface-container-lowest border-l border-surface-variant flex flex-col py-lg gap-base">
+<div class="px-sm mb-md">
+<div class="flex items-center gap-sm p-sm bg-surface-container rounded-xl">
+<img alt="Roma Norte" class="w-10 h-10 rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC40E6iv3h98-84cMnZ9Zg-8nesTuwNVHl172b6Gne49sEBCjY40hUwK7vujINSJu2gJgvhSM8X-pnkm9mrIIUXHjPWFkm7OZGCNj8vWeT-eoN6E43P0oSKFWBQKg5fr2oubcOLaSTs0ruMFHoBLr_BrRhaNAu5fEBBWLfq4GlXS7mMgSeYbg-Xg5qgk87vFQI0YMnmtTu_XMnXqk3vkeXtdAAEsFNWYWzbNuTy-kgo2wiSM6HM_EamBjPMBzpDTqIeTt-RVgSlxG4"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Roma Norte</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gerente de Turno</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-xs grow">
+<button class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Huespedes</span>
+</button>
+<button class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">KPIs</span>
+</button>
+<button class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</button>
+<button class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high rounded-xl mx-2">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Ayuda</span>
+</button>
+</div>
+<div class="px-md">
+<button class="w-full py-sm bg-gradient-to-r from-primary to-tertiary text-white rounded-xl shadow-lg font-label-md text-label-md flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                Solicitar IA Insight
+            </button>
+</div>
+<button class="flex items-center gap-sm p-sm text-error hover:bg-error-container/20 rounded-xl mx-2 mt-md">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Cerrar Sesión</span>
+</button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-[64px] pr-80 min-h-screen">
+<div class="p-margin-desktop grid grid-cols-12 gap-gutter">
+<!-- Header Section -->
+<div class="col-span-12 flex justify-between items-end mb-sm">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Reservaciones — Roma Norte</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Viernes, 24 de Mayo | Turno Cena</p>
+</div>
+<div class="flex gap-xs">
+<button class="px-md py-sm bg-white border border-outline-variant rounded-full font-label-md text-label-md flex items-center gap-xs hover:bg-surface-container-low">
+<span class="material-symbols-outlined">calendar_today</span>
+                        Calendario
+                    </button>
+<button class="px-md py-sm bg-primary text-white rounded-full font-label-md text-label-md flex items-center gap-xs shadow-md">
+<span class="material-symbols-outlined">add</span>
+                        Nueva Reserva
+                    </button>
+</div>
+</div>
+<!-- Left Panel: Timeline -->
+<div class="col-span-8 bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden flex flex-col h-[700px]">
+<div class="p-md border-b border-surface-variant flex justify-between items-center bg-surface-container-lowest">
+<h2 class="font-headline-sm text-headline-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary">schedule</span>
+                        Timeline de la Noche
+                    </h2>
+<div class="flex items-center gap-sm text-body-sm">
+<span class="flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-primary-container"></span> Confirmada</span>
+<span class="flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-secondary-container"></span> VIP</span>
+<span class="flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-surface-container-highest"></span> Pendiente</span>
+</div>
+</div>
+<div class="grow overflow-auto custom-scrollbar relative">
+<!-- Time Header -->
+<div class="sticky top-0 z-10 bg-white/90 backdrop-blur-sm border-b border-surface-variant flex">
+<div class="w-24 p-sm border-r border-surface-variant shrink-0 font-label-md text-label-md bg-surface-container-low text-center">Mesas</div>
+<div class="flex grow">
+<div class="w-[100px] p-sm text-center border-r border-surface-variant font-label-md text-label-md">19:00</div>
+<div class="w-[100px] p-sm text-center border-r border-surface-variant font-label-md text-label-md">19:30</div>
+<div class="w-[100px] p-sm text-center border-r border-surface-variant font-label-md text-label-md">20:00</div>
+<div class="w-[100px] p-sm text-center border-r border-surface-variant font-label-md text-label-md">20:30</div>
+<div class="w-[100px] p-sm text-center border-r border-surface-variant font-label-md text-label-md">21:00</div>
+<div class="w-[100px] p-sm text-center border-r border-surface-variant font-label-md text-label-md">21:30</div>
+<div class="w-[100px] p-sm text-center border-r border-surface-variant font-label-md text-label-md">22:00</div>
+<div class="w-[100px] p-sm text-center border-r border-surface-variant font-label-md text-label-md">22:30</div>
+<div class="w-[100px] p-sm text-center border-r border-surface-variant font-label-md text-label-md">23:00</div>
+<div class="w-[100px] p-sm text-center font-label-md text-label-md">23:30</div>
+</div>
+</div>
+<!-- Grid Content -->
+<div class="flex min-w-max timeline-grid">
+<!-- Table Numbers -->
+<div class="w-24 shrink-0 bg-surface-container-lowest border-r border-surface-variant">
+<div class="h-20 border-b border-surface-variant flex items-center justify-center font-bold text-primary">Mesa 10</div>
+<div class="h-20 border-b border-surface-variant flex items-center justify-center font-bold text-primary">Mesa 11</div>
+<div class="h-20 border-b border-surface-variant flex items-center justify-center font-bold text-primary">Mesa 12</div>
+<div class="h-20 border-b border-surface-variant flex items-center justify-center font-bold text-primary">Mesa 14</div>
+<div class="h-20 border-b border-surface-variant flex items-center justify-center font-bold text-primary">Mesa 15</div>
+<div class="h-20 border-b border-surface-variant flex items-center justify-center font-bold text-primary">Mesa 16</div>
+<div class="h-20 border-b border-surface-variant flex items-center justify-center font-bold text-primary">Mesa 17</div>
+<div class="h-20 border-b border-surface-variant flex items-center justify-center font-bold text-primary">Mesa 18</div>
+</div>
+<!-- Slots -->
+<div class="grow relative">
+<!-- Mesa 12 VIP Block -->
+<div class="absolute left-[200px] top-[168px] w-[350px] h-16 bg-secondary-container rounded-xl shadow-md border-l-4 border-primary p-xs flex flex-col justify-center cursor-pointer hover:scale-[1.02] transition-transform z-20">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-secondary-container">Lucia Robles VIP 🎂</span>
+<span class="material-symbols-outlined text-sm">star</span>
+</div>
+<span class="text-[11px] font-medium text-on-secondary-container/80 uppercase tracking-wider">6 Personas | 20:00 - 21:45</span>
+</div>
+<!-- Mesa 10 Block -->
+<div class="absolute left-[50px] top-[8px] w-[200px] h-16 bg-primary-container/20 border-l-4 border-primary rounded-lg p-xs flex flex-col justify-center">
+<span class="font-label-md text-label-md text-primary">Carlos Slim</span>
+<span class="text-[11px] text-primary/70">2 Personas | 19:15</span>
+</div>
+<!-- Mesa 14 Block -->
+<div class="absolute left-[400px] top-[248px] w-[250px] h-16 bg-primary-container text-white border-l-4 border-white/40 rounded-lg p-xs flex flex-col justify-center">
+<span class="font-label-md text-label-md">Raul Jimenez</span>
+<span class="text-[11px] opacity-80">4 Personas | 21:00</span>
+</div>
+<!-- Mesa 11 Block -->
+<div class="absolute left-[650px] top-[88px] w-[200px] h-16 bg-surface-container-highest/50 border-l-4 border-outline rounded-lg p-xs flex flex-col justify-center">
+<span class="font-label-md text-label-md text-on-surface">Marta Gomez</span>
+<span class="text-[11px] text-on-surface-variant">2 Personas | 22:15</span>
+</div>
+<!-- Grid Lines Visual Placeholder -->
+<div class="h-full w-full pointer-events-none opacity-5">
+<!-- Background grid handled by .timeline-grid CSS -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Stack -->
+<div class="col-span-4 flex flex-col gap-gutter">
+<!-- Card 1: Waitlist -->
+<div class="bg-white border border-outline-variant rounded-xl shadow-sm p-md border-l-4 border-secondary">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-sm text-headline-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary">hourglass_top</span>
+                            Waitlist
+                        </h3>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-sm py-xs rounded-full font-label-md text-label-md">3 esperando</span>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="flex justify-between items-center p-sm bg-surface-container-low rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md">M. Perez (4p)</span>
+<span class="text-body-sm text-on-surface-variant">Espera: 15 min</span>
+</div>
+<button class="material-symbols-outlined text-secondary">notifications_active</button>
+</div>
+<div class="flex justify-between items-center p-sm bg-surface-container-low rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md">J. Herrera (2p)</span>
+<span class="text-body-sm text-on-surface-variant">Espera: 8 min</span>
+</div>
+<button class="material-symbols-outlined text-outline">notifications</button>
+</div>
+</div>
+</div>
+<!-- Card 2: No-shows + Recovery -->
+<div class="bg-white border border-outline-variant rounded-xl shadow-sm p-md border-l-4 border-error">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-sm text-headline-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-error">event_busy</span>
+                            No-shows
+                        </h3>
+</div>
+<div class="flex items-center gap-md p-sm bg-error-container/20 rounded-lg mb-sm">
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-error-container">Ana Paula (20:30)</p>
+<p class="text-body-sm text-on-surface-variant">No llegó. Mesa liberada.</p>
+</div>
+<button class="bg-primary text-white p-xs rounded-full flex items-center gap-xs text-[12px] px-sm">
+<span class="material-symbols-outlined text-sm">send</span> Recovery
+                        </button>
+</div>
+<div class="mt-base">
+<p class="text-[12px] text-on-surface-variant italic">IA enviará recordatorio de penalización vía WhatsApp.</p>
+</div>
+</div>
+<!-- Card 3: Bot FOH (Agente WhatsApp) -->
+<div class="bg-gradient-to-br from-[#B9532A] to-[#9A3412] text-white rounded-xl shadow-lg p-md overflow-hidden relative">
+<div class="flex items-center gap-sm mb-md">
+<div class="w-10 h-10 bg-secondary-container rounded-full flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md">Copiloto FOH</h3>
+<p class="text-[11px] opacity-80">Agente de Reservas Activo</p>
+</div>
+<div class="ml-auto w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="bg-white/10 backdrop-blur-md p-sm rounded-lg border border-white/20 transform -translate-x-2">
+<p class="text-[12px] italic">"Hola! ¿Aún tienen mesa para 4 a las 9pm?"</p>
+<div class="mt-xs flex justify-end">
+<span class="text-[10px] opacity-60">Gaby T. · Hace 1m</span>
+</div>
+</div>
+<div class="bg-primary-container p-sm rounded-lg self-end border border-white/20 transform translate-x-2">
+<p class="text-[12px]">"¡Hola Gaby! Sí, solo nos queda en Terraza. ¿Te la reservo?"</p>
+<div class="mt-xs flex justify-start">
+<span class="text-[10px] opacity-60">Copiloto AI</span>
+</div>
+</div>
+</div>
+<div class="mt-md pt-sm border-t border-white/20 flex justify-between items-center">
+<span class="text-body-sm">4 conversaciones activas</span>
+<button class="text-[12px] font-bold underline">Ver todos</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB Action Button -->
+<button class="fixed bottom-lg right-10 w-16 h-16 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50">
+<span class="material-symbols-outlined text-[32px]">assignment_add</span>
+</button>
+<script>
+        // Micro-interactions for timeline blocks
+        document.querySelectorAll('.cursor-pointer').forEach(block => {
+            block.addEventListener('click', () => {
+                alert('Abriendo detalles de la reserva: ' + block.querySelector('span').innerText);
+            });
+        });
+
+        // Simple smooth scroll for timeline
+        const timeline = document.querySelector('.overflow-auto');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        timeline.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - timeline.offsetLeft;
+            scrollLeft = timeline.scrollLeft;
+        });
+        timeline.addEventListener('mouseleave', () => {
+            isDown = false;
+        });
+        timeline.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+        timeline.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - timeline.offsetLeft;
+            const walk = (x - startX) * 2;
+            timeline.scrollLeft = scrollLeft - walk;
+        });
+    </script>
+</body></html>

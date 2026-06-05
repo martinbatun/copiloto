@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@600;700;800;900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "surface-container": "#f0edf1",
+                    "surface-bright": "#fbf8fc",
+                    "on-secondary-fixed": "#2a1700",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#59413b",
+                    "surface-dim": "#dcd9dd",
+                    "primary-fixed-dim": "#ffb5a0",
+                    "on-background": "#1b1b1e",
+                    "on-tertiary-fixed-variant": "#842503",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#c2512d",
+                    "surface-variant": "#e4e1e6",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#3a0a00",
+                    "tertiary": "#a23917",
+                    "secondary-container": "#fea619",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#a93107",
+                    "inverse-on-surface": "#f3f0f4",
+                    "on-primary-fixed": "#3b0a00",
+                    "surface-container-high": "#eae7eb",
+                    "outline-variant": "#e1bfb6",
+                    "outline": "#8d7169",
+                    "tertiary-fixed": "#ffdbd1",
+                    "background": "#fbf8fc",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1b1b1e",
+                    "surface-container-highest": "#e4e1e6",
+                    "on-secondary-container": "#684000",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#ac340a",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "secondary-fixed": "#ffddb8",
+                    "on-primary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "on-primary-fixed-variant": "#862200",
+                    "primary-container": "#cb4921",
+                    "surface-container-low": "#f6f2f7",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb59f",
+                    "surface": "#fbf8fc",
+                    "secondary": "#855300",
+                    "primary-fixed": "#ffdbd1",
+                    "inverse-primary": "#ffb5a0",
+                    "on-tertiary-container": "#fffbff",
+                    "inverse-surface": "#303033"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "3rem",
+                    "sm": "1rem",
+                    "md": "1.5rem",
+                    "xs": "0.5rem",
+                    "margin-desktop": "40px",
+                    "base": "4px",
+                    "lg": "2rem",
+                    "margin-mobile": "16px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-md": ["Lexend"],
+                    "numeral-xl": ["Lexend"],
+                    "headline-sm": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-md": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass { @apply bg-surface/86 backdrop-blur-xl; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen pb-24">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/86 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant/50">
+<img alt="Manager" class="w-full h-full object-cover" data-alt="A professional headshot of a Hispanic restaurant manager in his early 40s, wearing a clean charcoal grey bistro apron. The lighting is soft and natural, coming from a large window in a modern, sunlit upscale Mexican restaurant. The overall aesthetic is clean, professional, and warm, with soft out-of-focus wooden textures in the background to maintain a high-end minimalist feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUKkvEOx-_mCcqYSeNpaJMK0UsiqkOuf4xcOTnx4pxQfv8ETE5LBY7OVSICzXzYOSLGfaiTgrhUlzGToN_9QDvSnSorZrIzXD4d_jwlbjLQNLFtJGRLGmM7zSbjipGqJ0za2Z5gnxyW5BCdEHvtvTG6rv_RME-Y0RZoQCJD__9cXwhEkZ_g-lPQHQveNUY7TH8F3fSuDucN5VFQ0MfVoHs_8gwCGhYAeGuaf7rsxaYcTx45K_2rb3drsQjD7G8S2I3RFvMNR1_REs"/>
+</div>
+<h1 class="font-display-md text-headline-sm text-primary tracking-tight">Reservaciones</h1>
+</div>
+<button class="material-symbols-outlined text-primary active:scale-95 transition-transform" data-icon="event_available">
+            event_available
+        </button>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 px-margin-mobile space-y-lg">
+<!-- Quick Stats / Copiloto Insights -->
+<section class="mt-4 p-md rounded-xl bg-gradient-to-br from-tertiary-container to-tertiary text-on-tertiary-container shadow-md border-l-4 border-[#F59E0B]">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-tertiary-container" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<h3 class="font-label-md text-label-md uppercase tracking-wider">Copiloto AI</h3>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full text-[10px] font-bold">LIVE</span>
+</div>
+<p class="font-body-sm text-body-sm leading-snug">
+                Proyección de 85% de ocupación hoy. Tienes 3 mesas VIP llegando en 20 mins. Sugerencia: Priorizar el Turno 2 en Terraza.
+            </p>
+</section>
+<!-- Segmented Control for Views -->
+<div class="flex p-1 bg-surface-container rounded-full border border-outline-variant/20">
+<button class="flex-1 py-2 text-center rounded-full bg-surface-container-lowest shadow-sm text-primary font-semibold font-label-md transition-all">
+                Lista
+            </button>
+<button class="flex-1 py-2 text-center rounded-full text-on-surface-variant font-label-md hover:bg-surface-container-high transition-colors">
+                Plano
+            </button>
+<button class="flex-1 py-2 text-center rounded-full text-on-surface-variant font-label-md hover:bg-surface-container-high transition-colors">
+                Waitlist
+            </button>
+</div>
+<!-- Section Title: Upcoming Reservations -->
+<div class="flex justify-between items-center">
+<h2 class="font-display-md text-headline-sm text-on-surface">Próximos Turnos</h2>
+<button class="text-primary font-semibold text-body-sm flex items-center gap-1">
+                Ver todo <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- List View Container -->
+<div class="space-y-sm">
+<!-- Reservation Card 1: Confirmed -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant/30 border-l-4 border-primary shadow-sm active:scale-[0.98] transition-transform">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary font-bold font-numeral-xl">
+                            19
+                        </div>
+<div>
+<p class="font-headline-sm text-body-md text-on-surface">Familia Ortiz</p>
+<p class="font-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">groups</span> 6 pax • Terraza
+                            </p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-primary-container/10 text-primary text-[11px] font-bold">CONFIRMADO</span>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 py-2 rounded-lg bg-primary text-white font-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">login</span> Check-in
+                    </button>
+<button class="w-12 h-10 flex items-center justify-center rounded-lg border border-outline-variant/50 text-on-surface-variant">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Reservation Card 2: No-Show Alert -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant/30 border-l-4 border-error shadow-sm bg-error-container/5">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-error-container flex items-center justify-center text-error font-bold font-numeral-xl">
+                            15
+                        </div>
+<div>
+<p class="font-headline-sm text-body-md text-on-surface">Roberto G. <span class="material-symbols-outlined text-error text-[14px]">priority_high</span></p>
+<p class="font-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span> Retrasado 15m • Salón
+                            </p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-error text-white text-[11px] font-bold">ALERTA</span>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 py-2 rounded-lg border border-error text-error font-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">phone</span> Llamar
+                    </button>
+<button class="flex-1 py-2 rounded-lg bg-surface-container text-on-surface-variant font-label-md">No-Show</button>
+</div>
+</div>
+</div>
+<!-- Waitlist Section -->
+<div class="mt-8">
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-display-md text-headline-sm text-on-surface">Waitlist (4)</h2>
+<button class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<div class="flex overflow-x-auto gap-4 pb-4 hide-scrollbar">
+<!-- Waitlist Card 1 -->
+<div class="min-w-[160px] p-4 rounded-2xl bg-surface-container-high border border-outline-variant/30 flex flex-col items-center text-center">
+<span class="text-tertiary font-bold font-display-md mb-1">12m</span>
+<p class="font-label-md text-on-surface truncate w-full">S. Martínez</p>
+<p class="text-[12px] text-on-surface-variant mb-3">2 pax</p>
+<button class="w-full py-1.5 rounded-full bg-tertiary-container text-on-tertiary-container text-[12px] font-bold">Notificar</button>
+</div>
+<!-- Waitlist Card 2 -->
+<div class="min-w-[160px] p-4 rounded-2xl bg-surface-container-high border border-outline-variant/30 flex flex-col items-center text-center opacity-70">
+<span class="text-primary font-bold font-display-md mb-1">25m</span>
+<p class="font-label-md text-on-surface truncate w-full">B. Lopez</p>
+<p class="text-[12px] text-on-surface-variant mb-3">4 pax</p>
+<button class="w-full py-1.5 rounded-full bg-surface-variant text-on-surface-variant text-[12px] font-bold">Espera</button>
+</div>
+<!-- Waitlist Card 3 -->
+<div class="min-w-[160px] p-4 rounded-2xl bg-surface-container-high border border-outline-variant/30 flex flex-col items-center text-center opacity-70">
+<span class="text-primary font-bold font-display-md mb-1">40m</span>
+<p class="font-label-md text-on-surface truncate w-full">L. Herrera</p>
+<p class="text-[12px] text-on-surface-variant mb-3">6 pax</p>
+<button class="w-full py-1.5 rounded-full bg-surface-variant text-on-surface-variant text-[12px] font-bold">Espera</button>
+</div>
+</div>
+</div>
+<!-- Quick Table Status (Mini Plano Simplificado) -->
+<div class="mt-4">
+<h2 class="font-display-md text-headline-sm text-on-surface mb-4">Estado de Mesas</h2>
+<div class="grid grid-cols-4 gap-3">
+<!-- Table Dots -->
+<div class="aspect-square rounded-lg bg-primary-container text-on-primary-container flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">T1</span>
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+<div class="aspect-square rounded-lg bg-primary-container text-on-primary-container flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">T2</span>
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+<div class="aspect-square rounded-lg bg-surface-container-high text-on-surface-variant border border-outline-variant/30 flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">T3</span>
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div class="aspect-square rounded-lg bg-secondary-container text-on-secondary-container flex flex-col items-center justify-center animate-pulse">
+<span class="text-[10px] font-bold">T4</span>
+<span class="material-symbols-outlined text-[20px]">cleaning_services</span>
+</div>
+<div class="aspect-square rounded-lg bg-primary-container text-on-primary-container flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">S1</span>
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+<div class="aspect-square rounded-lg bg-surface-container-high text-on-surface-variant border border-outline-variant/30 flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">S2</span>
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div class="aspect-square rounded-lg bg-tertiary-container text-on-tertiary-container flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">S3</span>
+<span class="material-symbols-outlined text-[20px]">star</span>
+</div>
+<div class="aspect-square rounded-lg bg-primary-container text-on-primary-container flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">S4</span>
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+</div>
+<div class="mt-4 flex gap-4 text-[11px] font-bold text-on-surface-variant px-2">
+<div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-primary-container"></div> OCUPADO</div>
+<div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-surface-container-high border border-outline-variant"></div> LIBRE</div>
+<div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-secondary-container"></div> LIMPIEZA</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-surface/86 backdrop-blur-xl border-t border-outline-variant/30 flex justify-around items-center px-xs pb-safe z-50 shadow-lg rounded-t-xl">
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-[10px]">Operaciones</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-md text-[10px]">Staff</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-[10px]">Inventario</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-md text-[10px]">CRM</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 duration-200">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-md text-[10px]">Copiloto</span>
+</div>
+</nav>
+<!-- Interactive FAB for quick actions -->
+<button class="fixed right-6 bottom-24 w-14 h-14 bg-tertiary text-white rounded-2xl shadow-xl flex items-center justify-center active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined text-[32px]">add_circle</span>
+</button>
+<script>
+        // Micro-interactions and subtle feedback
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Optional: Trigger haptic feedback if supported or subtle UI response
+                console.log('Interaction triggered');
+            });
+        });
+
+        // Simple visibility observer for lazy entrance animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.bg-surface-container-lowest').forEach(el => {
+            el.classList.add('transition-all', 'duration-500', 'opacity-0', 'translate-y-4');
+            observer.observe(el);
+        });
+    </script>
+</body></html>

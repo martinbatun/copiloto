@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Centro de Proveedores | Copiloto</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Lexend:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#ffb5a0",
+                        "primary-container": "#cb4921",
+                        "background": "#fbf8fc",
+                        "inverse-surface": "#303033",
+                        "primary-fixed-dim": "#ffb5a0",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#fea619",
+                        "outline": "#8d7169",
+                        "on-primary-fixed-variant": "#862200",
+                        "tertiary": "#a23917",
+                        "on-secondary-fixed": "#2a1700",
+                        "primary-fixed": "#ffdbd1",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#855300",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#842503",
+                        "on-tertiary-container": "#fffbff",
+                        "tertiary-fixed": "#ffdbd1",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "surface-variant": "#e4e1e6",
+                        "surface-container-high": "#eae7eb",
+                        "inverse-on-surface": "#f3f0f4",
+                        "surface": "#fbf8fc",
+                        "on-background": "#1b1b1e",
+                        "surface-container-low": "#f6f2f7",
+                        "tertiary-container": "#c2512d",
+                        "tertiary-fixed-dim": "#ffb59f",
+                        "on-surface-variant": "#59413b",
+                        "secondary-fixed": "#ffddb8",
+                        "outline-variant": "#e1bfb6",
+                        "surface-tint": "#ac340a",
+                        "surface-container": "#f0edf1",
+                        "on-surface": "#1b1b1e",
+                        "on-secondary-container": "#684000",
+                        "on-primary-container": "#fffbff",
+                        "surface-dim": "#dcd9dd",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#3a0a00",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e4e1e6",
+                        "on-primary-fixed": "#3b0a00",
+                        "primary": "#a93107",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fbf8fc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "0.5rem",
+                        "base": "4px",
+                        "margin-mobile": "16px",
+                        "md": "1.5rem",
+                        "margin-desktop": "40px",
+                        "xl": "3rem",
+                        "sm": "1rem",
+                        "lg": "2rem",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Lexend"],
+                        "numeral-xl": ["Lexend"],
+                        "headline-sm": ["Lexend"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "display-md": ["Lexend"],
+                        "display-lg": ["Lexend"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-nav {
+            background: rgba(251, 248, 252, 0.86);
+            backdrop-filter: blur(24px);
+        }
+        .bento-card {
+            background: #ffffff;
+            border: 1px solid #e1bfb6;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .bento-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(169, 49, 7, 0.08);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sparkline {
+            fill: none;
+            stroke: #a93107;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-surface">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface border-r border-outline-variant flex flex-col py-md px-xs z-[60] hidden md:flex">
+<div class="px-sm mb-lg">
+<h1 class="font-headline-sm text-headline-sm text-primary">Copiloto</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Operational Excellence</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-sm py-3 text-on-surface-variant hover:bg-surface-container transition-all duration-200 font-label-md text-label-md rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 px-sm py-3 text-on-surface-variant hover:bg-surface-container transition-all duration-200 font-label-md text-label-md rounded-lg" href="#">
+<span class="material-symbols-outlined">analytics</span> Analytics
+            </a>
+<a class="flex items-center gap-3 px-sm py-3 text-on-surface-variant hover:bg-surface-container transition-all duration-200 font-label-md text-label-md rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span> Staff
+            </a>
+<a class="flex items-center gap-3 px-sm py-3 text-primary font-bold border-l-4 border-primary bg-primary-fixed/20 font-label-md text-label-md rounded-r-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">conveyor_belt</span> Supply Chain
+            </a>
+<a class="flex items-center gap-3 px-sm py-3 text-on-surface-variant hover:bg-surface-container transition-all duration-200 font-label-md text-label-md rounded-lg" href="#">
+<span class="material-symbols-outlined">support_agent</span> Support
+            </a>
+</nav>
+<div class="mt-auto pt-md space-y-1">
+<button class="w-full flex items-center gap-3 px-sm py-3 bg-gradient-to-r from-primary to-tertiary text-white rounded-xl shadow-md active:scale-95 transition-all font-label-md text-label-md mb-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span> Copiloto AI
+            </button>
+<a class="flex items-center gap-3 px-sm py-3 text-on-surface-variant hover:bg-surface-container transition-all duration-200 font-label-md text-label-md rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span> Help
+            </a>
+<a class="flex items-center gap-3 px-sm py-3 text-on-surface-variant hover:bg-surface-container transition-all duration-200 font-label-md text-label-md rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span> Logout
+            </a>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-margin-desktop w-full h-16 fixed top-0 z-50 glass-nav border-b border-outline-variant md:pl-[18rem]">
+<div class="flex items-center gap-6">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">Inventario</span>
+<nav class="hidden lg:flex items-center gap-4">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Tablero</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Forecast</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">Inventario</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Recetas</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-body-sm font-body-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none w-64" placeholder="Buscar ingrediente..." type="text"/>
+</div>
+<button class="p-2 hover:bg-surface-container rounded-full transition-colors text-on-surface-variant active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Manager Profile" data-alt="A professional headshot of a Hispanic restaurant operations manager in his late 30s, wearing a clean, modern white linen shirt. He is standing in a softly blurred contemporary Mexican restaurant background with warm wood accents and Talavera tiles. The lighting is bright and airy, reflecting a high-end light-mode UI aesthetic. The mood is confident, organized, and welcoming." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-hVo82X-lTfZbq7bFW9yFFNAA2p-hATJrsNGDkBNth95yFkCC3LFqF8PAk5kpk2gdSlYwWNWZO9M8HK4a_F6OnvX_D8AiRsOIqCbrVtXWtEMBQZjRT987MXdrf_Eer2acqNN8S7YvTjrnf6b_IpghodKHnO15UFjqgcI0zmjmW56JQf6pyjirVwunZklS-3kZsz_mKd_FseA2fX5OF8pCzKe2TR7NaaSzi4iekeM1xOxHZSof173mS8gxOdZDwKcNd_w0JgYsf3g"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="md:pl-64 pt-24 pb-12 px-6 lg:px-margin-desktop min-h-screen">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Centro de Proveedores</h2>
+<p class="text-on-surface-variant font-body-md text-body-md max-w-2xl mt-2">Optimiza tu cadena de suministro con IA. Compara precios en tiempo real y gestiona tus pedidos desde un solo lugar.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 bg-primary text-white font-label-md text-label-md rounded-xl shadow-lg shadow-primary/20 flex items-center gap-2 hover:bg-primary-container transition-colors active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span> Nuevo Pedido
+                </button>
+</div>
+</div>
+<!-- Summary Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-lg">
+<div class="bento-card p-6 rounded-2xl border-l-4 border-l-secondary">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary bg-secondary-fixed/30 p-2 rounded-lg">savings</span>
+<span class="text-green-600 bg-green-50 px-2 py-1 rounded text-xs font-bold flex items-center">
+<span class="material-symbols-outlined text-xs">trending_up</span> 12%
+                    </span>
+</div>
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Ahorro Potencial</p>
+<p class="font-numeral-xl text-numeral-xl text-on-surface">$4,200 <span class="text-body-lg">MXN</span></p>
+</div>
+<div class="bento-card p-6 rounded-2xl border-l-4 border-l-primary">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary bg-primary-fixed/30 p-2 rounded-lg">package_2</span>
+<span class="text-on-surface-variant font-label-md text-label-md">Hoy</span>
+</div>
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Pedidos Pendientes</p>
+<p class="font-numeral-xl text-numeral-xl text-on-surface">08</p>
+</div>
+<div class="bento-card p-6 rounded-2xl border-l-4 border-l-tertiary">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-tertiary bg-tertiary-fixed/30 p-2 rounded-lg">verified</span>
+<span class="text-on-surface-variant font-label-md text-label-md">Top Desempeño</span>
+</div>
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Mejor Proveedor</p>
+<div class="flex items-center gap-3 mt-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-tertiary text-xs">SA</div>
+<p class="font-headline-sm text-headline-sm">Sigma Alimentos</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-gutter">
+<!-- Price Comparison & Ingredient Focus (Span 2) -->
+<div class="xl:col-span-2 space-y-gutter">
+<div class="bento-card rounded-2xl overflow-hidden">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+<h3 class="font-headline-sm text-headline-sm">Comparador de Precios</h3>
+<button class="text-primary font-label-md text-label-md hover:underline">Ver reporte completo</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Ingrediente</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Precio Actual</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Histórico Bajo</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Tendencia (3m)</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center text-green-700">🥑</div>
+<div>
+<p class="font-label-md text-label-md">Aguacate Hass</p>
+<p class="text-xs text-on-surface-variant">Caja 10kg • Michoacán</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-headline-sm text-headline-sm">$840.00</td>
+<td class="px-6 py-5 text-on-surface-variant font-label-md text-label-md">$780.00</td>
+<td class="px-6 py-5">
+<svg class="sparkline" height="30" width="80">
+<path d="M0,25 L10,20 L20,28 L30,15 L40,10 L50,18 L60,5 L70,8 L80,2"></path>
+</svg>
+</td>
+<td class="px-6 py-5">
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-label-md text-label-md transition-all active:scale-95 group-hover:shadow-md">Comprar</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center text-orange-700">🌽</div>
+<div>
+<p class="font-label-md text-label-md">Tortilla Nixtamal</p>
+<p class="text-xs text-on-surface-variant">Bulto 20kg • Local</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-headline-sm text-headline-sm">$320.00</td>
+<td class="px-6 py-5 text-on-surface-variant font-label-md text-label-md">$315.00</td>
+<td class="px-6 py-5">
+<svg class="sparkline" height="30" width="80">
+<path d="M0,15 L10,14 L20,16 L30,15 L40,15 L50,14 L60,15 L70,16 L80,15" stroke="#855300"></path>
+</svg>
+</td>
+<td class="px-6 py-5">
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-label-md text-label-md transition-all active:scale-95 group-hover:shadow-md">Comprar</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-700">🧅</div>
+<div>
+<p class="font-label-md text-label-md">Cebolla Blanca</p>
+<p class="text-xs text-on-surface-variant">Costal 25kg • Bajío</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-headline-sm text-headline-sm">$450.00</td>
+<td class="px-6 py-5 text-on-surface-variant font-label-md text-label-md">$390.00</td>
+<td class="px-6 py-5">
+<svg class="sparkline" height="30" width="80">
+<path d="M0,5 L10,12 L20,15 L30,22 L40,28 L50,25 L60,20 L70,18 L80,22" stroke="#ba1a1a"></path>
+</svg>
+</td>
+<td class="px-6 py-5">
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-label-md text-label-md transition-all active:scale-95 group-hover:shadow-md">Comprar</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Supplier Marketplace Grid -->
+<div>
+<h3 class="font-headline-sm text-headline-sm mb-4">Marketplace de Proveedores</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Supplier Card 1 -->
+<div class="bento-card rounded-2xl overflow-hidden flex flex-col">
+<div class="h-32 bg-surface-container-highest relative">
+<img alt="Sigma Alimentos" class="w-full h-full object-cover" data-alt="A brightly lit warehouse interior showcasing large-scale food distribution. Professional staff in clean uniforms are organizing fresh crates of high-quality meats and dairy products. The lighting is crisp and natural, highlighting the efficiency and hygiene of a top-tier industrial supplier. The color palette is clean with whites and subtle cool tones, fitting a modern premium UI style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBxRm7VguXSqr8RlFgIkRZyFkKfeYVg3epc235b8DYshAjOx5rFOpgc7__xOncy7yXHNHNpLlRZcMn5zOmR4Rdz2JiYqYR_506Lcu64l6OCIKAHXC6QN91nVrLKF8X77Peh0eLO6d_snH2KB3Txy5CehUN3XliGBYoLXxodk4lJWWH01zP-AW9WE_BA3yGb26H86MOrcy-0yAPNQCMxB1NKei8YzSefbgt03232ewhs1YaLPB-wCWgj9ljnemfExAhjF2-Fsr2EH0"/>
+<div class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-xs">4.9</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<h4 class="font-label-md text-label-md mb-1">Sigma Alimentos</h4>
+<p class="text-xs text-on-surface-variant mb-3">Carnes &amp; Lácteos</p>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xs">local_shipping</span>
+<span class="text-xs text-on-surface-variant">24-48h Entrega</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<div class="bg-primary-fixed/30 text-primary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Copiloto AI Rating</div>
+<span class="font-bold text-primary">A+</span>
+</div>
+</div>
+</div>
+<!-- Supplier Card 2 -->
+<div class="bento-card rounded-2xl overflow-hidden flex flex-col">
+<div class="h-32 bg-surface-container-highest relative">
+<img alt="Lácteos Polanco" class="w-full h-full object-cover" data-alt="A charming, high-end artisanal creamery interior with clean white tiled walls and marble countertops. Large glass jars of fresh milk and artisanal cheeses are displayed artistically under soft, warm pendant lighting. The atmosphere is sophisticated and highlights premium quality and traditional craftsmanship. The style is minimalist and airy, aligning with a warm professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwKDVy77RVLqjQX9RYCiCYOg2un332qtj6UFyq8caf8aBb8buDEfk5igUfa6C0txzTcEVATMDhh2zbOH_qQSOTefbtldY4HvxEiJJatagE5gVo3D6hBhTwhIRGqOZFWmYVTcS1pHkr3Cz20_ACCODIKbJznN4N1P0b8tqF4qnSYfmHkIB797sP6BeFT3C7tk8Z5C7H54Mm3tDyxUzUmzjN-T3XcKqERwhKScaxhW3ChcL-5C32Ul_Pyh49VDMcqMN4lEddHcy3vSk"/>
+<div class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-xs">4.7</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<h4 class="font-label-md text-label-md mb-1">Lácteos Polanco</h4>
+<p class="text-xs text-on-surface-variant mb-3">Quesos &amp; Cremas</p>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xs">local_shipping</span>
+<span class="text-xs text-on-surface-variant">12h (Local)</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<div class="bg-primary-fixed/30 text-primary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Copiloto AI Rating</div>
+<span class="font-bold text-primary">A</span>
+</div>
+</div>
+</div>
+<!-- Supplier Card 3 -->
+<div class="bento-card rounded-2xl overflow-hidden flex flex-col">
+<div class="h-32 bg-surface-container-highest relative">
+<img alt="Frutas Selectas" class="w-full h-full object-cover" data-alt="Vibrant, high-resolution close-up of a variety of premium fresh exotic fruits, including avocados, papayas, and dragon fruits, arranged neatly in wooden crates. The scene is illuminated by bright, natural sunlight, creating sharp shadows and highlighting the vivid colors and textures of the produce. The overall feel is fresh, organic, and top-tier quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwFOgUAwyozAth3CcHV6c3ugDjADj-Vm1Sq4TODKuwHNOivh_ou1dgGAeLYgUrSprlETOOkVf2iO4OCwWA2aC9PWo5OCkeeU1YAEYKVG4JUVxPeJTY96s8FnTNyzO_NUlmKzM2_bRCUA_hgJpAkF6iPEyD2lXQrjcGsdKN7F0DZXI_apF1JhyVLo-dnuo6b0wwzYcQUOcO5UCslPdW6GbiSTTzEzpxtr_M6F6CS-nhm7M88pL2YImidd2Ouc9-4DGj-E0Z6Ft7VYA"/>
+<div class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-xs">4.8</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<h4 class="font-label-md text-label-md mb-1">Frutas Selectas</h4>
+<p class="text-xs text-on-surface-variant mb-3">Frutas &amp; Verduras</p>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xs">local_shipping</span>
+<span class="text-xs text-on-surface-variant">24h Express</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<div class="bg-primary-fixed/30 text-primary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Copiloto AI Rating</div>
+<span class="font-bold text-primary">A+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Copiloto AI Insights Sidebar -->
+<div class="space-y-6">
+<div class="p-6 rounded-2xl bg-gradient-to-br from-[#B9532A] to-[#9A3412] text-white shadow-xl relative overflow-hidden">
+<!-- Subtle pattern overlay -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h3 class="font-headline-sm text-headline-sm">Copiloto AI Insight</h3>
+</div>
+<p class="font-body-lg text-body-lg mb-6 leading-relaxed">
+                            "Sugerencia: Cambiar de proveedor de <span class="font-bold text-secondary-container">Aguacate</span> a 'Frutas del Bosque' este mes ahorraría un <span class="font-bold">8% en food cost total</span>."
+                        </p>
+<div class="bg-white/10 backdrop-blur-md rounded-xl p-4 mb-6 border border-white/20">
+<p class="text-xs font-label-md uppercase tracking-wider mb-2 text-primary-fixed">Impacto Estimado</p>
+<div class="flex items-end gap-2">
+<span class="font-numeral-xl text-3xl">$12,450</span>
+<span class="text-xs mb-1">MXN / Mes</span>
+</div>
+</div>
+<button class="w-full py-3 bg-secondary-container text-on-secondary-container font-bold rounded-xl active:scale-95 transition-all hover:bg-secondary-fixed shadow-lg">
+                            Aplicar Cambios Ahora
+                        </button>
+</div>
+</div>
+<div class="bento-card p-6 rounded-2xl">
+<h4 class="font-label-md text-label-md mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">monitoring</span>
+                        Alertas de Stock Bajo
+                    </h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-error-container/20 rounded-xl border border-error-container">
+<div class="flex items-center gap-3">
+<span class="text-2xl">🍋</span>
+<div>
+<p class="text-sm font-bold">Limón Colima</p>
+<p class="text-[10px] text-on-surface-variant">Quedan 2.5 kg</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-primary hover:scale-110 transition-transform">shopping_cart</button>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="text-2xl">🥩</span>
+<div>
+<p class="text-sm font-bold">Arrachera Angus</p>
+<p class="text-[10px] text-on-surface-variant">Quedan 8 kg</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-primary hover:scale-110 transition-transform">shopping_cart</button>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-primary text-primary font-label-md text-label-md rounded-xl hover:bg-primary/5 transition-colors">
+                        Gestionar Todo el Stock
+                    </button>
+</div>
+<div class="bento-card p-6 rounded-2xl bg-secondary-fixed/10">
+<h4 class="font-label-md text-label-md mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">history</span>
+                        Pedidos Recientes
+                    </h4>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-xs">
+<span class="font-bold">#ORD-8923</span>
+<span class="text-on-surface-variant">Hace 2h</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="font-bold">#ORD-8922</span>
+<span class="text-on-surface-variant">Hace 5h</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="font-bold">#ORD-8921</span>
+<span class="text-on-surface-variant">Ayer</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full h-16 bg-surface border-t border-outline-variant flex justify-around items-center md:hidden z-50">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px]">Inicio</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">conveyor_belt</span>
+<span class="text-[10px] font-bold">Proveedores</span>
+</button>
+<button class="w-12 h-12 -mt-8 bg-primary text-white rounded-full shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined">auto_awesome</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px]">Stock</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px]">Perfil</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for table rows and buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 150);
+            });
+        });
+    </script>
+</body></html>

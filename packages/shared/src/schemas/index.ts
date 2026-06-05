@@ -82,3 +82,63 @@ export const ReservationSchema = z.object({
   reservedAt: z.string().datetime(),
   notes: z.string().max(500).optional(),
 });
+
+// ─── INVENTORY ───────────────────────────────────────────────
+//
+// Estado computado por el backend a partir de currentQty vs suggestedQty:
+//   <0.5   → BAJO_PAR
+//   <0.9   → ALERTA_PAR
+//   0.9–1.1 → OPTIMO
+//   >1.1   → EXCEDENTE
+// El CADUCA es un flag extra para perecederos cerca de su shelf life.
+export const InventoryStatusSchema = z.enum([
+  "BAJO_PAR",
+  "ALERTA_PAR",
+  "OPTIMO",
+  "EXCEDENTE",
+  "CADUCA",
+]);
+export type InventoryStatus = z.infer<typeof InventoryStatusSchema>;
+
+export const InventoryItemSchema = z.object({
+  ingredientId: z.string().uuid(),
+  sku: z.string(),
+  name: z.string(),
+  category: z.string().nullable(),
+  baseUnit: z.string(),
+  perishable: z.boolean(),
+  currentQty: z.number(),
+  parSuggested: z.number(),
+  parPrevious: z.number().nullable(),
+  costPerUnitCents: z.number().int().nullable(),
+  supplierName: z.string().nullable(),
+  statuses: z.array(InventoryStatusSchema),
+});
+export type InventoryItem = z.infer<typeof InventoryItemSchema>;
+
+export const InventorySummarySchema = z.object({
+  totalValueCents: z.number().int(),
+  totalValueDeltaPct: z.number(),
+  wastagePct: z.number(),
+  wastageLimitPct: z.number(),
+  stockoutsAvoided: z.number().int(),
+  alertCount: z.number().int(),
+  activeSkus: z.number().int(),
+});
+export type InventorySummary = z.infer<typeof InventorySummarySchema>;
+
+export const InventoryListResponseSchema = z.object({
+  locationId: z.string().uuid(),
+  locationName: z.string(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  summary: InventorySummarySchema,
+  items: z.array(InventoryItemSchema),
+});
+export type InventoryListResponse = z.infer<typeof InventoryListResponseSchema>;
+
+export const InventoryQuerySchema = z.object({
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+});

@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+/* Las fuentes del DS (Lexend, Inter, Material Symbols Outlined) se cargan
+   via <link> en layout.tsx — combinar @import url(...) con rangos de eje
+   variable (..) hace que PostCSS descarte la regla. */
+
 @import "@copiloto/ui/theme.css";
 
 @tailwind base;
@@ -9,9 +12,15 @@
   * {
     @apply border-border;
   }
+  html {
+    background-color: var(--canvas);
+  }
   body {
     font-family: var(--font-sans);
-    @apply bg-background text-foreground antialiased;
+    color: var(--on-surface);
+    background-color: var(--canvas);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);

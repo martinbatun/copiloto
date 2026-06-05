@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chat-container {
+            height: calc(100vh - 64px - 80px);
+            scrollbar-width: none;
+        }
+        .chat-container::-webkit-scrollbar {
+            display: none;
+        }
+        .glass-effect {
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#fbf8fc",
+                    "on-secondary-container": "#684000",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "on-primary-container": "#fffbff",
+                    "outline-variant": "#e1bfb6",
+                    "outline": "#8d7169",
+                    "surface-container-highest": "#e4e1e6",
+                    "on-primary-fixed-variant": "#862200",
+                    "inverse-surface": "#303033",
+                    "tertiary-container": "#c2512d",
+                    "on-error": "#ffffff",
+                    "inverse-primary": "#ffb5a0",
+                    "primary-fixed": "#ffdbd1",
+                    "on-surface": "#1b1b1e",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "error-container": "#ffdad6",
+                    "on-background": "#1b1b1e",
+                    "surface": "#fbf8fc",
+                    "primary-fixed-dim": "#ffb5a0",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#a93107",
+                    "secondary-container": "#fea619",
+                    "background": "#fbf8fc",
+                    "secondary-fixed": "#ffddb8",
+                    "surface-container-high": "#eae7eb",
+                    "surface-dim": "#dcd9dd",
+                    "secondary": "#855300",
+                    "on-tertiary-container": "#fffbff",
+                    "tertiary": "#a23917",
+                    "tertiary-fixed": "#ffdbd1",
+                    "on-tertiary-fixed": "#3a0a00",
+                    "on-tertiary-fixed-variant": "#842503",
+                    "on-secondary-fixed": "#2a1700",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e4e1e6",
+                    "surface-container": "#f0edf1",
+                    "tertiary-fixed-dim": "#ffb59f",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3f0f4",
+                    "surface-tint": "#ac340a",
+                    "error": "#ba1a1a",
+                    "primary-container": "#cb4921",
+                    "surface-container-low": "#f6f2f7",
+                    "on-surface-variant": "#59413b",
+                    "on-primary-fixed": "#3b0a00",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "1rem",
+                    "margin-desktop": "40px",
+                    "margin-mobile": "16px",
+                    "xl": "3rem",
+                    "gutter": "24px",
+                    "base": "4px",
+                    "md": "1.5rem",
+                    "lg": "2rem",
+                    "xs": "0.5rem"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Lexend"],
+                    "body-sm": ["Inter"],
+                    "numeral-xl": ["Lexend"],
+                    "headline-sm": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "display-md": ["Lexend"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-bright text-on-surface font-body-md selection:bg-primary-container selection:text-white overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/86 dark:bg-surface-container/86 backdrop-blur-xl border-b border-surface-container-highest dark:border-outline-variant shadow-sm flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant_menu">restaurant_menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">Copiloto</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden">
+<img alt="Avatar Chef" class="w-full h-full object-cover" data-alt="A close-up portrait of a professional chef in a clean white uniform, looking focused and friendly. The background is a slightly blurred, warm-toned high-end kitchen with stainless steel surfaces and soft golden lighting. The overall mood is one of culinary excellence and modern professionalism, echoing a high-end restaurant atmosphere in Mexico City." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7oRpfuDiYeBs9T4IQYEiwWG8Z8AR_RWWmKt-whYM__lf6GSewa9K32wlYMj60ne-xAvGnjfzgbWS1Z1_7T9eNWt3N4Lz91sPyrUwEOyclAKlmwIyER7AJPBmPlFWx1jIk_1l1T8VIPdS5Bc2yaPPi9mIfhdmLnh5n1kwlDFB8qepBkUZRCQp8Nak43QctV51RRzoCj2SI-2ZAwhq-F_0N83nkFL0eSjqu5r7HvZf2K36vF16jL2Sr6JhVCciZlNOojDTDA5LMWio"/>
+</div>
+</div>
+</header>
+<!-- Main Chat Canvas -->
+<main class="pt-16 pb-32 h-screen overflow-y-auto chat-container bg-gradient-to-b from-surface-bright to-primary-fixed/20 px-margin-mobile">
+<div class="max-w-md mx-auto py-6 space-y-6">
+<!-- Welcome Insight -->
+<div class="flex gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
+<div class="w-10 h-10 rounded-full bg-primary flex-shrink-0 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-white text-[20px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="flex flex-col gap-2 max-w-[85%]">
+<div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-surface-container-highest">
+<p class="font-body-md text-on-surface">¡Hola, Chef! Estoy monitoreando el turno. El margen de hoy está 2% arriba del promedio. ¿Quieres ver el detalle o revisar las reservas de la noche?</p>
+</div>
+<span class="text-[10px] font-label-md text-on-surface-variant uppercase ml-1">Copiloto • Ahora</span>
+</div>
+</div>
+<!-- Mini Widget Integration (KPIs) -->
+<div class="flex gap-3">
+<div class="w-10 h-10 opacity-0 flex-shrink-0"></div>
+<div class="w-full max-w-[85%] bg-gradient-to-br from-[#B9532A] to-[#9A3412] p-4 rounded-2xl shadow-lg border-l-4 border-secondary-container">
+<div class="flex justify-between items-start mb-3">
+<span class="text-white/80 font-label-md uppercase tracking-wider">Estado de Ventas</span>
+<span class="material-symbols-outlined text-secondary-container" data-icon="trending_up">trending_up</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-numeral-xl text-numeral-xl text-white">$42,850</span>
+<span class="text-secondary-container font-label-md">+12.5%</span>
+</div>
+<p class="text-white/70 text-[12px] mt-1">Proyección de cierre: $58k (Meta alcanzable)</p>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex flex-row-reverse gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex-shrink-0 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-on-secondary-container text-[20px]" data-icon="person">person</span>
+</div>
+<div class="flex flex-col gap-2 max-w-[85%] items-end">
+<div class="bg-primary-container text-white p-4 rounded-2xl rounded-tr-none shadow-md">
+<p class="font-body-md">¿Cómo va el margen de la carne hoy?</p>
+</div>
+<span class="text-[10px] font-label-md text-on-surface-variant uppercase mr-1">Tú • 12:45 PM</span>
+</div>
+</div>
+<!-- Copiloto Response with Alert Widget -->
+<div class="flex gap-3">
+<div class="w-10 h-10 rounded-full bg-primary flex-shrink-0 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-white text-[20px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="flex flex-col gap-3 max-w-[85%]">
+<div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-surface-container-highest">
+<p class="font-body-md text-on-surface">El margen de la Picaña bajó a 62% por el aumento del proveedor de ayer. He ajustado el costo teórico automáticamente.</p>
+</div>
+<!-- Alert Widget -->
+<div class="bg-surface-container-low border border-error-container p-3 rounded-xl flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error text-[20px]" data-icon="warning">warning</span>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-on-surface text-[13px]">Alerta de Merma</h4>
+<p class="text-[11px] text-on-surface-variant">Se detectó 1.5kg de merma atípica en cocina.</p>
+</div>
+<button class="text-primary font-label-md text-[12px] px-2 py-1 hover:bg-primary/5 rounded-lg">Ver</button>
+</div>
+<span class="text-[10px] font-label-md text-on-surface-variant uppercase ml-1">Copiloto • Hace 1 min</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Layer (Floating) -->
+<div class="fixed bottom-0 w-full z-40">
+<!-- Quick Suggestions (Chips) -->
+<div class="flex gap-2 overflow-x-auto px-margin-mobile pb-3 no-scrollbar glass-effect py-2">
+<button class="whitespace-nowrap bg-white/90 border border-outline-variant px-4 py-2 rounded-full font-label-md text-primary shadow-sm active:scale-95 transition-all">
+                ¿Resumen de reservas?
+            </button>
+<button class="whitespace-nowrap bg-white/90 border border-outline-variant px-4 py-2 rounded-full font-label-md text-primary shadow-sm active:scale-95 transition-all">
+                ¿Margen semanal?
+            </button>
+<button class="whitespace-nowrap bg-white/90 border border-outline-variant px-4 py-2 rounded-full font-label-md text-primary shadow-sm active:scale-95 transition-all">
+                Horarios del staff
+            </button>
+</div>
+<!-- Message Input -->
+<div class="bg-white/86 backdrop-blur-xl border-t border-surface-container-highest p-4 flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+</button>
+<div class="flex-1 bg-surface-container-low rounded-full px-4 py-3 flex items-center border border-outline-variant focus-within:border-primary transition-colors">
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface font-body-md placeholder:text-on-surface-variant/50" placeholder="Pregúntale a Copiloto..." type="text"/>
+<span class="material-symbols-outlined text-primary-container" data-icon="mic">mic</span>
+</div>
+<button class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/20 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+<!-- BottomNavBar -->
+<nav class="bg-white/86 backdrop-blur-xl border-t border-surface-container-highest flex justify-around items-center h-20 px-2 pb-safe w-full">
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:text-primary transition-colors active:scale-90">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-md text-label-md">Copiloto</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:text-primary transition-colors active:scale-90">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Operaciones</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:text-primary transition-colors active:scale-90">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+<span class="font-label-md text-label-md">Más</span>
+</div>
+</nav>
+</div>
+<script>
+        // Micro-interactions: Auto-scroll to bottom
+        const container = document.querySelector('.chat-container');
+        container.scrollTop = container.scrollHeight;
+
+        // Interaction for input focus (hide suggestions to save space if needed)
+        const input = document.querySelector('input');
+        const suggestions = document.querySelector('.overflow-x-auto');
+        
+        input.addEventListener('focus', () => {
+            // Optional: Dynamic behavior for mobile keyboard
+            container.classList.add('pb-48');
+        });
+
+        input.addEventListener('blur', () => {
+            container.classList.remove('pb-48');
+        });
+    </script>
+</body></html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | Copiloto AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-background": "#1b1b1e",
+                "primary-fixed-dim": "#ffb5a0",
+                "on-primary-container": "#fffbff",
+                "on-surface-variant": "#59413b",
+                "surface-bright": "#fbf8fc",
+                "error-container": "#ffdad6",
+                "outline-variant": "#e1bfb6",
+                "on-error-container": "#93000a",
+                "surface-container-highest": "#e4e1e6",
+                "primary": "#a93107",
+                "on-tertiary-fixed": "#3a0a00",
+                "on-primary": "#ffffff",
+                "on-error": "#ffffff",
+                "on-primary-fixed-variant": "#862200",
+                "surface-container-lowest": "#ffffff",
+                "surface-container": "#f0edf1",
+                "secondary-fixed": "#ffddb8",
+                "on-secondary-fixed-variant": "#653e00",
+                "tertiary": "#a23917",
+                "secondary-container": "#fea619",
+                "on-secondary": "#ffffff",
+                "tertiary-container": "#c2512d",
+                "tertiary-fixed": "#ffdbd1",
+                "inverse-on-surface": "#f3f0f4",
+                "on-primary-fixed": "#3b0a00",
+                "background": "#fbf8fc",
+                "on-surface": "#1b1b1e",
+                "secondary-fixed-dim": "#ffb95f",
+                "on-tertiary": "#ffffff",
+                "surface-variant": "#e4e1e6",
+                "primary-fixed": "#ffdbd1",
+                "on-tertiary-container": "#fffbff",
+                "secondary": "#855300",
+                "outline": "#8d7169",
+                "surface-tint": "#ac340a",
+                "inverse-primary": "#ffb5a0",
+                "surface-dim": "#dcd9dd",
+                "surface-container-high": "#eae7eb",
+                "tertiary-fixed-dim": "#ffb59f",
+                "surface": "#fbf8fc",
+                "on-secondary-container": "#684000",
+                "error": "#ba1a1a",
+                "surface-container-low": "#f6f2f7",
+                "primary-container": "#cb4921",
+                "on-tertiary-fixed-variant": "#842503",
+                "on-secondary-fixed": "#2a1700",
+                "inverse-surface": "#303033"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "lg": "2rem",
+                "margin-mobile": "16px",
+                "sm": "1rem",
+                "base": "4px",
+                "xs": "0.5rem",
+                "md": "1.5rem",
+                "gutter": "24px",
+                "xl": "3rem",
+                "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                "headline-sm": ["Lexend"],
+                "numeral-xl": ["Lexend"],
+                "body-md": ["Inter"],
+                "headline-lg-mobile": ["Lexend"],
+                "headline-lg": ["Lexend"],
+                "body-lg": ["Inter"],
+                "body-sm": ["Inter"],
+                "display-md": ["Lexend"],
+                "display-lg": ["Lexend"],
+                "label-md": ["Inter"]
+            },
+            "fontSize": {
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .talavera-pattern {
+            background-color: #fbf8fc;
+            background-image: radial-gradient(#e1bfb6 0.8px, transparent 0.8px), radial-gradient(#e1bfb6 0.8px, #fbf8fc 0.8px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            opacity: 0.15;
+        }
+
+        .terracotta-orb {
+            filter: blur(120px);
+            background: radial-gradient(circle, #a93107 0%, rgba(169, 49, 7, 0) 70%);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(169, 49, 7, 0.05);
+        }
+
+        .btn-terracota-gradient {
+            background: linear-gradient(135deg, #a93107 0%, #cb4921 100%);
+            box-shadow: 0 4px 14px 0 rgba(169, 49, 7, 0.39);
+            transition: all 0.3s ease;
+        }
+
+        .btn-terracota-gradient:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px 0 rgba(169, 49, 7, 0.45);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delayed { animation: float 8s ease-in-out infinite 1s; }
+        .animate-float-slow { animation: float 10s ease-in-out infinite 2s; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<main class="flex h-screen w-full">
+<!-- PANEL IZQUIERDO (58%) -->
+<section class="relative hidden lg:flex w-[58%] h-full bg-surface-container-low overflow-hidden items-center justify-center border-r border-outline-variant">
+<!-- Background Elements -->
+<div class="absolute inset-0 talavera-pattern"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] terracotta-orb opacity-20"></div>
+<!-- Branding -->
+<div class="absolute top-margin-desktop left-margin-desktop flex items-center gap-base">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">cooking</span>
+</div>
+<span class="font-display-md text-headline-sm text-primary tracking-tight">Copiloto</span>
+</div>
+<!-- Floating Glassmorphism Cards Container -->
+<div class="relative w-full max-w-2xl aspect-square flex items-center justify-center">
+<!-- Card 1: Forecast -->
+<div class="absolute top-10 left-10 glass-card p-md rounded-xl w-64 animate-float border-l-4 border-secondary">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-on-surface-variant">Forecast hoy</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+<div class="font-numeral-xl text-numeral-xl text-on-surface">284</div>
+<div class="font-body-sm text-secondary font-bold flex items-center gap-xs">
+<span>+12%</span>
+<span class="text-on-surface-variant font-normal">vs ayer</span>
+</div>
+</div>
+<!-- Card 2: Co-piloto Recommendation -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 glass-card p-md rounded-xl w-80 animate-float-delayed border-l-4 border-primary">
+<div class="flex items-center gap-xs mb-sm">
+<div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[16px]" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<span class="font-label-md text-primary uppercase tracking-wider">Insight de Co-piloto</span>
+</div>
+<p class="font-headline-sm text-headline-sm mb-md leading-tight text-on-surface">"Sube par level aguacate a 18kg"</p>
+<div class="flex gap-sm">
+<button class="flex-1 py-xs px-sm bg-primary text-white font-label-md rounded-lg hover:bg-primary-container transition-colors">Aprobar</button>
+<button class="flex-1 py-xs px-sm border border-outline-variant text-on-surface-variant font-label-md rounded-lg hover:bg-white transition-colors">Modificar</button>
+</div>
+</div>
+<!-- Card 3: KPI Margen -->
+<div class="absolute bottom-10 right-10 glass-card p-md rounded-xl w-60 animate-float-slow border-l-4 border-tertiary">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-on-surface-variant">KPI Margen</span>
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">pie_chart</span>
+</div>
+<div class="font-numeral-xl text-numeral-xl text-on-surface">34.8%</div>
+<div class="font-body-sm text-tertiary font-bold">
+                        +2.3pp <span class="text-on-surface-variant font-normal">esta semana</span>
+</div>
+</div>
+</div>
+</section>
+<!-- PANEL DERECHO (42%) -->
+<section class="w-full lg:w-[42%] h-full bg-white flex items-center justify-center p-md">
+<div class="w-full max-w-md space-y-xl">
+<!-- Mobile Branding (Hidden on Desktop) -->
+<div class="lg:hidden flex items-center gap-base mb-xl">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">cooking</span>
+</div>
+<span class="font-display-md text-headline-sm text-primary tracking-tight">Copiloto</span>
+</div>
+<div class="space-y-xs">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Hola de nuevo, operador</h1>
+<p class="font-body-md text-on-surface-variant">Bienvenido al centro de control de tu restaurante.</p>
+</div>
+<!-- Login Form -->
+<form class="space-y-md" onsubmit="event.preventDefault();">
+<div class="space-y-base">
+<label class="font-label-md text-on-surface" for="email">Correo Electrónico</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">mail</span>
+<input class="w-full pl-xl pr-md py-sm rounded-xl border border-outline-variant focus:ring-2 focus:ring-primary-container focus:border-primary transition-all bg-surface-container-lowest outline-none" id="email" placeholder="tu@email.com" type="email" value="dueno@copiloto.mx"/>
+</div>
+</div>
+<div class="space-y-base">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-on-surface" for="password">Contraseña</label>
+<a class="font-label-md text-primary hover:underline" href="#">¿Olvidaste tu contraseña?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">lock</span>
+<input class="w-full pl-xl pr-md py-sm rounded-xl border border-outline-variant focus:ring-2 focus:ring-primary-container focus:border-primary transition-all bg-surface-container-lowest outline-none" id="password" placeholder="••••••••" type="password" value="password123"/>
+<button class="absolute right-sm top-1/2 -translate-y-1/2 text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-xs">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" id="remember" type="checkbox"/>
+<label class="font-body-sm text-on-surface-variant select-none" for="remember">Recordar sesión por 30 días</label>
+</div>
+<button class="w-full py-md btn-terracota-gradient text-white font-label-md rounded-xl text-lg tracking-wide uppercase" type="submit">
+                        Entrar al tablero
+                    </button>
+</form>
+<!-- Social Login -->
+<div class="space-y-md">
+<div class="relative flex items-center justify-center">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant"></div>
+</div>
+<span class="relative px-sm bg-white font-body-sm text-outline">O continúa con</span>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<button class="flex items-center justify-center gap-xs py-sm border border-outline-variant rounded-xl hover:bg-surface-container-low transition-all">
+<img alt="Google Logo" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBccWdt-fSGXuDpr1q0CLqyknMSGATAdTkBmxzRcjYSdPetHMSORIuJzYnXo-wuV9AfYaCEjiwOpi5wAFig2JVO-Jk-DIJkCfFPIrTNt-oxnWaEkKclzeUfUxxjv2dVuHwrGWcxvnWdivgBSXBuSkWsvzxUOCSp_DVbnpf1WgFoJAJd0cI1l4dIA-d1xta8s8ErRknhY2Rk3T7Atp7kFVW7OIs4CEL2b07Ao-Fu73_F5PVhcKwZ7Jsj0HzxwjdMJHItDFjlafrsUyM"/>
+<span class="font-label-md text-on-surface">Google</span>
+</button>
+<button class="flex items-center justify-center gap-xs py-sm border border-outline-variant rounded-xl hover:bg-surface-container-low transition-all">
+<img alt="Microsoft Logo" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD15yIi7OUE_cQPiwhzb2mZINo3pi1Ozcd_sy0tDjr3wN-VfXSjNFSKCKq79Gss1LCNZ8rXsTnoY2nqPzoiOwrUxSHpGldbezIu7SLpUYIrF5HBkg4dnec-pC6dZ9_HOcfxQxP4PM2sXWmTxyWuLIasMJOTLua9WWUZz6sgE3k854hFSXqs0MEKJTX7WsMCrBE7nOsH0kbSVaV1svM62SqILmlqCN1LhqgWMgEiu9qiqu1O0kEql6tADkzhXhJbARC5AziClkWY8Ik"/>
+<span class="font-label-md text-on-surface">Microsoft</span>
+</button>
+</div>
+</div>
+<p class="text-center font-body-sm text-on-surface-variant">
+                    ¿Nuevo en Copiloto? <a class="text-primary font-bold hover:underline" href="#">Solicita un demo</a>
+</p>
+</div>
+</section>
+</main>
+<!-- UI Micro-interactions -->
+<script>
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.98)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simple parallax effect for floating cards
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) / 100;
+            const moveY = (e.clientY - window.innerHeight / 2) / 100;
+            const cards = document.querySelectorAll('.animate-float, .animate-float-delayed, .animate-float-slow');
+            
+            cards.forEach((card, index) => {
+                const speed = (index + 1) * 0.5;
+                card.style.transform = `translate(${moveX * speed}px, ${moveY * speed}px)`;
+            });
+        });
+    </script>
+</body></html>

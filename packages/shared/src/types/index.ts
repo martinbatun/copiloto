@@ -104,6 +104,17 @@ export interface Location {
   active: boolean;
 }
 
+/**
+ * Respuesta de GET /api/auth/me — todo lo que el web necesita en su boot
+ * para construir el AppShell sin segundo round-trip: quien soy + a que
+ * sucursales tengo acceso + branding del tenant.
+ */
+export interface MeResponse {
+  user: AuthUser;
+  tenant: Tenant;
+  locations: Pick<Location, "id" | "name" | "slug" | "timezone">[];
+}
+
 export interface ForecastBucket {
   locationId: string;
   date: string; // YYYY-MM-DD

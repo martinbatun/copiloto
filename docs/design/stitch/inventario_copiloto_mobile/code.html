@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Lexend:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-header { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+        @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .animate-pulse-soft { animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fbf8fc",
+                      "on-secondary-container": "#684000",
+                      "secondary-fixed-dim": "#ffb95f",
+                      "on-primary-container": "#fffbff",
+                      "outline-variant": "#e1bfb6",
+                      "outline": "#8d7169",
+                      "surface-container-highest": "#e4e1e6",
+                      "on-primary-fixed-variant": "#862200",
+                      "inverse-surface": "#303033",
+                      "tertiary-container": "#c2512d",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#ffb5a0",
+                      "primary-fixed": "#ffdbd1",
+                      "on-surface": "#1b1b1e",
+                      "on-secondary-fixed-variant": "#653e00",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1b1b1e",
+                      "surface": "#fbf8fc",
+                      "primary-fixed-dim": "#ffb5a0",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "primary": "#a93107",
+                      "secondary-container": "#fea619",
+                      "background": "#fbf8fc",
+                      "secondary-fixed": "#ffddb8",
+                      "surface-container-high": "#eae7eb",
+                      "surface-dim": "#dcd9dd",
+                      "secondary": "#855300",
+                      "on-tertiary-container": "#fffbff",
+                      "tertiary": "#a23917",
+                      "tertiary-fixed": "#ffdbd1",
+                      "on-tertiary-fixed": "#3a0a00",
+                      "on-tertiary-fixed-variant": "#842503",
+                      "on-secondary-fixed": "#2a1700",
+                      "on-error-container": "#93000a",
+                      "surface-variant": "#e4e1e6",
+                      "surface-container": "#f0edf1",
+                      "tertiary-fixed-dim": "#ffb59f",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#f3f0f4",
+                      "surface-tint": "#ac340a",
+                      "error": "#ba1a1a",
+                      "primary-container": "#cb4921",
+                      "surface-container-low": "#f6f2f7",
+                      "on-surface-variant": "#59413b",
+                      "on-primary-fixed": "#3b0a00",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "1rem",
+                      "margin-desktop": "40px",
+                      "margin-mobile": "16px",
+                      "xl": "3rem",
+                      "gutter": "24px",
+                      "base": "4px",
+                      "md": "1.5rem",
+                      "lg": "2rem",
+                      "xs": "0.5rem"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "headline-lg-mobile": ["Lexend"],
+                      "display-lg": ["Lexend"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Lexend"],
+                      "body-sm": ["Inter"],
+                      "numeral-xl": ["Lexend"],
+                      "headline-sm": ["Lexend"],
+                      "body-lg": ["Inter"],
+                      "display-md": ["Lexend"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-bright text-on-surface font-body-md min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/86 dark:bg-surface-container/86 backdrop-blur-xl shadow-sm border-b border-surface-container-highest flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant_menu">restaurant_menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">Copiloto</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="pt-20 pb-28 px-margin-mobile max-w-md mx-auto">
+<!-- Low Stock Alerts -->
+<section class="mb-lg">
+<div class="flex items-center justify-between mb-sm">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Alertas de Stock</h2>
+<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-md text-label-md">3 Críticos</span>
+</div>
+<div class="space-y-sm">
+<!-- Alert Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-sm rounded-xl flex items-center gap-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="w-12 h-12 rounded-lg bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Aguacate Hass</p>
+<p class="text-body-sm text-on-surface-variant">Quedan 2kg • Par: 15kg</p>
+</div>
+<button class="bg-primary text-on-primary px-3 py-1.5 rounded-lg font-label-md text-label-md shadow-sm active:scale-95 transition-transform">
+                        Pedir
+                    </button>
+</div>
+</div>
+</section>
+<!-- Category Filters -->
+<section class="mb-lg -mx-margin-mobile overflow-x-auto hide-scrollbar px-margin-mobile flex gap-xs">
+<button class="flex-shrink-0 bg-primary text-on-primary px-4 py-2 rounded-full font-label-md text-label-md transition-colors">Todo</button>
+<button class="flex-shrink-0 bg-surface-container border border-outline-variant text-on-surface-variant px-4 py-2 rounded-full font-label-md text-label-md transition-colors hover:bg-surface-container-high">Proteínas</button>
+<button class="flex-shrink-0 bg-surface-container border border-outline-variant text-on-surface-variant px-4 py-2 rounded-full font-label-md text-label-md transition-colors hover:bg-surface-container-high">Verduras</button>
+<button class="flex-shrink-0 bg-surface-container border border-outline-variant text-on-surface-variant px-4 py-2 rounded-full font-label-md text-label-md transition-colors hover:bg-surface-container-high">Lácteos</button>
+<button class="flex-shrink-0 bg-surface-container border border-outline-variant text-on-surface-variant px-4 py-2 rounded-full font-label-md text-label-md transition-colors hover:bg-surface-container-high">Secos</button>
+</section>
+<!-- Inventory List -->
+<section class="space-y-sm">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-sm">Inventario Actual</h2>
+<!-- Inventory Card: Protein -->
+<div class="bg-white p-sm rounded-xl border border-surface-container-highest shadow-sm flex items-center gap-sm">
+<div class="w-2 rounded-full h-12 bg-[#B9532A]"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<p class="font-label-md text-label-md text-on-surface">Pechuga de Pollo</p>
+<p class="text-body-sm font-semibold text-on-surface">24.5 kg</p>
+</div>
+<!-- Stock Bar -->
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[82%]"></div>
+</div>
+<div class="flex justify-between mt-1 text-[10px] text-on-surface-variant font-medium">
+<span>Min: 10kg</span>
+<span>Par: 30kg</span>
+</div>
+</div>
+</div>
+<!-- Inventory Card: Veggie -->
+<div class="bg-white p-sm rounded-xl border border-surface-container-highest shadow-sm flex items-center gap-sm">
+<div class="w-2 rounded-full h-12 bg-green-600"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<p class="font-label-md text-label-md text-on-surface">Cebolla Blanca</p>
+<p class="text-body-sm font-semibold text-on-surface">8.0 kg</p>
+</div>
+<!-- Stock Bar -->
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full rounded-full w-[40%]"></div>
+</div>
+<div class="flex justify-between mt-1 text-[10px] text-on-surface-variant font-medium">
+<span>Min: 5kg</span>
+<span>Par: 20kg</span>
+</div>
+</div>
+</div>
+<!-- Inventory Card: Dairy -->
+<div class="bg-white p-sm rounded-xl border border-surface-container-highest shadow-sm flex items-center gap-sm">
+<div class="w-2 rounded-full h-12 bg-blue-400"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<p class="font-label-md text-label-md text-on-surface">Leche Entera</p>
+<p class="text-body-sm font-semibold text-on-surface">42 L</p>
+</div>
+<!-- Stock Bar -->
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[95%]"></div>
+</div>
+<div class="flex justify-between mt-1 text-[10px] text-on-surface-variant font-medium">
+<span>Min: 12L</span>
+<span>Par: 45L</span>
+</div>
+</div>
+</div>
+<!-- Copiloto Insight Card -->
+<div class="bg-gradient-to-br from-[#B9532A] to-[#9A3412] p-md rounded-xl text-on-primary-container shadow-md border border-white/10 mt-lg">
+<div class="flex items-center gap-xs mb-xs">
+<span class="material-symbols-outlined text-secondary-container" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary-container/90">Copiloto AI</span>
+</div>
+<p class="text-body-md font-semibold leading-tight text-white">Detectado aumento de consumo en Tortilla de Maíz.</p>
+<p class="text-body-sm text-white/80 mt-xs">Sugiero aumentar el pedido del miércoles un 15% para cubrir el evento del fin de semana.</p>
+<button class="mt-md w-full py-2 bg-secondary-container text-on-secondary-container rounded-lg font-label-md text-label-md active:scale-[0.98] transition-transform">
+                    Ajustar Par Level
+                </button>
+</div>
+<!-- Inventory Card: Dry -->
+<div class="bg-white p-sm rounded-xl border border-surface-container-highest shadow-sm flex items-center gap-sm">
+<div class="w-2 rounded-full h-12 bg-yellow-700"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<p class="font-label-md text-label-md text-on-surface">Arroz Jazmín</p>
+<p class="text-body-sm font-semibold text-on-surface">15.0 kg</p>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[60%]"></div>
+</div>
+<div class="flex justify-between mt-1 text-[10px] text-on-surface-variant font-medium">
+<span>Min: 5kg</span>
+<span>Par: 25kg</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-24 right-margin-mobile w-14 h-14 bg-primary text-on-primary rounded-2xl shadow-xl flex items-center justify-center z-40 active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined text-[32px]" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-white/86 dark:bg-surface-container/86 backdrop-blur-xl border-t border-surface-container-highest rounded-t-xl shadow-lg flex justify-around items-center h-20 px-2 pb-safe">
+<button class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md mt-0.5">Inicio</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md mt-0.5">Copiloto</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="inventory_2" data-weight="fill">inventory_2</span>
+<span class="font-label-md text-label-md mt-0.5">Operaciones</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+<span class="font-label-md text-label-md mt-0.5">Más</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interaction for the cards
+        document.querySelectorAll('.inventory-card').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.classList.add('scale-[0.98]');
+            });
+            card.addEventListener('touchend', () => {
+                card.classList.remove('scale-[0.98]');
+            });
+        });
+    </script>
+</body></html>

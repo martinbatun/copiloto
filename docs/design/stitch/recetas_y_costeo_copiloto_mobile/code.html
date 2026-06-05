@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "surface-container": "#f0edf1",
+                    "surface-bright": "#fbf8fc",
+                    "on-secondary-fixed": "#2a1700",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#59413b",
+                    "surface-dim": "#dcd9dd",
+                    "primary-fixed-dim": "#ffb5a0",
+                    "on-background": "#1b1b1e",
+                    "on-tertiary-fixed-variant": "#842503",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#c2512d",
+                    "surface-variant": "#e4e1e6",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#3a0a00",
+                    "tertiary": "#a23917",
+                    "secondary-container": "#fea619",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#a93107",
+                    "inverse-on-surface": "#f3f0f4",
+                    "on-primary-fixed": "#3b0a00",
+                    "surface-container-high": "#eae7eb",
+                    "outline-variant": "#e1bfb6",
+                    "outline": "#8d7169",
+                    "tertiary-fixed": "#ffdbd1",
+                    "background": "#fbf8fc",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1b1b1e",
+                    "surface-container-highest": "#e4e1e6",
+                    "on-secondary-container": "#684000",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#ac340a",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "secondary-fixed": "#ffddb8",
+                    "on-primary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "on-primary-fixed-variant": "#862200",
+                    "primary-container": "#cb4921",
+                    "surface-container-low": "#f6f2f7",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb59f",
+                    "surface": "#fbf8fc",
+                    "secondary": "#855300",
+                    "primary-fixed": "#ffdbd1",
+                    "inverse-primary": "#ffb5a0",
+                    "on-tertiary-container": "#fffbff",
+                    "inverse-surface": "#303033"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "3rem",
+                    "sm": "1rem",
+                    "md": "1.5rem",
+                    "xs": "0.5rem",
+                    "margin-desktop": "40px",
+                    "base": "4px",
+                    "lg": "2rem",
+                    "margin-mobile": "16px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-md": ["Lexend"],
+                    "numeral-xl": ["Lexend"],
+                    "headline-sm": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "numeral-xl": ["40px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "900"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass { background: rgba(255, 255, 255, 0.86); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .tab-active { color: #a93107; font-weight: 700; border-bottom: 2px solid #a93107; }
+        .scrolling-hide::-webkit-scrollbar { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 glass border-b border-outline-variant/30 flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant/50">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a restaurant manager in a modern, sunlit commercial kitchen. The lighting is warm and natural, emphasizing a high-end culinary environment. The manager has a confident, approachable expression, wearing a clean, minimalist uniform that fits the Copiloto brand aesthetic. High-key lighting highlights the clean surfaces and steel equipment in the blurred background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNMsrmZ5kdxVjTnLmJ7fUuYzNETZhHZNlfy9KXyE7HpwR8u7k8KRGZrvKZhGKlV4VPyA2Jt2RtFYHk04UD6oKVH294F4uc0SIPPMwGWV2ViY3DUQm4kmRAZcXp-KRYFUAAEsyWptojmFb6wiNHv9vGAsgJbLgevt669s6sdjqEfH6PR6AFBKXvqMSL5bmQqumGkCuTCszrkCbxD1C_f6sZ4I3xIxSTYEE2l8b_ExM3iT9T83MzS8Ssm9aI_EcV-raN42B4WcaZ1D4"/>
+</div>
+<h1 class="font-display-md text-headline-sm text-primary tracking-tight">Copiloto</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+</header>
+<main class="pt-20 px-margin-mobile max-w-lg mx-auto">
+<!-- Search Section -->
+<section class="mt-4 mb-lg">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-4 rounded-xl border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary transition-all font-body-md" placeholder="Buscar recetas o ingredientes..." type="text"/>
+</div>
+</section>
+<!-- Dynamic Insights (Copiloto AI) -->
+<section class="mb-lg">
+<div class="bg-gradient-to-br from-[#B9532A] to-[#9A3412] p-md rounded-xl text-on-primary-container shadow-lg relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="flex items-center gap-xs mb-2">
+<span class="material-symbols-outlined text-[#F59E0B]" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md text-[#F59E0B]">COPILOTO INSIGHT</span>
+</div>
+<h3 class="font-headline-sm text-white mb-2">Costos al alza</h3>
+<p class="text-white/90 font-body-sm leading-tight">
+                    El costo del **Aguacate Hass** subió 15% ayer. El margen de "Tostada de Salmón" se redujo a 22%. ¿Ajustar precio sugerido?
+                </p>
+<button class="mt-4 bg-[#F59E0B] text-on-secondary-fixed px-4 py-2 rounded-full font-label-md active:scale-95 transition-transform flex items-center gap-xs">
+                    Revisar Ajuste <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Main Recipe Card (Selected State) -->
+<section class="space-y-md">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm relative">
+<!-- Recipe Header Accent -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-md">
+<div>
+<span class="text-xs uppercase tracking-widest text-outline font-bold">Platillo Principal</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Tostada de Salmón &amp; Miso</h2>
+</div>
+<div class="text-right">
+<span class="block text-xs text-on-surface-variant">Margen Actual</span>
+<span class="font-numeral-xl text-primary">68%</span>
+</div>
+</div>
+<!-- Rapid Cost Metrics -->
+<div class="grid grid-cols-3 gap-xs mb-md">
+<div class="bg-surface-container p-xs rounded-lg text-center">
+<span class="block text-[10px] text-on-surface-variant uppercase">Costo Unit.</span>
+<span class="font-bold text-on-surface">$4.52</span>
+</div>
+<div class="bg-surface-container p-xs rounded-lg text-center">
+<span class="block text-[10px] text-on-surface-variant uppercase">Precio Venta</span>
+<span class="font-bold text-on-surface">$14.50</span>
+</div>
+<div class="bg-surface-container p-xs rounded-lg text-center border border-error/20">
+<span class="block text-[10px] text-error uppercase">Varianza</span>
+<span class="font-bold text-error">+0.85</span>
+</div>
+</div>
+<!-- Tabs Trigger -->
+<div class="flex border-b border-outline-variant mb-md overflow-x-auto scrolling-hide">
+<button class="pb-2 px-4 tab-active font-label-md whitespace-nowrap">Ingredientes</button>
+<button class="pb-2 px-4 text-on-surface-variant font-label-md whitespace-nowrap">Historial Compras</button>
+<button class="pb-2 px-4 text-on-surface-variant font-label-md whitespace-nowrap">Escandallo</button>
+</div>
+<!-- Ingredients List -->
+<ul class="space-y-sm">
+<li class="flex justify-between items-center py-xs border-b border-outline-variant/30">
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div>
+<p class="font-body-md text-on-surface">Salmón Noruego</p>
+<p class="text-[12px] text-on-surface-variant">80g por porción</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-on-surface">$2.90</p>
+<p class="text-[10px] text-error flex items-center justify-end gap-[2px]">
+<span class="material-symbols-outlined text-[12px]" data-icon="trending_up">trending_up</span> 12%
+                                </p>
+</div>
+</li>
+<li class="flex justify-between items-center py-xs border-b border-outline-variant/30">
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<div>
+<p class="font-body-md text-on-surface">Aguacate Hass</p>
+<p class="text-[12px] text-on-surface-variant">40g por porción</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-on-surface">$0.85</p>
+<p class="text-[10px] text-error flex items-center justify-end gap-[2px]">
+<span class="material-symbols-outlined text-[12px]" data-icon="trending_up">trending_up</span> 25%
+                                </p>
+</div>
+</li>
+<li class="flex justify-between items-center py-xs border-b border-outline-variant/30">
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-on-surface-variant"></div>
+<div>
+<p class="font-body-md text-on-surface">Pan de Masa Madre</p>
+<p class="text-[12px] text-on-surface-variant">1 rebanada</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-on-surface">$0.45</p>
+<p class="text-[10px] text-on-surface-variant">Estable</p>
+</div>
+</li>
+</ul>
+<div class="mt-md pt-md border-t border-outline-variant/50">
+<button class="w-full bg-primary text-white py-4 rounded-xl font-headline-sm active:scale-95 transition-transform flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+                            Editar Ficha Técnica
+                        </button>
+</div>
+</div>
+</div>
+<!-- Smaller Quick Recipe Cards -->
+<div class="grid grid-cols-1 gap-md">
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant/50 flex items-center gap-md">
+<div class="w-16 h-16 rounded-lg overflow-hidden shrink-0">
+<img alt="Salad" class="w-full h-full object-cover" data-alt="A top-down vibrant culinary photograph of a fresh Mediterranean salad in a white ceramic bowl. The lighting is bright and airy, reflecting a high-end clean aesthetic. Visible ingredients include deep green kale, bright red cherry tomatoes, and creamy white feta cheese, arranged artistically on a light stone surface with a minimalist composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBP-DVh3aVXTfh9UgOO10ImH1JSZITVLDB5LPl1kL_QCnQTo-e4GkR-JAQVZa7J3amNNaDT1QlTLv5lG9s6biY60BjuKMR-iQ3ll1Z3r5caGS9rQSeJmd9HjS8641xxoG-_DHdyh_IbUOV35Vz9y2rDe2FVSHypXoC1yMZGjJyvvqkVmRKNfnM1rTymzoiXk51sDDixnYfwxg-HEwoebMWC3imYcuH8eeSVtPHj_EOQeq286nmUR6r4Aa3yLsxp66ECn0wgQ5y_R0"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface">Bowl de Quinoa Vegano</h4>
+<div class="flex justify-between items-end">
+<span class="text-sm text-on-surface-variant">Costo: $3.20</span>
+<span class="text-sm font-bold text-secondary">75% Margen</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant/50 flex items-center gap-md">
+<div class="w-16 h-16 rounded-lg overflow-hidden shrink-0">
+<img alt="Pizza" class="w-full h-full object-cover" data-alt="A macro shot of a gourmet neapolitan pizza with a perfectly charred crust and melted mozzarella. The scene is shot in a warm, low-lit kitchen environment that feels cozy and artisanal. Saffron and terracotta tones are hinted at through the golden cheese and tomato base. The overall style is modern Mexican culinary warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFp_pb2UYQOkvszCxJN36TFJWomggY3lzb6c9Vfji8qg-FEn3GUMiqajA7J9Y3lIjceKgVbdl0EYD8FX0aJfd6bouxOuZ2tFN0NuH9JumK2BGJDZjjhBchT0AjYPBOtIdYwtxQQnZUrRVZvPW2qmSN4ztMuKFjwbv7ZM8YjRloAjip1E_CSyfpO_IYPCv70DrdZk5zqQ0LB9cOSrpK1_sK-GvQYf2aJVH6EfnYrYCZd-jm2Gp-9nAElEicIt28p_g7z2YB1VFO0mc"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface">Pizza Margarita Pro</h4>
+<div class="flex justify-between items-end">
+<span class="text-sm text-on-surface-variant">Costo: $2.85</span>
+<span class="text-sm font-bold text-secondary">82% Margen</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 glass border-t border-outline-variant/30 flex justify-around items-center px-xs pb-safe z-50">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Operaciones</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Staff</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Inventario</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-label-md text-label-md">CRM</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md">Copiloto</span>
+</div>
+</nav>
+<!-- FAB -->
+<button class="fixed bottom-24 right-margin-mobile w-14 h-14 bg-secondary text-on-secondary-fixed rounded-full shadow-xl flex items-center justify-center active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+<script>
+        // Micro-interactions for scrolling
+        let lastScrollTop = 0;
+        const nav = document.querySelector('nav');
+        const fab = document.querySelector('button.fixed.bottom-24');
+
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop) {
+                // Downscroll
+                nav.style.transform = 'translateY(100%)';
+                fab.style.transform = 'scale(0)';
+            } else {
+                // Upscroll
+                nav.style.transform = 'translateY(0)';
+                fab.style.transform = 'scale(1)';
+            }
+            nav.style.transition = 'transform 0.3s ease-in-out';
+            fab.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            lastScrollTop = scrollTop;
+        });
+    </script>
+</body></html>
