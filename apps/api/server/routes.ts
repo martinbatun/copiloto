@@ -3,6 +3,7 @@ import authRoutes from "./routes/auth.js";
 import locationsRoutes from "./routes/locations.js";
 import posRoutes from "./routes/pos.js";
 import menuRoutes from "./routes/menu.js";
+import ordersRoutes from "./routes/orders.js";
 import ingredientsRoutes from "./routes/ingredients.js";
 import suppliersRoutes from "./routes/suppliers.js";
 import invoicesRoutes from "./routes/invoices.js";
@@ -28,6 +29,7 @@ export function registerRoutes(app: Express): void {
   app.use("/api/locations", locationsRoutes);
   app.use("/api/pos", posRoutes);
   app.use("/api/menu", menuRoutes);
+  app.use("/api/orders", ordersRoutes);
   app.use("/api/ingredients", ingredientsRoutes);
   app.use("/api/suppliers", suppliersRoutes);
   app.use("/api/invoices", invoicesRoutes);

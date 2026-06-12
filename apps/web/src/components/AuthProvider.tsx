@@ -33,6 +33,9 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 // Rutas que son accesibles sin sesion. Cualquier otra ruta dentro del
 // AppShell asume que ya hay user y arranca una redireccion a /login si no.
 const PUBLIC_ROUTES = new Set(["/", "/login", "/demo"]);
+// Prefijos públicos: superficies del cliente final (menú digital / QR en mesa)
+// que viven fuera del AppShell y nunca deben redirigir a /login.
+const PUBLIC_PREFIXES = ["/menu"];
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -54,7 +57,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     staleTime: 5 * 60 * 1000,
   });
 
-  const isPublic = PUBLIC_ROUTES.has(pathname);
+  const isPublic =
+    PUBLIC_ROUTES.has(pathname) ||
+    PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 
   // Redirect a /login cuando: (a) no hay token en una ruta privada, o (b) el
   // /me regreso 401 (token invalido/expirado).

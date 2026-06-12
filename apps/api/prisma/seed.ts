@@ -316,9 +316,162 @@ async function main() {
     }
   }
 
+  console.log("[seed] creando menú digital (categorías + platillos)...");
+  // Categorías del menú del cliente. Id determinístico para que el upsert sea
+  // idempotente entre corridas.
+  const categories = [
+    { key: "entradas", name: "Entradas", sortKey: 1 },
+    { key: "fuertes", name: "Platos Fuertes", sortKey: 2 },
+    { key: "bebidas", name: "Bebidas", sortKey: 3 },
+    { key: "postres", name: "Postres", sortKey: 4 },
+  ];
+  const categoryByKey: Record<string, string> = {};
+  for (const c of categories) {
+    const id = `cat-${tenant.id.slice(0, 8)}-${c.key}`;
+    await prisma.menuCategory.upsert({
+      where: { id },
+      update: { name: c.name, sortKey: c.sortKey },
+      create: { id, tenantId: tenant.id, name: c.name, sortKey: c.sortKey },
+    });
+    categoryByKey[c.key] = id;
+  }
+
+  // Platillos basados en el diseño Stitch (imágenes aida-public incluidas).
+  const menuItems = [
+    {
+      sku: "RIBEYE-PASTOR",
+      name: "Tacos de Rib-Eye al Pastor",
+      description:
+        "Rib-eye marinado al pastor, piña tatemada y salsa de la casa. La recomendación de hoy.",
+      priceCents: 28500,
+      category: "fuertes",
+      tags: ["Picante", "Especial"],
+      rating: 4.9,
+      imageUrl:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCUiCa2MmdAiYovwCX_OMOtsrf0Vi7utfkMr-3weacGHAgQxffoDUaXd-ZwHpL31U-4WokdQW44nuf-YgxGoOVRRNJ-q4MCqveqk6QY4CfdBkCVS8MEYVTRYygWcvPwLo31ZEb9PcKtohOHwvqxzDgendKMUNA3SSdaAxCcDfz28BhG1h6pJBVLqcnwyelpLY0Mp_XsqNV8H4mJt50kzAkxpAm3rT8D_wWKlpUWN5HpEsQhYRo2l7V4tyqs6_P3MlYqHXBM0z2yh9w",
+    },
+    {
+      sku: "TACOS-PASTOR",
+      name: "Tacos al Pastor (Orden de 3)",
+      description: "Con piña, cebolla y cilantro.",
+      priceCents: 18500,
+      category: "fuertes",
+      tags: [],
+      rating: 4.8,
+      imageUrl:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCUiCa2MmdAiYovwCX_OMOtsrf0Vi7utfkMr-3weacGHAgQxffoDUaXd-ZwHpL31U-4WokdQW44nuf-YgxGoOVRRNJ-q4MCqveqk6QY4CfdBkCVS8MEYVTRYygWcvPwLo31ZEb9PcKtohOHwvqxzDgendKMUNA3SSdaAxCcDfz28BhG1h6pJBVLqcnwyelpLY0Mp_XsqNV8H4mJt50kzAkxpAm3rT8D_wWKlpUWN5HpEsQhYRo2l7V4tyqs6_P3MlYqHXBM0z2yh9w",
+    },
+    {
+      sku: "PIZZA-MARGARITA",
+      name: "Margarita Contemporánea",
+      description:
+        "Salsa de tomate ahumada en casa, mozzarella de búfala y aceite de albahaca fresca.",
+      priceCents: 24000,
+      category: "fuertes",
+      tags: [],
+      rating: 4.8,
+      imageUrl:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBmWtMGMbVcc1TSB2r98kSWtbedq7Br8gZXh0L8lRKBKL7jQsjhMSa5b_0QJUP22AHWUxBmVm1z2CKX3iPC1pRUaqjPYc6Px0leD9Tlc57iN8mxuzrGwhO0etCaHMWQRJUMUyr09jvYKDTOEBGhoakI2UI4I3G_Ec2ZJu8yaaTwBzxsEKKKDhr8dE-PV2J8Et1u4LCFc-kA5rk6ldfnuHesicvr_B7d3ZdKAN6dL1V7yAfIJ7cZ5cfhGiaegRL3cL-qvyobKONx234",
+    },
+    {
+      sku: "BOWL-ANCESTRAL",
+      name: "Bowl Ancestral",
+      description:
+        "Quinoa real, aguacate tatemado, garbanzos crujientes y aderezo de tahini y limón.",
+      priceCents: 19500,
+      category: "fuertes",
+      tags: ["Vegano"],
+      rating: 4.9,
+      imageUrl:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuDv33LzYNDqEyrTsA0lDDlwBLRCPC2HlO1th8K_11eG7x7otHE0jFqlmMc7GtJSZJ-2ri0cvCjt_Uk0PIFcxwHSEc3ND6XUnBBHYC3KiR2VrJh3_YdZDOcLL2fyCnl6BfySsLssRdP3hgKq_vpiXKY5lhWKMF9zJ0jkuXUSEf8KLJO6w-qMA_i3K-YE0GN47Sbo0OIujYP8HXldH6ovGJGPrj7zxi8DS5W-_lr3CWXR9bnzodUhci5iPQo9xN3MQOkQvMalo7dnej4",
+    },
+    {
+      sku: "MEZCALITA-MARACUYA",
+      name: "Mezcalita de Maracuyá",
+      description:
+        "Mezcal joven, pulpa natural de maracuyá, escarcha de sal de gusano y un toque de chile.",
+      priceCents: 16000,
+      category: "bebidas",
+      tags: [],
+      rating: 4.7,
+      imageUrl:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuDDavIWTtVCLIf97uBt9VNPsTzh3Dy5mjeTy_CX1usSw8UAYOpTNn-k2pRv4fYGzjDR2emcsxkU02txgBKmc0oo2zPGaXUtqs7xNJoh2AW5XNsrDNWe8paASWCK1oy2NRaTV69mvvnleXngsqXOjm7usINa32gmy8NfZ5f2J48N8HHeq9dezaVPj2wWppdF0tIbcrmDmSJAJ_cFSrpSRHT7NmaAOmceQ1X5N26cOoe7IIfikdj90V_RY5zSfzhO6KZl1505e986FFI",
+    },
+    {
+      sku: "AGUA-JAMAICA",
+      name: "Agua de Jamaica (L)",
+      description: "Infusión natural, 500ml.",
+      priceCents: 4500,
+      category: "bebidas",
+      tags: ["Sin alcohol"],
+      rating: 4.6,
+      imageUrl:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCVGLEzJpNp3tpW5zPdpTWjHjIoKZeP06ax98rTBFkcrqIH7ijFUSv2QcBN-0UV9ejWpQgP7AcBQH1yRpyze_LiPjCklfaDFvZ4uC2QQloSlRsJmFFyH6R4-Bttoacr4spHjCM-Bb7y9gg8cbrfpkHdmuu4-ZeomN8rMe7makaOSCqXlCfDxEpEMW09Ieyofzz7QGI3Krk1E9xz9q1wDJbfAMDYBlIKvpqH-9WzL8cnWPbNyW4oovw6zgS7KyJYnbB-GgCTOgphPyM",
+    },
+    {
+      sku: "GUACAMOLE-MOLCAJETE",
+      name: "Guacamole en Molcajete",
+      description: "Aguacate, jitomate, cebolla morada y chile serrano, con totopos de maíz azul.",
+      priceCents: 12500,
+      category: "entradas",
+      tags: ["Vegano"],
+      rating: 4.8,
+      imageUrl: null,
+    },
+    {
+      sku: "ESQUITES-TRUFA",
+      name: "Esquites con Trufa",
+      description: "Elote tatemado, mayonesa de chipotle, queso cotija y aceite de trufa.",
+      priceCents: 9500,
+      category: "entradas",
+      tags: [],
+      rating: 4.5,
+      imageUrl: null,
+    },
+    {
+      sku: "FLAN-MEZCAL",
+      name: "Flan de Mezcal",
+      description: "Flan napolitano con caramelo de mezcal y nuez garapiñada.",
+      priceCents: 8500,
+      category: "postres",
+      tags: [],
+      rating: 4.7,
+      imageUrl: null,
+    },
+  ];
+
+  for (const mi of menuItems) {
+    await prisma.menuItem.upsert({
+      where: { tenantId_sku: { tenantId: tenant.id, sku: mi.sku } },
+      update: {
+        name: mi.name,
+        description: mi.description,
+        priceCents: mi.priceCents,
+        categoryId: categoryByKey[mi.category],
+        tags: mi.tags,
+        rating: mi.rating,
+        imageUrl: mi.imageUrl,
+        active: true,
+      },
+      create: {
+        tenantId: tenant.id,
+        sku: mi.sku,
+        name: mi.name,
+        description: mi.description,
+        priceCents: mi.priceCents,
+        categoryId: categoryByKey[mi.category],
+        tags: mi.tags,
+        rating: mi.rating,
+        imageUrl: mi.imageUrl,
+      },
+    });
+  }
+
   console.log("[seed] listo. Login: dueno@copiloto.mx / password123");
   console.log(`[seed] tenant slug: ${tenant.slug} · location: ${location.slug}`);
   console.log(`[seed] ingredientes: ${ingredients.length} · suppliers: ${suppliers.length}`);
+  console.log(`[seed] menú: ${menuItems.length} platillos en ${categories.length} categorías`);
+  console.log(`[seed] 🍽️  Menú del cliente: /menu/${location.id}`);
 }
 
 main()

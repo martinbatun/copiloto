@@ -26,3 +26,21 @@
     font-family: var(--font-display);
   }
 }
+
+@layer components {
+  /* Menú digital del cliente (QR en mesa) — clases del diseño Stitch que no
+     viven en el theme compartido. */
+  .ai-badge {
+    background: linear-gradient(135deg, #b9532a 0%, #9a3412 100%);
+  }
+  .category-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .category-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@copiloto/ui";
 import { useAuth } from "@/components/AuthProvider";
+import { useOpsOrders } from "@/lib/hooks/useOrders";
 
 type NavItem = {
   href: string;
@@ -14,6 +15,7 @@ type NavItem = {
 
 const PRIMARY_NAV: NavItem[] = [
   { href: "/dashboard", label: "Tablero", icon: "dashboard" },
+  { href: "/orders", label: "Pedidos", icon: "room_service" },
   { href: "/copilot", label: "Co-piloto", icon: "auto_awesome" },
   { href: "/forecast", label: "Forecast", icon: "trending_up" },
   { href: "/schedule", label: "Schedule", icon: "calendar_today" },
@@ -33,7 +35,24 @@ const MORE_NAV: NavItem[] = [
   { href: "/admin", label: "Admin", icon: "settings" },
 ];
 
-function NavLink({ item, active }: { item: NavItem; active: boolean }) {
+/** Pastilla de conteo para avisos en el nav (pedidos nuevos sin atender). */
+function NavBadge({ count }: { count: number }) {
+  return (
+    <span className="ml-0.5 min-w-[18px] h-[18px] px-1 bg-primary text-on-primary rounded-full text-[10px] font-bold inline-flex items-center justify-center">
+      {count > 99 ? "99+" : count}
+    </span>
+  );
+}
+
+function NavLink({
+  item,
+  active,
+  badge,
+}: {
+  item: NavItem;
+  active: boolean;
+  badge?: number;
+}) {
   return (
     <Link
       href={item.href}
@@ -46,6 +65,7 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
     >
       <span className="material-symbols-outlined text-[15px]">{item.icon}</span>
       <span className="font-label-md text-[13px]">{item.label}</span>
+      {badge ? <NavBadge count={badge} /> : null}
     </Link>
   );
 }
@@ -198,9 +218,11 @@ function BranchSwitcher({
 function MobileMenu({
   items,
   isActive,
+  badges,
 }: {
   items: NavItem[];
   isActive: (href: string) => boolean;
+  badges?: Record<string, number>;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -213,17 +235,22 @@ function MobileMenu({
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
+  const totalBadge = Object.values(badges ?? {}).reduce((a, b) => a + b, 0);
+
   return (
     <div className="relative xl:hidden" ref={ref}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low"
+        className="relative w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low"
         aria-label="Abrir menú"
         aria-haspopup="menu"
         aria-expanded={open}
       >
         <span className="material-symbols-outlined">menu</span>
+        {totalBadge > 0 && (
+          <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full border border-white" />
+        )}
       </button>
       {open && (
         <div
@@ -232,6 +259,7 @@ function MobileMenu({
         >
           {items.map((item) => {
             const active = isActive(item.href);
+            const badge = badges?.[item.href];
             return (
               <Link
                 key={item.href}
@@ -246,7 +274,8 @@ function MobileMenu({
                 )}
               >
                 <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
-                <span className="font-label-md text-[14px]">{item.label}</span>
+                <span className="font-label-md text-[14px] flex-1">{item.label}</span>
+                {badge ? <NavBadge count={badge} /> : null}
               </Link>
             );
           })}
@@ -262,6 +291,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     useAuth();
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
+
+  // Badge de "pedidos nuevos sin atender" = pedidos en estado PLACED de la
+  // sucursal activa. Comparte la query key del board (React Query dedupe), así
+  // que no genera fetch extra cuando ya estás en /orders.
+  const { data: ordersData } = useOpsOrders(currentLocation?.id);
+  const pendingOrders =
+    ordersData?.orders.filter((o) => o.status === "PLACED").length ?? 0;
+  const navBadges: Record<string, number> = pendingOrders
+    ? { "/orders": pendingOrders }
+    : {};
 
   // Iniciales del usuario para el avatar; "?" mientras carga.
   const initials =
@@ -291,7 +330,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header className="fixed top-0 left-0 right-0 h-[64px] z-50 glass-nav px-4 lg:px-margin-desktop flex items-center justify-between gap-3">
         <div className="flex items-center gap-md min-w-0">
           {/* Mobile menu (xl-) */}
-          <MobileMenu items={[...PRIMARY_NAV, ...MORE_NAV]} isActive={isActive} />
+          <MobileMenu
+            items={[...PRIMARY_NAV, ...MORE_NAV]}
+            isActive={isActive}
+            badges={navBadges}
+          />
 
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-xs shrink-0">
@@ -318,7 +361,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {/* Primary nav + Más dropdown — un solo bloque, sin segunda fila */}
           <nav className="hidden xl:flex items-center gap-base ml-2">
             {PRIMARY_NAV.map((item) => (
-              <NavLink key={item.href} item={item} active={isActive(item.href)} />
+              <NavLink
+                key={item.href}
+                item={item}
+                active={isActive(item.href)}
+                badge={navBadges[item.href]}
+              />
             ))}
             <MoreMenu items={MORE_NAV} isActive={isActive} />
           </nav>
