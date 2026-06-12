@@ -138,3 +138,71 @@ export interface Recommendation {
   expiresAt: string | null;
   createdAt: string;
 }
+
+// ─── MENU DIGITAL DEL CLIENTE (público, QR en mesa) ──────────
+
+export type OrderStatus =
+  | "PLACED"
+  | "IN_KITCHEN"
+  | "READY"
+  | "SERVED"
+  | "CANCELLED";
+
+export type OrderPaymentMethod = "MOBILE" | "CASHIER";
+
+export type OrderPaymentStatus = "PENDING" | "PAID";
+
+export interface MenuItemPublic {
+  id: string;
+  categoryId: string | null;
+  name: string;
+  description: string | null;
+  priceCents: number;
+  taxRate: number;
+  imageUrl: string | null;
+  tags: string[];
+  rating: number | null;
+}
+
+export interface MenuCategoryPublic {
+  id: string;
+  name: string;
+  sortKey: number;
+  items: MenuItemPublic[];
+}
+
+/** Respuesta de GET /api/menu/public/:locationId — todo lo que el menú del
+ *  cliente necesita para renderizar sin segundo round-trip. */
+export interface PublicMenuResponse {
+  locationId: string;
+  locationName: string;
+  tenantName: string;
+  currency: Tenant["currency"];
+  categories: MenuCategoryPublic[];
+}
+
+export interface OrderItemDTO {
+  id: string;
+  menuItemId: string | null;
+  name: string;
+  qty: number;
+  unitCents: number;
+  totalCents: number;
+  notes: string | null;
+}
+
+/** Respuesta al crear/consultar un pedido (POST y GET /api/orders/public). */
+export interface OrderSummaryDTO {
+  id: string;
+  code: string;
+  status: OrderStatus;
+  paymentMethod: OrderPaymentMethod;
+  paymentStatus: OrderPaymentStatus;
+  customerName: string | null;
+  tableLabel: string | null;
+  subtotalCents: number;
+  taxCents: number;
+  totalCents: number;
+  createdAt: string;
+  items: OrderItemDTO[];
+}

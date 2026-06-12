@@ -142,3 +142,45 @@ export const InventoryQuerySchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),
 });
+
+// ─── ORDERS (menu digital del cliente) ───────────────────────
+
+export const OrderPaymentMethodSchema = z.enum(["MOBILE", "CASHIER"]);
+
+export const CreateOrderItemSchema = z.object({
+  menuItemId: z.string().uuid(),
+  qty: z.number().int().min(1).max(50),
+  notes: z.string().max(280).optional(),
+});
+
+export const CreateOrderSchema = z.object({
+  locationId: z.string().uuid(),
+  items: z.array(CreateOrderItemSchema).min(1),
+  paymentMethod: OrderPaymentMethodSchema,
+  customerName: z.string().max(120).optional(),
+  tableLabel: z.string().max(40).optional(),
+  notes: z.string().max(500).optional(),
+});
+export type CreateOrderInput = z.infer<typeof CreateOrderSchema>;
+
+export const OrderStatusSchema = z.enum([
+  "PLACED",
+  "IN_KITCHEN",
+  "READY",
+  "SERVED",
+  "CANCELLED",
+]);
+
+export const OrderPaymentStatusSchema = z.enum(["PENDING", "PAID"]);
+
+// Actualización de pedido desde el panel de operaciones (cocina/caja).
+// Al menos uno de los dos campos debe venir.
+export const UpdateOrderSchema = z
+  .object({
+    status: OrderStatusSchema.optional(),
+    paymentStatus: OrderPaymentStatusSchema.optional(),
+  })
+  .refine((v) => v.status !== undefined || v.paymentStatus !== undefined, {
+    message: "Nada que actualizar",
+  });
+export type UpdateOrderInput = z.infer<typeof UpdateOrderSchema>;

@@ -153,6 +153,26 @@ enum InvoiceStatus {
   RECONCILED
 }
 
+// Pedidos del cliente (menu digital / QR en mesa). Distintos de SalesEvent,
+// que es la ingesta historica del POS.
+enum OrderStatus {
+  PLACED      // enviado a cocina
+  IN_KITCHEN  // en preparacion
+  READY       // listo para servir/entregar
+  SERVED      // entregado al cliente
+  CANCELLED
+}
+
+enum OrderPaymentMethod {
+  MOBILE   // pago desde el movil (pasarela — hoy simulado)
+  CASHIER  // paga en caja
+}
+
+enum OrderPaymentStatus {
+  PENDING
+  PAID
+}
+
 // ─── TENANCY ────────────────────────────────────────────────
 
 model Tenant {
@@ -175,6 +195,7 @@ model Tenant {
   recipes        Recipe[]
   menuItems      MenuItem[]
   recommendations Recommendation[]
+  orders         Order[]
 }
 
 model User {
@@ -223,6 +244,7 @@ model Location {
   reservations Reservation[]
   reviews      Review[]
   inventoryCounts InventoryCount[]
+  orders       Order[]
 
   @@unique([tenantId, slug])
   @@index([tenantId])
@@ -272,6 +294,10 @@ model MenuItem {
   description  String?
   priceCents   Int      @map("price_cents")
   taxRate      Decimal  @default(0.16) @map("tax_rate") @db.Decimal(5, 4)
+  // Presentacion para el menu digital del cliente (QR en mesa).
+  imageUrl     String?  @map("image_url")
+  tags         String[] @default([]) // ej. ["Vegano", "Picante"]
+  rating       Decimal? @db.Decimal(2, 1) // 0.0–5.0 — estrellas en el card
   active       Boolean  @default(true)
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
@@ -280,6 +306,7 @@ model MenuItem {
   category MenuCategory?  @relation(fields: [categoryId], references: [id])
   recipe   Recipe?
   saleLines SalesLine[]
+  orderItems OrderItem[]
 
   @@unique([tenantId, sku])
   @@index([tenantId])
@@ -750,4 +777,51 @@ model Review {
   guest    Guest?   @relation(fields: [guestId], references: [id])
 
   @@index([locationId, createdAt])
+}
+
+// ─── ORDERS (menu digital del cliente) ──────────────────────
+
+model Order {
+  id            String             @id @default(uuid())
+  tenantId      String             @map("tenant_id")
+  locationId    String             @map("location_id")
+  // Codigo corto legible para cocina/caja (ej. "A37"). Unico por location/dia
+  // en la practica; aqui basta con que sea unico global para no colisionar.
+  code          String             @unique
+  status        OrderStatus        @default(PLACED)
+  paymentMethod OrderPaymentMethod @map("payment_method")
+  paymentStatus OrderPaymentStatus @default(PENDING) @map("payment_status")
+  customerName  String?            @map("customer_name")
+  tableLabel    String?            @map("table_label")
+  notes         String?
+  subtotalCents Int                @map("subtotal_cents")
+  taxCents      Int                @map("tax_cents")
+  totalCents    Int                @map("total_cents")
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+
+  tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  location Location    @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  items    OrderItem[]
+
+  @@index([tenantId, createdAt])
+  @@index([locationId, status])
+}
+
+model OrderItem {
+  id         String  @id @default(uuid())
+  orderId    String  @map("order_id")
+  menuItemId String? @map("menu_item_id")
+  // Snapshot del nombre/precio al momento del pedido — sobrevive a cambios
+  // posteriores del menu.
+  name       String
+  qty        Int     @default(1)
+  unitCents  Int     @map("unit_cents")
+  totalCents Int     @map("total_cents")
+  notes      String?
+
+  order    Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem MenuItem? @relation(fields: [menuItemId], references: [id])
+
+  @@index([orderId])
 }
