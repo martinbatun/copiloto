@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/usr/bin/grep -rn \"@copiloto/utils\" apps/web/src)",
+      "Bash(/usr/bin/head -3 packages/shared/src/index.ts)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"WEB TS EXIT $?\")",
+      "Bash(/usr/bin/grep -i \"playwright\\\\|puppeteer\")",
+      "Bash(node /tmp/shot.mjs)",
+      "Bash(sed -n '1,80p' apps/api/server/routes/reservations.ts)",
+      "Bash(sed -n '1,40p' apps/web/src/app/reservations/page.tsx)",
+      "Bash(echo \"EXIT $?\")",
+      "Bash(/usr/bin/curl -s -X POST http://localhost:3400/api/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"dueno@copiloto.mx\",\"password\":\"password123\"}')",
+      "Bash(python3 -c \"import sys,json;d=json.load\\(sys.stdin\\);print\\('history count',len\\(d['orders']\\)\\)\")",
+      "Bash(git commit *)",
+      "Bash(gh pr create --base main --head feat/menu-cliente-y-pedidos --title 'feat: menú digital del cliente + pedidos en panel de operaciones' --body ' *)"
+    ]
+  }
+}
