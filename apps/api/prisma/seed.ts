@@ -20,6 +20,17 @@ const TODAY = new Date();
 TODAY.setUTCHours(0, 0, 0, 0);
 
 async function main() {
+  // Guard de seguridad: el seed crea datos demo (tenant "Demo CDMX", usuarios
+  // con password123, menú de ejemplo). NUNCA debe correr contra producción.
+  // Para forzarlo a propósito: SEED_ALLOW_PROD=true.
+  if (process.env.NODE_ENV === "production" && process.env.SEED_ALLOW_PROD !== "true") {
+    console.error(
+      "[seed] ABORTADO: NODE_ENV=production. El seed mete datos demo y no debe correr en prod.\n" +
+        "        Si de verdad lo necesitas, corre con SEED_ALLOW_PROD=true."
+    );
+    process.exit(1);
+  }
+
   console.log("[seed] creando tenant + usuarios demo...");
   const tenant = await prisma.tenant.upsert({
     where: { slug: "demo-mx" },
