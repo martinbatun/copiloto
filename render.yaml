@@ -1,0 +1,46 @@
+# Blueprint de Render para la API de Copiloto (apps/api).
+#
+# Cómo usarlo:
+#   1. Render Dashboard → New → Blueprint → conecta este repo.
+#   2. Render lee este archivo y crea el servicio "copiloto-api".
+#   3. Llena las env vars marcadas (sync:false) en el dashboard (son secretos).
+#   4. Al terminar, Render te da una URL https://copiloto-api.onrender.com
+#      → ponla como NEXT_PUBLIC_API_URL en el proyecto de Vercel del web y
+#        redepliega el web.
+#
+# El web (apps/web) sigue en Vercel; esto es SOLO el backend Express.
+services:
+  - type: web
+    name: copiloto-api
+    runtime: docker
+    repo: https://github.com/martinbatun/copiloto
+    branch: main
+    plan: free # sube a "starter" para que no duerma por inactividad
+    region: oregon
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: . # raíz del monorepo (el build inlinea los @copiloto/*)
+    healthCheckPath: /api/health
+    autoDeploy: true # redeploy automático en cada push a main
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Origen del web para CORS. Si cambias el dominio del web, actualiza esto.
+      - key: CORS_ORIGIN
+        value: https://copiloto-web.vercel.app
+      # Secretos — se llenan en el dashboard de Render (no en el repo):
+      - key: DATABASE_URL # Supabase: pooler (puerto 6543, ?pgbouncer=true)
+        sync: false
+      - key: DIRECT_URL # Supabase: conexión directa (puerto 5432)
+        sync: false
+      - key: JWT_SECRET # MISMO valor que tu API actual, para no invalidar sesiones
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_BUCKET
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        sync: false

@@ -1,0 +1,14 @@
+# Lo que NO debe entrar al contexto de build (se reinstala/regenera dentro).
+**/node_modules
+**/dist
+**/.next
+**/.turbo
+**/prisma/generated
+.git
+.github
+**/*.log
+**/.DS_Store
+apps/api/uploads
+agent/apps/api/uploads
+.claude
+docs
