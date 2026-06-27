@@ -24,9 +24,14 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      # Origen del web para CORS. Si cambias el dominio del web, actualiza esto.
+      # Origen del web para CORS (admite lista separada por comas si algún día
+      # hay varios — ej. dominio propio + vercel.app durante una migración).
       - key: CORS_ORIGIN
         value: https://copiloto-web.vercel.app
+      # Preview deploys de Vercel para QA por PR. Hoy en false (un solo origen);
+      # ponlo en "true" cuando quieras probar previews antes de mergear.
+      - key: CORS_ALLOW_VERCEL_PREVIEWS
+        value: "false"
       # Secretos — se llenan en el dashboard de Render (no en el repo):
       - key: DATABASE_URL # Supabase: pooler (puerto 6543, ?pgbouncer=true)
         sync: false

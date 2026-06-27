@@ -22,7 +22,8 @@ primary_region = "qro" # Querétaro, MX (cerca de los usuarios). Alterna: "iad",
 [env]
   NODE_ENV = "production"
   PORT = "3400"
-  CORS_ORIGIN = "https://copiloto-web.vercel.app"
+  CORS_ORIGIN = "https://copiloto-web.vercel.app" # lista separada por comas si hay varios
+  CORS_ALLOW_VERCEL_PREVIEWS = "false" # ponlo en "true" para permitir previews de Vercel (QA por PR)
 
 [http_service]
   internal_port = 3400
