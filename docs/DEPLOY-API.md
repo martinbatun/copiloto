@@ -61,3 +61,21 @@ Abre `https://copiloto-web.vercel.app/menu/<locationId>` → el menú carga.
 - **Supabase free tier**: si la DB se pausó por inactividad, las queries fallan
   con `Tenant or user not found` → reactívala desde el dashboard de Supabase.
 - **autoDeploy**: cada push a `main` redepliega la API automáticamente.
+
+## Respaldo: Fly.io
+
+Si prefieres Fly (o como fallback), hay un [`fly.toml`](../fly.toml) en la raíz que
+usa el mismo `Dockerfile`. Con la CLI de Fly instalada y logueado:
+
+```bash
+fly launch --no-deploy        # primera vez: crea la app (puedes renombrarla en fly.toml)
+fly secrets set \
+  DATABASE_URL=... DIRECT_URL=... JWT_SECRET=... \
+  SUPABASE_URL=... SUPABASE_SERVICE_KEY=... SUPABASE_BUCKET=... \
+  OPENROUTER_API_KEY=... OPENROUTER_MODEL=...
+fly deploy                    # build con apps/api/Dockerfile, contexto = raíz
+```
+
+Fly te da una URL `https://<app>.fly.dev` → úsala como `NEXT_PUBLIC_API_URL` en
+Vercel (igual que con Render). El `fly.toml` escala a cero por inactividad
+(`min_machines_running = 0`); ponlo en `1` para always-on.

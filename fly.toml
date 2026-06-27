@@ -1,0 +1,45 @@
+# Respaldo de deploy en Fly.io (alternativa a Render). Usa el MISMO Dockerfile.
+# Vive en la raíz del monorepo a propósito: así el contexto de build es la raíz
+# (el bundle de la API inlinea los workspaces @copiloto/*).
+#
+# Primera vez:
+#   fly launch --no-deploy            # crea la app (puedes renombrarla aquí)
+#   fly secrets set \
+#     DATABASE_URL=... DIRECT_URL=... JWT_SECRET=... \
+#     SUPABASE_URL=... SUPABASE_SERVICE_KEY=... SUPABASE_BUCKET=... \
+#     OPENROUTER_API_KEY=... OPENROUTER_MODEL=...
+#   fly deploy
+#
+# Redeploys posteriores: `fly deploy` desde la raíz del repo.
+
+app = "copiloto-api"
+primary_region = "qro" # Querétaro, MX (cerca de los usuarios). Alterna: "iad", "sjc".
+
+[build]
+  dockerfile = "apps/api/Dockerfile"
+
+# Vars NO secretas (las secretas van por `fly secrets set`, nunca aquí).
+[env]
+  NODE_ENV = "production"
+  PORT = "3400"
+  CORS_ORIGIN = "https://copiloto-web.vercel.app"
+
+[http_service]
+  internal_port = 3400
+  force_https = true
+  # Escala a cero por inactividad (como el plan free de Render). Para always-on
+  # pon min_machines_running = 1.
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/api/health"
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "10s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
