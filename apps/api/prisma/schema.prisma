@@ -156,6 +156,7 @@ enum InvoiceStatus {
 // Pedidos del cliente (menu digital / QR en mesa). Distintos de SalesEvent,
 // que es la ingesta historica del POS.
 enum OrderStatus {
+  AWAITING_PAYMENT // pago en linea pendiente — NO entra a cocina hasta confirmar
   PLACED      // enviado a cocina
   IN_KITCHEN  // en preparacion
   READY       // listo para servir/entregar
@@ -794,6 +795,9 @@ model Order {
   customerName  String?            @map("customer_name")
   tableLabel    String?            @map("table_label")
   notes         String?
+  // Referencia del pago en la pasarela (ej. payment id de Mercado Pago) — para
+  // reconciliación e idempotencia del webhook.
+  paymentRef    String?            @map("payment_ref")
   subtotalCents Int                @map("subtotal_cents")
   taxCents      Int                @map("tax_cents")
   totalCents    Int                @map("total_cents")

@@ -3,3 +3,4 @@
 // de configurar paths en tsconfig.
 
 export { PrismaClient } from "../prisma/generated/client/index.js";
+export type { Prisma } from "../prisma/generated/client/index.js";
