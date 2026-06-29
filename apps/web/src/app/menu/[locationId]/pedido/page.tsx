@@ -30,6 +30,12 @@ export default function PedidoPage() {
       {
         onSuccess: (order) => {
           clear();
+          // Pago en línea: nos vamos al checkout de la pasarela. Si no (pago en
+          // caja o modo simulado), directo a la confirmación.
+          if (order.checkoutUrl) {
+            window.location.href = order.checkoutUrl;
+            return;
+          }
           router.push(`/menu/${locationId}/confirmacion/${order.id}`);
         },
         onError: (err) => {

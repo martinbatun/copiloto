@@ -1,7 +1,13 @@
 import { Router } from "express";
 import { randomInt } from "node:crypto";
-import { PrismaClient } from "../db.js";
+import { PrismaClient, type Prisma } from "../db.js";
 import { requireAuth } from "../middleware/auth.js";
+import {
+  isMpEnabled,
+  createCheckoutPreference,
+  getPayment,
+  validateWebhookSignature,
+} from "../lib/mercadopago.js";
 import {
   CreateOrderSchema,
   OrderStatusSchema,
@@ -9,6 +15,9 @@ import {
   type OrderSummaryDTO,
   type OrderItemDTO,
 } from "@copiloto/shared";
+
+const PUBLIC_WEB_URL = process.env.PUBLIC_WEB_URL || "http://localhost:5400";
+const PUBLIC_API_URL = process.env.PUBLIC_API_URL || "http://localhost:3400";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -97,7 +106,7 @@ router.post("/public", async (req, res) => {
 
   const location = await prisma.location.findFirst({
     where: { id: locationId, active: true },
-    select: { id: true, tenantId: true },
+    select: { id: true, tenantId: true, tenant: { select: { currency: true } } },
   });
   if (!location) {
     res.status(404).json({ error: "Sucursal no encontrada" });
@@ -136,9 +145,16 @@ router.post("/public", async (req, res) => {
     };
   });
   const totalCents = subtotalCents + taxCents;
-  const paymentStatus = paymentMethod === "MOBILE" ? "PAID" : "PENDING";
 
-  // Crea el pedido; reintenta una vez si el code corto colisiona (raro).
+  // Pago en línea real solo si es MOBILE y la pasarela está configurada.
+  // Sin pasarela, MOBILE cae al modo simulado (PAID inmediato) para no romper
+  // dev/staging. CASHIER siempre entra a cocina y se cobra en caja.
+  const payOnline = paymentMethod === "MOBILE" && isMpEnabled();
+  const initialStatus = payOnline ? "AWAITING_PAYMENT" : "PLACED";
+  const paymentStatus =
+    paymentMethod === "MOBILE" && !isMpEnabled() ? "PAID" : "PENDING";
+
+  // Crea el pedido; reintenta si el code corto colisiona (raro).
   let created;
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
@@ -147,7 +163,7 @@ router.post("/public", async (req, res) => {
           tenantId: location.tenantId,
           locationId: location.id,
           code: genCode(),
-          status: "PLACED",
+          status: initialStatus,
           paymentMethod,
           paymentStatus,
           customerName: customerName ?? null,
@@ -177,7 +193,95 @@ router.post("/public", async (req, res) => {
     }
   }
 
+  // Pago en línea: crea la preferencia de Mercado Pago y devuelve checkoutUrl.
+  // Si MP falla, cancelamos el pedido (quedó en AWAITING_PAYMENT) y avisamos.
+  if (payOnline) {
+    try {
+      const { preferenceId, checkoutUrl } = await createCheckoutPreference({
+        orderId: created!.id,
+        currency: location.tenant.currency,
+        items: created!.items.map((it) => ({
+          id: it.menuItemId ?? it.id,
+          title: it.name,
+          quantity: it.qty,
+          unitCents: it.unitCents,
+        })),
+        backUrl: `${PUBLIC_WEB_URL}/menu/${location.id}/confirmacion/${created!.id}`,
+        notificationUrl: `${PUBLIC_API_URL}/api/orders/webhook/mp`,
+      });
+      await prisma.order.update({
+        where: { id: created!.id },
+        data: { paymentRef: preferenceId },
+      });
+      res.status(201).json({ ...toDTO(created!), checkoutUrl });
+      return;
+    } catch (err) {
+      console.error("[orders] mercadopago preference failed", err);
+      await prisma.order.update({
+        where: { id: created!.id },
+        data: { status: "CANCELLED" },
+      });
+      res.status(502).json({ error: "No se pudo iniciar el pago" });
+      return;
+    }
+  }
+
   res.status(201).json(toDTO(created!));
+});
+
+/**
+ * POST /api/orders/webhook/mp  (PÚBLICO — lo llama Mercado Pago)
+ *
+ * Confirma el pago de un pedido en línea. Verifica la firma del webhook, trae
+ * el pago real desde MP (no confía en el body) y, si está aprobado, mueve el
+ * pedido de AWAITING_PAYMENT → PLACED + PAID. Idempotente: si ya está pagado,
+ * no hace nada. Siempre responde 200 para que MP no reintente en loop salvo
+ * error transitorio nuestro.
+ */
+router.post("/webhook/mp", async (req, res) => {
+  // 1. Verifica firma (HMAC + anti-replay). Firma inválida → 401.
+  try {
+    validateWebhookSignature({
+      xSignature: req.header("x-signature"),
+      xRequestId: req.header("x-request-id"),
+      dataId: req.query["data.id"] as string | undefined,
+    });
+  } catch (err) {
+    console.warn("[orders] webhook firma inválida", (err as Error).message);
+    res.status(401).json({ error: "Firma inválida" });
+    return;
+  }
+
+  // 2. Solo nos interesan notificaciones de pago.
+  const type = req.query.type ?? req.body?.type;
+  const paymentId = (req.query["data.id"] as string) ?? req.body?.data?.id;
+  if (type !== "payment" || !paymentId) {
+    res.status(200).json({ ignored: true });
+    return;
+  }
+
+  try {
+    // 3. Trae el pago real desde MP (fuente de verdad).
+    const payment = await getPayment(String(paymentId));
+    const orderId = payment.externalReference;
+    if (!orderId) {
+      res.status(200).json({ ignored: "sin external_reference" });
+      return;
+    }
+
+    // 4. Solo confirmamos si está aprobado e idempotente (no re-confirmar).
+    if (payment.status === "approved") {
+      await prisma.order.updateMany({
+        where: { id: orderId, paymentStatus: { not: "PAID" } },
+        data: { status: "PLACED", paymentStatus: "PAID", paymentRef: String(paymentId) },
+      });
+    }
+    res.status(200).json({ ok: true });
+  } catch (err) {
+    console.error("[orders] webhook procesamiento falló", err);
+    // 500 → MP reintenta más tarde (es transitorio nuestro, no del pago).
+    res.status(500).json({ error: "Error procesando webhook" });
+  }
 });
 
 /**
@@ -229,25 +333,26 @@ router.get("/location/:locationId", requireAuth, async (req, res) => {
   ) as OrderSummaryDTO["status"][];
 
   const includeAll = req.query.include === "all";
-  const baseWhere =
-    validStatuses.length > 0
-      ? { locationId: location.id, status: { in: validStatuses } }
-      : includeAll
-      ? { locationId: location.id }
-      : { locationId: location.id, status: { in: ["PLACED", "IN_KITCHEN", "READY"] as const } };
+  const where: Prisma.OrderWhereInput = { locationId: location.id };
+  if (validStatuses.length > 0) {
+    where.status = { in: validStatuses };
+  } else if (!includeAll) {
+    // Default del board: solo pedidos activos en cocina (excluye AWAITING_PAYMENT,
+    // SERVED y CANCELLED).
+    where.status = { in: ["PLACED", "IN_KITCHEN", "READY"] };
+  }
 
   // ?since=<ISO datetime> → solo pedidos creados a partir de ese instante.
   // El cliente manda el inicio del día en su zona horaria (historial "del día").
   const sinceParam = typeof req.query.since === "string" ? req.query.since : "";
   const since = sinceParam ? new Date(sinceParam) : null;
-  const where =
-    since && !Number.isNaN(since.getTime())
-      ? { ...baseWhere, createdAt: { gte: since } }
-      : baseWhere;
+  if (since && !Number.isNaN(since.getTime())) {
+    where.createdAt = { gte: since };
+  }
 
   // Cocina quiere los más viejos primero (cola FIFO); el historial, los más
   // recientes primero.
-  const order = req.query.order === "desc" ? "desc" : "asc";
+  const order: Prisma.SortOrder = req.query.order === "desc" ? "desc" : "asc";
 
   const orders = await prisma.order.findMany({
     where,

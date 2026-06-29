@@ -164,6 +164,7 @@ export const CreateOrderSchema = z.object({
 export type CreateOrderInput = z.infer<typeof CreateOrderSchema>;
 
 export const OrderStatusSchema = z.enum([
+  "AWAITING_PAYMENT",
   "PLACED",
   "IN_KITCHEN",
   "READY",

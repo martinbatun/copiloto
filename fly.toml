@@ -24,6 +24,10 @@ primary_region = "qro" # Querétaro, MX (cerca de los usuarios). Alterna: "iad",
   PORT = "3400"
   CORS_ORIGIN = "https://copiloto-web.vercel.app" # lista separada por comas si hay varios
   CORS_ALLOW_VERCEL_PREVIEWS = "false" # ponlo en "true" para permitir previews de Vercel (QA por PR)
+  # URLs públicas para el checkout de pago (back_urls) y el webhook.
+  PUBLIC_WEB_URL = "https://copiloto-web.vercel.app"
+  PUBLIC_API_URL = "https://copiloto-api.fly.dev"
+  # MERCADO_PAGO_TOKEN y MERCADO_PAGO_WEBHOOK_SECRET van por `fly secrets set`.
 
 [http_service]
   internal_port = 3400

@@ -31,7 +31,22 @@ export default function ConfirmacionPage() {
           </div>
         )}
 
-        {order && (
+        {order && order.status === "AWAITING_PAYMENT" && (
+          <div className="flex flex-col items-center text-center mt-16 gap-3">
+            <span className="material-symbols-outlined animate-spin text-primary text-[40px]">
+              progress_activity
+            </span>
+            <h1 className="font-headline-lg text-headline-lg text-on-surface">
+              Confirmando tu pago…
+            </h1>
+            <p className="font-body-md text-on-surface-variant max-w-sm">
+              En cuanto la pasarela confirme, tu pedido entra a cocina. Esta
+              pantalla se actualiza sola.
+            </p>
+          </div>
+        )}
+
+        {order && order.status !== "AWAITING_PAYMENT" && (
           <div className="flex flex-col items-center text-center mt-8">
             <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
               <span

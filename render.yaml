@@ -49,3 +49,13 @@ services:
         sync: false
       - key: OPENROUTER_MODEL
         sync: false
+      # Pago real (Mercado Pago). Sin estas, el pago móvil cae a modo simulado.
+      - key: MERCADO_PAGO_TOKEN # Access Token de Producción
+        sync: false
+      - key: MERCADO_PAGO_WEBHOOK_SECRET # Clave secreta del webhook (Tus Integraciones)
+        sync: false
+      # URLs públicas para back_urls del checkout y notification_url del webhook.
+      - key: PUBLIC_WEB_URL
+        value: https://copiloto-web.vercel.app
+      - key: PUBLIC_API_URL
+        value: https://copiloto-api-z7j2.onrender.com

@@ -142,6 +142,7 @@ export interface Recommendation {
 // ─── MENU DIGITAL DEL CLIENTE (público, QR en mesa) ──────────
 
 export type OrderStatus =
+  | "AWAITING_PAYMENT"
   | "PLACED"
   | "IN_KITCHEN"
   | "READY"
@@ -189,6 +190,12 @@ export interface OrderItemDTO {
   unitCents: number;
   totalCents: number;
   notes: string | null;
+}
+
+/** Respuesta al crear un pedido. `checkoutUrl` viene solo cuando el pago es
+ *  MOBILE con pasarela activa: el cliente debe redirigirse ahí para pagar. */
+export interface CreateOrderResponse extends OrderSummaryDTO {
+  checkoutUrl?: string | null;
 }
 
 /** Respuesta al crear/consultar un pedido (POST y GET /api/orders/public). */
