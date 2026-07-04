@@ -6,6 +6,11 @@ import rateLimit from "express-rate-limit";
 import http from "http";
 import path from "path";
 import { registerRoutes } from "./routes.js";
+import { makeIsAllowedOrigin } from "./lib/cors.js";
+import { initSentry, setupSentryErrorHandler } from "./lib/sentry.js";
+
+// Lo antes posible: inicializa Sentry si hay SENTRY_DSN (no-op si no).
+initSentry();
 
 const app = express();
 const server = http.createServer(app);
@@ -29,20 +34,11 @@ const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || "http://localhost:5400")
 const ALLOW_VERCEL_PREVIEWS = process.env.CORS_ALLOW_VERCEL_PREVIEWS === "true";
 const VERCEL_PREVIEW_PREFIX = process.env.CORS_VERCEL_PREFIX || "copiloto-web";
 
-function isAllowedOrigin(origin: string): boolean {
-  if (ALLOWED_ORIGINS.includes(origin)) return true;
-  if (ALLOW_VERCEL_PREVIEWS) {
-    try {
-      const { hostname } = new URL(origin);
-      if (hostname.endsWith(".vercel.app") && hostname.startsWith(VERCEL_PREVIEW_PREFIX)) {
-        return true;
-      }
-    } catch {
-      /* origin no parseable → no permitido */
-    }
-  }
-  return false;
-}
+const isAllowedOrigin = makeIsAllowedOrigin({
+  allowed: ALLOWED_ORIGINS,
+  allowVercelPreviews: ALLOW_VERCEL_PREVIEWS,
+  vercelPrefix: VERCEL_PREVIEW_PREFIX,
+});
 
 // Headers de seguridad. Es una API JSON (no sirve HTML), así que dejamos CSP
 // fuera; el resto de defaults de helmet aplican. CORS controla el acceso del
@@ -92,6 +88,17 @@ app.get("/api/health", (_req, res) => {
 });
 
 registerRoutes(app);
+
+// Sentry captura errores no manejados (debe ir después de las rutas)...
+setupSentryErrorHandler(app);
+
+// ...y un handler final devuelve 500 JSON en vez de HTML/stack al cliente.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error("[api] unhandled error", err);
+  if (res.headersSent) return;
+  res.status(500).json({ error: "Error interno" });
+});
 
 server.listen(PORT, () => {
   const ts = new Date().toISOString();

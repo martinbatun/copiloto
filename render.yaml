@@ -59,3 +59,6 @@ services:
         value: https://copiloto-web.vercel.app
       - key: PUBLIC_API_URL
         value: https://copiloto-api-z7j2.onrender.com
+      # Monitoreo de errores (opcional). Sin DSN, Sentry queda desactivado.
+      - key: SENTRY_DSN
+        sync: false

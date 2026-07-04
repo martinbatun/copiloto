@@ -39,6 +39,9 @@ jobs:
       - name: Typecheck Web
         run: pnpm --filter @copiloto/web exec tsc --noEmit
 
+      - name: Test API
+        run: pnpm --filter @copiloto/api test
+
       - name: Build API
         run: pnpm --filter @copiloto/api build
 
