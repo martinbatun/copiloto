@@ -30,12 +30,19 @@ interface CartContextValue {
   setQty: (menuItemId: string, qty: number) => void;
   remove: (menuItemId: string) => void;
   clear: () => void;
+  /** Mesa del comensal (viene del QR: /menu/:loc?mesa=12). Solo etiqueta. */
+  tableLabel: string | null;
+  setTable: (label: string | null) => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
 
 function storageKey(locationId: string) {
   return `copiloto:cart:${locationId}`;
+}
+
+function tableKey(locationId: string) {
+  return `copiloto:table:${locationId}`;
 }
 
 export function CartProvider({
@@ -46,6 +53,7 @@ export function CartProvider({
   children: React.ReactNode;
 }) {
   const [lines, setLines] = useState<CartLine[]>([]);
+  const [tableLabel, setTableLabel] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
   // Hidrata desde localStorage una vez montado (evita mismatch SSR).
@@ -53,11 +61,25 @@ export function CartProvider({
     try {
       const raw = window.localStorage.getItem(storageKey(locationId));
       if (raw) setLines(JSON.parse(raw) as CartLine[]);
+      setTableLabel(window.localStorage.getItem(tableKey(locationId)));
     } catch {
       /* carrito corrupto → arranca vacío */
     }
     setHydrated(true);
   }, [locationId]);
+
+  const setTable = useCallback(
+    (label: string | null) => {
+      setTableLabel(label);
+      try {
+        if (label) window.localStorage.setItem(tableKey(locationId), label);
+        else window.localStorage.removeItem(tableKey(locationId));
+      } catch {
+        /* storage bloqueado → solo en memoria */
+      }
+    },
+    [locationId]
+  );
 
   // Persiste en cada cambio (solo tras hidratar, para no pisar con []).
   useEffect(() => {
@@ -116,8 +138,10 @@ export function CartProvider({
       setQty,
       remove,
       clear,
+      tableLabel,
+      setTable,
     };
-  }, [lines, add, setQty, remove, clear]);
+  }, [lines, add, setQty, remove, clear, tableLabel, setTable]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

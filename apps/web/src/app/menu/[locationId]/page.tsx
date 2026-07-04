@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import type { MenuCategoryPublic, MenuItemPublic } from "@copiloto/shared";
 import { usePublicMenu } from "@/lib/hooks/useMenu";
+import { useCart } from "@/components/menu/CartProvider";
 import { CustomerTopBar, CustomerBottomNav } from "@/components/menu/chrome";
 import { CategoryChips } from "@/components/menu/CategoryChips";
 import { MenuItemCard } from "@/components/menu/MenuItemCard";
@@ -13,8 +14,16 @@ import { CartFab } from "@/components/menu/CartFab";
 export default function MenuPage() {
   const { locationId } = useParams<{ locationId: string }>();
   const { data, isLoading, error } = usePublicMenu(locationId);
+  const { setTable, tableLabel } = useCart();
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<string | null>(null);
+
+  // El QR de la mesa llega como /menu/:loc?mesa=12 → guardamos la mesa para
+  // prellenar el pedido. Leemos de window.location (evita Suspense de useSearchParams).
+  useEffect(() => {
+    const mesa = new URLSearchParams(window.location.search).get("mesa");
+    if (mesa) setTable(mesa.trim());
+  }, [setTable]);
 
   const allItems = useMemo(
     () => data?.categories.flatMap((c) => c.items) ?? [],
@@ -53,6 +62,12 @@ export default function MenuPage() {
 
       <main className="pt-20 px-margin-mobile max-w-5xl mx-auto">
         <div className="mt-6 mb-8">
+          {tableLabel && (
+            <span className="inline-flex items-center gap-1 mb-3 px-3 py-1 rounded-full bg-primary/10 text-primary font-label-md text-label-md">
+              <span className="material-symbols-outlined text-[16px]">table_restaurant</span>
+              Mesa {tableLabel}
+            </span>
+          )}
           <h2 className="font-headline-lg text-headline-lg mb-2">
             ¿Qué te apetece hoy?
           </h2>

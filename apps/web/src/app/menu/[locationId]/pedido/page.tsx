@@ -14,7 +14,7 @@ const TAX_RATE = 0.16; // preview en cliente; el server recalcula al confirmar.
 export default function PedidoPage() {
   const { locationId } = useParams<{ locationId: string }>();
   const router = useRouter();
-  const { lines, subtotalCents, clear } = useCart();
+  const { lines, subtotalCents, clear, tableLabel } = useCart();
   const createOrder = useCreateOrder();
 
   const taxCents = Math.round(subtotalCents * TAX_RATE);
@@ -25,6 +25,7 @@ export default function PedidoPage() {
       {
         locationId,
         paymentMethod: method,
+        tableLabel: tableLabel || undefined,
         items: lines.map((l) => ({ menuItemId: l.menuItemId, qty: l.qty })),
       },
       {
@@ -59,6 +60,12 @@ export default function PedidoPage() {
           <p className="font-body-sm text-on-surface-variant">
             Revisa tus artículos antes de confirmar.
           </p>
+          {tableLabel && (
+            <span className="inline-flex items-center gap-1 mt-2 px-3 py-1 rounded-full bg-primary/10 text-primary font-label-md text-label-md">
+              <span className="material-symbols-outlined text-[16px]">table_restaurant</span>
+              Mesa {tableLabel}
+            </span>
+          )}
         </header>
 
         {lines.length === 0 ? (
