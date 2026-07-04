@@ -18,9 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # La versión de pnpm la toma del "packageManager" del package.json
+      # (pnpm@9.0.0); no la fijamos aquí para evitar el conflicto de doble versión.
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - uses: actions/setup-node@v4
         with:
