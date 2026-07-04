@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   CreateOrderInput,
   CreateOrderResponse,
@@ -39,5 +39,15 @@ export function useOrderStatus(orderId: string) {
     enabled: Boolean(orderId),
     refetchInterval: (query) =>
       query.state.data?.status === "AWAITING_PAYMENT" ? 3000 : false,
+  });
+}
+
+/** Cancela un pedido con pago en línea pendiente (self-service del comensal). */
+export function useCancelOrder(orderId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () =>
+      api<OrderSummaryDTO>(`/api/orders/public/${orderId}/cancel`, { method: "POST" }),
+    onSuccess: (order) => qc.setQueryData(["order", orderId], order),
   });
 }

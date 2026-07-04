@@ -2,13 +2,23 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 import { formatMoney } from "@/lib/format";
-import { useOrderStatus } from "@/lib/hooks/useMenu";
+import { useOrderStatus, useCancelOrder } from "@/lib/hooks/useMenu";
 import { CustomerTopBar, CustomerBottomNav } from "@/components/menu/chrome";
 
 export default function ConfirmacionPage() {
   const { locationId, orderId } = useParams<{ locationId: string; orderId: string }>();
   const { data: order, isLoading, error } = useOrderStatus(orderId);
+  const cancel = useCancelOrder(orderId);
+
+  function handleCancel() {
+    cancel.mutate(undefined, {
+      onSuccess: () => toast.success("Pedido cancelado"),
+      onError: (e) =>
+        toast.error("No se pudo cancelar", { description: String((e as Error).message) }),
+    });
+  }
 
   return (
     <div className="min-h-screen bg-canvas">
@@ -43,10 +53,38 @@ export default function ConfirmacionPage() {
               En cuanto la pasarela confirme, tu pedido entra a cocina. Esta
               pantalla se actualiza sola.
             </p>
+            <button
+              type="button"
+              onClick={handleCancel}
+              disabled={cancel.isPending}
+              className="mt-4 px-5 py-2.5 rounded-full border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container-low disabled:opacity-60 transition-colors"
+            >
+              {cancel.isPending ? "Cancelando…" : "Cancelar pedido"}
+            </button>
           </div>
         )}
 
-        {order && order.status !== "AWAITING_PAYMENT" && (
+        {order && order.status === "CANCELLED" && (
+          <div className="flex flex-col items-center text-center mt-16 gap-3">
+            <div className="w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center mb-1">
+              <span className="material-symbols-outlined text-on-surface-variant text-[44px]">
+                cancel
+              </span>
+            </div>
+            <h1 className="font-headline-lg text-headline-lg text-on-surface">Pedido cancelado</h1>
+            <p className="font-body-md text-on-surface-variant max-w-sm">
+              Este pedido (#{order.code}) fue cancelado. Puedes volver al menú y ordenar de nuevo.
+            </p>
+            <Link
+              href={`/menu/${locationId}`}
+              className="mt-3 px-6 py-3 btn-terracota-gradient rounded-full font-bold"
+            >
+              Volver al menú
+            </Link>
+          </div>
+        )}
+
+        {order && order.status !== "AWAITING_PAYMENT" && order.status !== "CANCELLED" && (
           <div className="flex flex-col items-center text-center mt-8">
             <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
               <span
