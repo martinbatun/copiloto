@@ -8,6 +8,7 @@ import {
   getPayment,
   validateWebhookSignature,
 } from "../lib/mercadopago.js";
+import { computeOrderTotals } from "../lib/orders-math.js";
 import {
   CreateOrderSchema,
   OrderStatusSchema,
@@ -127,24 +128,20 @@ router.post("/public", async (req, res) => {
     return;
   }
 
-  // Calcula totales en centavos. tax por item = round(line * taxRate).
-  let subtotalCents = 0;
-  let taxCents = 0;
-  const lineData = items.map((line) => {
-    const mi = byId.get(line.menuItemId)!;
-    const lineTotal = mi.priceCents * line.qty;
-    subtotalCents += lineTotal;
-    taxCents += Math.round(lineTotal * num(mi.taxRate));
-    return {
-      menuItemId: mi.id,
-      name: mi.name,
-      qty: line.qty,
-      unitCents: mi.priceCents,
-      totalCents: lineTotal,
-      notes: line.notes ?? null,
-    };
-  });
-  const totalCents = subtotalCents + taxCents;
+  // Calcula totales en centavos (subtotal + IVA por item) con la lógica pura.
+  const { subtotalCents, taxCents, totalCents, lines: lineData } = computeOrderTotals(
+    items.map((line) => {
+      const mi = byId.get(line.menuItemId)!;
+      return {
+        menuItemId: mi.id,
+        name: mi.name,
+        qty: line.qty,
+        unitCents: mi.priceCents,
+        taxRate: num(mi.taxRate),
+        notes: line.notes ?? null,
+      };
+    })
+  );
 
   // Pago en línea real solo si es MOBILE y la pasarela está configurada.
   // Sin pasarela, MOBILE cae al modo simulado (PAID inmediato) para no romper
