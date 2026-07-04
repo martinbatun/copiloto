@@ -3,7 +3,7 @@
 // CJS-tipado por @types/* es lo unico que funciona simultaneamente en
 // type-check (TS strict ESM) y runtime (tsx ESM con CJS interop).
 import bcryptjs from "bcryptjs";
-import jsonwebtoken from "jsonwebtoken";
+import jsonwebtoken, { type SignOptions } from "jsonwebtoken";
 import type { Role } from "@copiloto/shared";
 
 // tsx wrapea el CJS bajo .default cuando llega a runtime — desempaquetamos
@@ -21,7 +21,7 @@ export interface JwtPayload {
   email: string;
 }
 
-const DEFAULT_TTL: jwt.SignOptions["expiresIn"] = "7d";
+const DEFAULT_TTL: SignOptions["expiresIn"] = "7d";
 
 export async function hashPassword(plain: string): Promise<string> {
   return bcrypt.hash(plain, 10);
@@ -34,11 +34,11 @@ export async function verifyPassword(plain: string, hash: string): Promise<boole
 export function signJwt(
   payload: JwtPayload,
   secret: string,
-  ttl: jwt.SignOptions["expiresIn"] = DEFAULT_TTL
+  ttl: SignOptions["expiresIn"] = DEFAULT_TTL
 ): string {
   // jsonwebtoken v9 endurecio el tipo de expiresIn (number | "7d" tipado).
   // Casteamos el options a SignOptions para mantener la API ergonomica sin any.
-  const opts: jwt.SignOptions = { expiresIn: ttl };
+  const opts: SignOptions = { expiresIn: ttl };
   return jwt.sign(payload, secret, opts);
 }
 
