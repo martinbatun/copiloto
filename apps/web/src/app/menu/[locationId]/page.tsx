@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import type { MenuCategoryPublic, MenuItemPublic } from "@copiloto/shared";
 import { usePublicMenu } from "@/lib/hooks/useMenu";
+import { ApiError } from "@/lib/api";
 import { useCart } from "@/components/menu/CartProvider";
 import { CustomerTopBar, CustomerBottomNav } from "@/components/menu/chrome";
 import { CategoryChips } from "@/components/menu/CategoryChips";
@@ -13,7 +14,7 @@ import { CartFab } from "@/components/menu/CartFab";
 
 export default function MenuPage() {
   const { locationId } = useParams<{ locationId: string }>();
-  const { data, isLoading, error } = usePublicMenu(locationId);
+  const { data, isLoading, error, refetch, isFetching } = usePublicMenu(locationId);
   const { setTable, tableLabel } = useCart();
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<string | null>(null);
@@ -87,15 +88,39 @@ export default function MenuPage() {
 
         {isLoading && <MenuSkeleton />}
 
-        {error && (
-          <div className="bg-error-container/40 border border-error/30 text-on-error-container rounded-xl p-4 flex items-center gap-3">
-            <span className="material-symbols-outlined text-error">error</span>
-            <div>
-              <p className="font-bold">No pudimos cargar el menú</p>
-              <p className="text-sm">{String((error as Error).message)}</p>
+        {error &&
+          (error instanceof ApiError && error.status === 404 ? (
+            <div className="flex flex-col items-center text-center py-16 gap-3">
+              <span className="material-symbols-outlined text-on-surface-variant text-[56px]">
+                storefront
+              </span>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface">
+                Este menú no está disponible
+              </h3>
+              <p className="font-body-md text-on-surface-variant max-w-sm">
+                La sucursal no existe o está inactiva. Verifica el código QR o pregunta al
+                personal.
+              </p>
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="flex flex-col items-center text-center py-16 gap-3">
+              <span className="material-symbols-outlined text-error text-[56px]">wifi_off</span>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface">
+                No pudimos cargar el menú
+              </h3>
+              <p className="font-body-md text-on-surface-variant max-w-sm">
+                Revisa tu conexión e inténtalo de nuevo.
+              </p>
+              <button
+                type="button"
+                onClick={() => refetch()}
+                disabled={isFetching}
+                className="mt-2 px-6 py-3 btn-terracota-gradient rounded-full font-bold disabled:opacity-60"
+              >
+                {isFetching ? "Reintentando…" : "Reintentar"}
+              </button>
+            </div>
+          ))}
 
         {data && (
           <>

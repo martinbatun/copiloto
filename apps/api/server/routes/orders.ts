@@ -297,6 +297,38 @@ router.get("/public/:orderId", async (req, res) => {
   res.json(toDTO(order));
 });
 
+/**
+ * POST /api/orders/public/:orderId/cancel  (PÚBLICO)
+ *
+ * Cancelación por el propio comensal. Solo se permite cuando el pedido AÚN NO
+ * entró a cocina: estado AWAITING_PAYMENT (pago en línea no completado). Una vez
+ * PLACED ya está en cocina y debe cancelarlo el personal. El id es un UUID no
+ * adivinable → tenerlo basta como autorización para este self-service.
+ */
+router.post("/public/:orderId/cancel", async (req, res) => {
+  const id = String(req.params.orderId);
+  const order = await prisma.order.findUnique({
+    where: { id },
+    select: { id: true, status: true },
+  });
+  if (!order) {
+    res.status(404).json({ error: "Pedido no encontrado" });
+    return;
+  }
+  if (order.status !== "AWAITING_PAYMENT") {
+    res.status(409).json({
+      error: "Este pedido ya no se puede cancelar desde aquí. Pídelo al personal.",
+    });
+    return;
+  }
+  const updated = await prisma.order.update({
+    where: { id },
+    data: { status: "CANCELLED" },
+    include: { items: true },
+  });
+  res.json(toDTO(updated));
+});
+
 // ─── PANEL DE OPERACIONES (cocina / caja) — autenticado ──────
 
 /**
