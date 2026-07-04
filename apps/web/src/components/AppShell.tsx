@@ -26,6 +26,7 @@ const PRIMARY_NAV: NavItem[] = [
 
 const MORE_NAV: NavItem[] = [
   { href: "/admin/menu", label: "Carta", icon: "restaurant_menu" },
+  { href: "/admin/qr", label: "QR Mesas", icon: "qr_code_2" },
   { href: "/anomalies", label: "Anomalías", icon: "warning" },
   { href: "/guests", label: "Huéspedes", icon: "groups" },
   { href: "/reservations", label: "Reservas", icon: "event_available" },
