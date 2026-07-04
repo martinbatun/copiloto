@@ -182,6 +182,44 @@ export interface PublicMenuResponse {
   categories: MenuCategoryPublic[];
 }
 
+// ─── MENU ADMIN (gestión de la carta desde el panel) ────────
+
+export interface AdminMenuItem {
+  id: string;
+  sku: string;
+  categoryId: string | null;
+  name: string;
+  description: string | null;
+  priceCents: number;
+  taxRate: number;
+  imageUrl: string | null;
+  tags: string[];
+  rating: number | null;
+  active: boolean;
+}
+
+export interface AdminMenuCategory {
+  id: string;
+  name: string;
+  sortKey: number;
+}
+
+/** Respuesta de GET /api/menu/admin/:locationId — categorías + items (incl.
+ *  inactivos) para el editor de la carta. */
+export interface AdminMenuResponse {
+  locationId: string;
+  locationName: string;
+  categories: AdminMenuCategory[];
+  items: AdminMenuItem[];
+}
+
+/** Respuesta del endpoint de subida de imágenes. */
+export interface UploadResponse {
+  url: string;
+  path: string;
+  size: number;
+}
+
 export interface OrderItemDTO {
   id: string;
   menuItemId: string | null;

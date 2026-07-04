@@ -40,6 +40,21 @@ export async function api<T>(
   return (await res.json()) as T;
 }
 
+/** Sube un archivo (multipart/form-data). No fija Content-Type — el navegador
+ *  agrega el boundary. Reutiliza el Bearer token. */
+export async function apiUpload<T>(path: string, formData: FormData): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: "POST",
+    headers: { ...authHeader() }, // sin Content-Type: lo pone el navegador
+    body: formData,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new ApiError(res.status, `API ${res.status}: ${text}`);
+  }
+  return (await res.json()) as T;
+}
+
 export function getToken(): string | null {
   if (typeof window === "undefined") return null;
   return window.localStorage.getItem(TOKEN_KEY);

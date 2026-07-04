@@ -174,6 +174,28 @@ export const OrderStatusSchema = z.enum([
 
 export const OrderPaymentStatusSchema = z.enum(["PENDING", "PAID"]);
 
+// ─── MENU ADMIN (onboarding: el restaurante gestiona su carta) ───
+
+export const MenuItemUpsertSchema = z.object({
+  name: z.string().min(2).max(120),
+  description: z.string().max(500).optional().nullable(),
+  // Precio en centavos (entero). El front convierte pesos → centavos.
+  priceCents: z.number().int().min(0).max(100_000_00),
+  categoryId: z.string().uuid().optional().nullable(),
+  imageUrl: z.string().url().max(1000).optional().nullable(),
+  tags: z.array(z.string().max(40)).max(10).default([]),
+  rating: z.number().min(0).max(5).optional().nullable(),
+  taxRate: z.number().min(0).max(1).optional(), // default 0.16 en el server
+  active: z.boolean().optional(),
+});
+export type MenuItemUpsertInput = z.infer<typeof MenuItemUpsertSchema>;
+
+export const MenuCategoryUpsertSchema = z.object({
+  name: z.string().min(2).max(80),
+  sortKey: z.number().int().min(0).max(9999).optional(),
+});
+export type MenuCategoryUpsertInput = z.infer<typeof MenuCategoryUpsertSchema>;
+
 // Actualización de pedido desde el panel de operaciones (cocina/caja).
 // Al menos uno de los dos campos debe venir.
 export const UpdateOrderSchema = z
