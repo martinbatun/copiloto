@@ -182,6 +182,60 @@ export interface PublicMenuResponse {
   categories: MenuCategoryPublic[];
 }
 
+// ─── PROVEEDORES ────────────────────────────────────────────
+
+export interface SupplierDTO {
+  id: string;
+  name: string;
+  rfc: string | null;
+  email: string | null;
+  phone: string | null;
+  ingredientCount: number;
+}
+
+export interface SupplierIngredientDTO {
+  id: string;
+  name: string;
+  category: string | null;
+  baseUnit: string;
+  costPerUnitCents: number | null;
+  supplierName: string | null;
+}
+
+export interface SuppliersResponse {
+  suppliers: SupplierDTO[];
+  ingredients: SupplierIngredientDTO[];
+}
+
+// ─── CRM: HUÉSPEDES ─────────────────────────────────────────
+
+/** Categoría en español que espera el badge del front. */
+export type GuestCategory = "VIP" | "Foodie" | "Nuevo" | "Riesgo" | "Habitual";
+
+export interface GuestDTO {
+  id: string;
+  name: string;
+  email: string | null;
+  category: GuestCategory;
+  lastVisitAt: string | null;
+  totalSpentCents: number;
+  visitCount: number;
+  birthdayToday: boolean;
+}
+
+export interface GuestSegmentDTO {
+  id: string;
+  name: string;
+  kind: GuestSegment;
+  count: number;
+}
+
+export interface GuestsResponse {
+  summary: { vips: number; churnRisk: number; avgVisits: number };
+  segments: GuestSegmentDTO[];
+  guests: GuestDTO[];
+}
+
 // ─── MENU ADMIN (gestión de la carta desde el panel) ────────
 
 export interface AdminMenuItem {

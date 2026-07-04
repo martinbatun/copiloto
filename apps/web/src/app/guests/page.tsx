@@ -1,19 +1,15 @@
-import { AppShell } from "@/components/AppShell";
+"use client";
 
-const SAMPLE_GUESTS = [
-  { name: "Sofia Castro", cat: "Foodie", days: 4, spend: 14820 },
-  { name: "Mateo Silva", cat: "Habitual", days: 9, spend: 9610 },
-  { name: "Isabella Gomez", cat: "Nuevo", days: 2, spend: 1840 },
-  { name: "Daniela Ortiz", cat: "VIP", days: 6, spend: 41250 },
-  { name: "Gabriel Ruiz", cat: "Riesgo", days: 18, spend: 7430 },
-  { name: "Valentina Vega", cat: "VIP", days: 5, spend: 39120 },
-  { name: "Alejandro Leon", cat: "Habitual", days: 12, spend: 11260 },
-  { name: "Ximena Duarte", cat: "Foodie", days: 7, spend: 18950 },
-  { name: "Sebastian Peña", cat: "Habitual", days: 15, spend: 8210 },
-  { name: "Mariana Soler", cat: "Riesgo", days: 22, spend: 5640 },
-];
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
+import type { GuestDTO, GuestSegmentDTO } from "@copiloto/shared";
+import { AppShell } from "@/components/AppShell";
+import { useGuests } from "@/lib/hooks/useGuests";
+import { formatMoney } from "@/lib/format";
 
 export default function Page() {
+  const { data, isLoading, error } = useGuests();
+
   return (
     <AppShell>
       <header>
@@ -23,69 +19,56 @@ export default function Page() {
         </p>
       </header>
 
+      {error && (
+        <div className="bg-error-container/40 border border-error/30 text-on-error-container rounded-xl p-4">
+          <p className="font-bold">No pudimos cargar los huéspedes</p>
+          <p className="text-sm">{String((error as Error).message)}</p>
+        </div>
+      )}
+
       <section className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-        <KpiCard icon="grade" tint="primary" label="VIPs Activos" value="412" />
-        <KpiCard icon="warning" tint="error" label="En riesgo de churn" value="184" />
-        <KpiCard
-          icon="calendar_today"
-          tint="secondary"
-          label="Frecuencia media"
-          value="2.4"
-          suffix="/mes"
-        />
+        {isLoading || !data ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-24 bg-surface-container-high/70 rounded-xl animate-pulse" />
+          ))
+        ) : (
+          <>
+            <KpiCard icon="grade" tint="primary" label="VIPs activos" value={String(data.summary.vips)} />
+            <KpiCard
+              icon="warning"
+              tint="error"
+              label="En riesgo de churn"
+              value={String(data.summary.churnRisk)}
+            />
+            <KpiCard
+              icon="calendar_today"
+              tint="secondary"
+              label="Visitas promedio"
+              value={String(data.summary.avgVisits)}
+            />
+          </>
+        )}
       </section>
 
-      <div>
-        <h2 className="font-headline-sm text-headline-sm mb-md text-on-surface">
-          Segmentos estratégicos
-        </h2>
-        <section className="grid grid-cols-1 md:grid-cols-4 gap-gutter">
-          <SegmentCard
-            border="border-primary"
-            color="text-primary"
-            icon="workspace_premium"
-            title="VIPs Embajadores"
-            desc="Clientes con >12 visitas anuales."
-            count="124 huéspedes"
-          />
-          <SegmentCard
-            border="border-secondary"
-            color="text-secondary"
-            icon="fiber_new"
-            title="Nuevos"
-            desc="Primera visita en los últimos 30 días."
-            count="56 huéspedes"
-          />
-          <SegmentCard
-            border="border-error"
-            color="text-error"
-            icon="heart_broken"
-            title="Riesgo"
-            desc="Sin visitas en más de 60 días."
-            count="88 huéspedes"
-          />
-          <SegmentCard
-            border="border-tertiary"
-            color="text-tertiary"
-            icon="restaurant"
-            title="Foodies"
-            desc="Consumo alto en vinos y especialidades."
-            count="210 huéspedes"
-          />
-        </section>
-      </div>
+      {data && data.segments.length > 0 && (
+        <div>
+          <h2 className="font-headline-sm text-headline-sm mb-md text-on-surface">
+            Segmentos estratégicos
+          </h2>
+          <section className="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+            {data.segments.map((s) => (
+              <SegmentCard key={s.id} segment={s} />
+            ))}
+          </section>
+        </div>
+      )}
 
       <div className="bg-white rounded-2xl border border-outline-variant card-shadow overflow-hidden">
         <div className="p-md border-b border-outline-variant flex justify-between items-center">
           <h3 className="font-headline-sm text-headline-sm text-on-surface">Listado de huéspedes</h3>
-          <div className="flex gap-xs">
-            <button className="flex items-center gap-xs px-sm py-xs border border-outline-variant rounded-lg font-label-md hover:bg-surface-container-low transition-colors">
-              <span className="material-symbols-outlined text-[18px]">filter_list</span> Filtrar
-            </button>
-            <button className="flex items-center gap-xs px-sm py-xs bg-primary text-white rounded-lg font-label-md shadow-sm">
-              <span className="material-symbols-outlined text-[18px]">person_add</span> Nuevo
-            </button>
-          </div>
+          <button className="flex items-center gap-xs px-sm py-xs bg-primary text-white rounded-lg font-label-md shadow-sm">
+            <span className="material-symbols-outlined text-[18px]">person_add</span> Nuevo
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -95,118 +78,73 @@ export default function Page() {
                 <th className="px-md py-sm">Categoría</th>
                 <th className="px-md py-sm">Última visita</th>
                 <th className="px-md py-sm">Gasto total</th>
-                <th className="px-md py-sm" />
               </tr>
             </thead>
             <tbody className="text-body-sm divide-y divide-outline-variant/60">
-              <tr className="hover:bg-primary/5 transition-colors bg-primary/5">
-                <td className="px-md py-md">
-                  <div className="flex items-center gap-sm">
-                    <div className="w-8 h-8 rounded-full border border-primary/20 bg-primary-fixed flex items-center justify-center text-primary font-bold text-[12px]">
-                      LR
-                    </div>
-                    <div>
-                      <p className="font-bold text-on-surface">Lucia Robles</p>
-                      <span className="text-[10px] text-primary flex items-center gap-xs font-bold uppercase tracking-tight">
-                        <span
-                          className="material-symbols-outlined text-[12px]"
-                          style={{ fontVariationSettings: "'FILL' 1" }}
-                        >
-                          cake
-                        </span>
-                        Cumple hoy
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-md py-md">
-                  <CategoryBadge cat="VIP" />
-                </td>
-                <td className="px-md py-md">Hace 3 días</td>
-                <td className="px-md py-md font-bold">$54,200</td>
-                <td className="px-md py-md">
-                  <button className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">
-                    more_vert
-                  </button>
-                </td>
-              </tr>
-              <tr className="hover:bg-surface-container-low transition-colors">
-                <td className="px-md py-md">
-                  <div className="flex items-center gap-sm">
-                    <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold">
-                      RM
-                    </div>
-                    <div>
-                      <p className="font-bold text-on-surface">Ricardo Mendoza</p>
-                      <span className="text-[10px] text-on-surface-variant">
-                        ricardo.m@gmail.com
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-md py-md">
-                  <CategoryBadge cat="Habitual" />
-                </td>
-                <td className="px-md py-md">Hace 1 semana</td>
-                <td className="px-md py-md font-bold">$22,150</td>
-                <td className="px-md py-md">
-                  <button className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">
-                    more_vert
-                  </button>
-                </td>
-              </tr>
-              {SAMPLE_GUESTS.map((g) => (
-                <tr key={g.name} className="hover:bg-surface-container-low transition-colors">
-                  <td className="px-md py-md">
-                    <div className="flex items-center gap-sm">
-                      <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-[12px]">
-                        {g.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </div>
-                      <div>
-                        <p className="font-bold text-on-surface">{g.name}</p>
-                        <span className="text-[10px] text-on-surface-variant">
-                          {g.name.toLowerCase().replace(/ /g, ".")}@email.com
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-md py-md">
-                    <CategoryBadge cat={g.cat} />
-                  </td>
-                  <td className="px-md py-md">Hace {g.days} días</td>
-                  <td className="px-md py-md font-bold">${g.spend.toLocaleString("en-US")}</td>
-                  <td className="px-md py-md">
-                    <button className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">
-                      more_vert
-                    </button>
+              {isLoading || !data ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <tr key={i}>
+                    {Array.from({ length: 4 }).map((_, j) => (
+                      <td key={j} className="px-md py-md">
+                        <div className="h-4 w-24 bg-surface-container-high/70 rounded animate-pulse" />
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : data.guests.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-md py-xl text-center text-on-surface-variant">
+                    Aún no hay huéspedes registrados.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                data.guests.map((g) => <GuestRow key={g.id} guest={g} />)
+              )}
             </tbody>
           </table>
         </div>
-        <div className="p-md bg-surface-container-low flex justify-between items-center text-body-sm text-on-surface-variant">
-          <p>Mostrando 12 de 1,245 huéspedes</p>
-          <div className="flex gap-xs">
-            {[1, 2, 3].map((n) => (
-              <button
-                key={n}
-                className="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-white transition-colors"
-              >
-                {n}
-              </button>
-            ))}
-            <span className="px-xs flex items-center">…</span>
-            <button className="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-white transition-colors">
-              104
-            </button>
-          </div>
-        </div>
       </div>
     </AppShell>
+  );
+}
+
+function GuestRow({ guest }: { guest: GuestDTO }) {
+  const initials = guest.name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join("");
+  const lastVisit = guest.lastVisitAt
+    ? formatDistanceToNow(new Date(guest.lastVisitAt), { addSuffix: true, locale: es })
+    : "—";
+  return (
+    <tr className={`transition-colors ${guest.birthdayToday ? "bg-primary/5" : "hover:bg-surface-container-low"}`}>
+      <td className="px-md py-md">
+        <div className="flex items-center gap-sm">
+          <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-[12px]">
+            {initials}
+          </div>
+          <div>
+            <p className="font-bold text-on-surface">{guest.name}</p>
+            {guest.birthdayToday ? (
+              <span className="text-[10px] text-primary flex items-center gap-xs font-bold uppercase tracking-tight">
+                <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  cake
+                </span>
+                Cumple hoy
+              </span>
+            ) : (
+              <span className="text-[10px] text-on-surface-variant">{guest.email ?? ""}</span>
+            )}
+          </div>
+        </div>
+      </td>
+      <td className="px-md py-md">
+        <CategoryBadge cat={guest.category} />
+      </td>
+      <td className="px-md py-md">{lastVisit}</td>
+      <td className="px-md py-md font-bold">{formatMoney(guest.totalSpentCents)}</td>
+    </tr>
   );
 }
 
@@ -215,13 +153,11 @@ function KpiCard({
   tint,
   label,
   value,
-  suffix,
 }: {
   icon: string;
   tint: "primary" | "secondary" | "error";
   label: string;
   value: string;
-  suffix?: string;
 }) {
   const tintMap = {
     primary: "bg-primary/10 text-primary",
@@ -235,38 +171,34 @@ function KpiCard({
       </div>
       <div>
         <p className="text-on-surface-variant font-label-md">{label}</p>
-        <p className="font-numeral-xl text-primary text-[32px]">
-          {value}
-          {suffix && <span className="font-label-md text-on-surface-variant">{suffix}</span>}
-        </p>
+        <p className="font-numeral-xl text-primary text-[32px]">{value}</p>
       </div>
     </div>
   );
 }
 
-function SegmentCard({
-  border,
-  color,
-  icon,
-  title,
-  desc,
-  count,
-}: {
-  border: string;
-  color: string;
-  icon: string;
-  title: string;
-  desc: string;
-  count: string;
-}) {
+const SEGMENT_STYLE: Record<
+  GuestSegmentDTO["kind"],
+  { border: string; color: string; icon: string; desc: string }
+> = {
+  VIP: { border: "border-primary", color: "text-primary", icon: "workspace_premium", desc: "Clientes con más visitas anuales." },
+  BIG_SPENDER: { border: "border-tertiary", color: "text-tertiary", icon: "restaurant", desc: "Consumo alto en especialidades." },
+  FIRST_VISIT: { border: "border-secondary", color: "text-secondary", icon: "fiber_new", desc: "Primera visita reciente." },
+  CHURN_RISK: { border: "border-error", color: "text-error", icon: "heart_broken", desc: "Sin visitas hace tiempo." },
+  LAPSED: { border: "border-error", color: "text-error", icon: "heart_broken", desc: "Clientes perdidos." },
+  REGULAR: { border: "border-outline", color: "text-on-surface-variant", icon: "group", desc: "Clientes recurrentes." },
+};
+
+function SegmentCard({ segment }: { segment: GuestSegmentDTO }) {
+  const s = SEGMENT_STYLE[segment.kind];
   return (
-    <div
-      className={`bg-white border-l-4 ${border} p-md rounded-xl card-shadow hover:-translate-y-1 transition-transform cursor-pointer`}
-    >
-      <span className={`material-symbols-outlined ${color} mb-xs`}>{icon}</span>
-      <p className="font-bold text-on-surface">{title}</p>
-      <p className="text-body-sm text-on-surface-variant">{desc}</p>
-      <p className={`${color} font-bold mt-sm`}>{count}</p>
+    <div className={`bg-white border-l-4 ${s.border} p-md rounded-xl card-shadow hover:-translate-y-1 transition-transform`}>
+      <span className={`material-symbols-outlined ${s.color} mb-xs`}>{s.icon}</span>
+      <p className="font-bold text-on-surface">{segment.name}</p>
+      <p className="text-body-sm text-on-surface-variant">{s.desc}</p>
+      <p className={`${s.color} font-bold mt-sm`}>
+        {segment.count} {segment.count === 1 ? "huésped" : "huéspedes"}
+      </p>
     </div>
   );
 }

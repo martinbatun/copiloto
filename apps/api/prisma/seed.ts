@@ -478,8 +478,85 @@ async function main() {
     });
   }
 
+  console.log("[seed] creando CRM (segmentos + huéspedes)...");
+  // Segmentos estratégicos (kind = enum GuestSegment). Id determinístico.
+  const segmentDefs = [
+    { key: "vip", name: "VIPs Embajadores", kind: "VIP" as const, rules: { minVisits: 12 } },
+    { key: "foodie", name: "Foodies", kind: "BIG_SPENDER" as const, rules: { minSpendCents: 1500000 } },
+    { key: "nuevo", name: "Nuevos", kind: "FIRST_VISIT" as const, rules: { firstVisitWithinDays: 30 } },
+    { key: "riesgo", name: "En riesgo", kind: "CHURN_RISK" as const, rules: { lastVisitOverDays: 60 } },
+    { key: "habitual", name: "Habituales", kind: "REGULAR" as const, rules: {} },
+  ];
+  const segmentByKey: Record<string, string> = {};
+  for (const s of segmentDefs) {
+    const id = `seg-${tenant.id.slice(0, 8)}-${s.key}`;
+    await prisma.segment.upsert({
+      where: { id },
+      update: { name: s.name, kind: s.kind, rules: s.rules },
+      create: { id, tenantId: tenant.id, name: s.name, kind: s.kind, rules: s.rules },
+    });
+    segmentByKey[s.key] = id;
+  }
+
+  const daysAgo = (n: number) => {
+    const d = new Date(TODAY);
+    d.setUTCDate(d.getUTCDate() - n);
+    return d;
+  };
+  const birthdayToday = new Date(Date.UTC(1990, TODAY.getUTCMonth(), TODAY.getUTCDate()));
+
+  const guestDefs = [
+    { name: "Lucía Robles", seg: "vip", spend: 5420000, visits: 24, last: 3, bday: true },
+    { name: "Daniela Ortiz", seg: "vip", spend: 4125000, visits: 19, last: 6 },
+    { name: "Valentina Vega", seg: "vip", spend: 3912000, visits: 17, last: 5 },
+    { name: "Sofía Castro", seg: "foodie", spend: 1482000, visits: 8, last: 4 },
+    { name: "Ximena Duarte", seg: "foodie", spend: 1895000, visits: 9, last: 7 },
+    { name: "Ricardo Mendoza", seg: "habitual", spend: 2215000, visits: 12, last: 8 },
+    { name: "Mateo Silva", seg: "habitual", spend: 961000, visits: 11, last: 9 },
+    { name: "Alejandro León", seg: "habitual", spend: 1126000, visits: 10, last: 12 },
+    { name: "Isabella Gómez", seg: "nuevo", spend: 184000, visits: 1, last: 2 },
+    { name: "Gabriel Ruiz", seg: "riesgo", spend: 743000, visits: 6, last: 68 },
+    { name: "Mariana Soler", seg: "riesgo", spend: 564000, visits: 5, last: 82 },
+    { name: "Sebastián Peña", seg: "habitual", spend: 821000, visits: 13, last: 15 },
+  ];
+  let gi = 0;
+  for (const g of guestDefs) {
+    gi += 1;
+    const phone = `+52550000${String(gi).padStart(4, "0")}`;
+    const email = `${g.name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, ".")}@email.com`;
+    const guest = await prisma.guest.upsert({
+      where: { tenantId_phone: { tenantId: tenant.id, phone } },
+      update: {
+        name: g.name,
+        email,
+        totalSpentCents: g.spend,
+        visitCount: g.visits,
+        lastVisitAt: daysAgo(g.last),
+        birthdate: g.bday ? birthdayToday : null,
+      },
+      create: {
+        tenantId: tenant.id,
+        name: g.name,
+        phone,
+        email,
+        totalSpentCents: g.spend,
+        visitCount: g.visits,
+        firstVisitAt: daysAgo(g.last + g.visits * 7),
+        lastVisitAt: daysAgo(g.last),
+        birthdate: g.bday ? birthdayToday : null,
+        marketingOptIn: true,
+      },
+    });
+    await prisma.guestSegmentLink.upsert({
+      where: { guestId_segmentId: { guestId: guest.id, segmentId: segmentByKey[g.seg]! } },
+      update: {},
+      create: { guestId: guest.id, segmentId: segmentByKey[g.seg]! },
+    });
+  }
+
   console.log("[seed] listo. Login: dueno@copiloto.mx / password123");
   console.log(`[seed] tenant slug: ${tenant.slug} · location: ${location.slug}`);
+  console.log(`[seed] CRM: ${guestDefs.length} huéspedes en ${segmentDefs.length} segmentos`);
   console.log(`[seed] ingredientes: ${ingredients.length} · suppliers: ${suppliers.length}`);
   console.log(`[seed] menú: ${menuItems.length} platillos en ${categories.length} categorías`);
   console.log(`[seed] 🍽️  Menú del cliente: /menu/${location.id}`);
