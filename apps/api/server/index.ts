@@ -1,12 +1,18 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import http from "http";
 import path from "path";
 import { registerRoutes } from "./routes.js";
 
 const app = express();
 const server = http.createServer(app);
+
+// Detrás de Render/Fly/Vercel hay 1 proxy: confiar en él para que req.ip y el
+// rate-limit lean el IP real (X-Forwarded-For) sin ser demasiado permisivos.
+app.set("trust proxy", 1);
 
 const PORT = parseInt(process.env.PORT || "3400", 10);
 
@@ -38,6 +44,11 @@ function isAllowedOrigin(origin: string): boolean {
   return false;
 }
 
+// Headers de seguridad. Es una API JSON (no sirve HTML), así que dejamos CSP
+// fuera; el resto de defaults de helmet aplican. CORS controla el acceso del
+// navegador, así que relajamos CORP para no bloquear el fetch cross-origin.
+app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: false }));
+
 app.use(
   cors({
     origin(origin, cb) {
@@ -50,6 +61,21 @@ app.use(
   })
 );
 app.use(express.json({ limit: "10mb" })); // facturas OCR'd vienen pesadas
+
+// Rate limit como backstop anti-DoS. Ceiling generoso porque los comensales de
+// un restaurante comparten un mismo IP (NAT del WiFi): un límite agresivo por
+// IP bloquearía a clientes legítimos. Excluimos health y el webhook de MP (lo
+// llama Mercado Pago, no un cliente). Ajustable por entorno.
+app.use(
+  rateLimit({
+    windowMs: 60_000,
+    limit: Number(process.env.RATE_LIMIT_PER_MIN || "300"),
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: (req) =>
+      req.path === "/api/health" || req.path === "/api/orders/webhook/mp",
+  })
+);
 
 // Static uploads solo en local dev (Supabase Storage en prod).
 if (!process.env.SUPABASE_URL) {

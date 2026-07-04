@@ -1,0 +1,48 @@
+name: CI
+
+# Corre en cada PR hacia main y en cada push a main. Verifica que el core
+# (api + web y sus paquetes) typecheckee y compile — así no se cuela nada roto.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Prisma generate (api)
+        run: pnpm --filter @copiloto/api db:generate
+
+      - name: Typecheck API
+        run: pnpm --filter @copiloto/api exec tsc --noEmit
+
+      - name: Typecheck Web
+        run: pnpm --filter @copiloto/web exec tsc --noEmit
+
+      - name: Build API
+        run: pnpm --filter @copiloto/api build
+
+      - name: Build Web
+        run: pnpm --filter @copiloto/web build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3400
