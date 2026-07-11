@@ -182,6 +182,77 @@ export interface PublicMenuResponse {
   categories: MenuCategoryPublic[];
 }
 
+// ─── RECETAS (costeo dinámico) ──────────────────────────────
+
+export interface RecipeIngredientDTO {
+  ingredientId: string;
+  name: string;
+  qty: number;
+  unit: string;
+  unitCostCents: number | null;
+  extCents: number; // qty * unitCost
+}
+
+export interface RecipeDTO {
+  menuItemId: string;
+  sku: string;
+  name: string;
+  priceCents: number;
+  foodCostCents: number;
+  foodCostPct: number; // 0..100
+  marginCents: number;
+  lines: RecipeIngredientDTO[];
+}
+
+export interface RecipesResponse {
+  recipes: RecipeDTO[];
+}
+
+// ─── FACTURAS (OCR de compras) ──────────────────────────────
+
+export interface InvoiceLineDTO {
+  id: string;
+  description: string;
+  qty: number;
+  unit: string;
+  unitCostCents: number;
+  totalCents: number;
+}
+
+export interface InvoiceDTO {
+  id: string;
+  supplierName: string | null;
+  status: string; // enum InvoiceStatus
+  statusLabel: string; // etiqueta en español
+  invoicedAt: string | null;
+  subtotalCents: number;
+  taxCents: number;
+  totalCents: number;
+  lines: InvoiceLineDTO[];
+}
+
+export interface InvoicesResponse {
+  invoices: InvoiceDTO[];
+}
+
+// ─── ANOMALÍAS + RECOMENDACIONES (feed) ─────────────────────
+
+export interface RecommendationDTO {
+  id: string;
+  kind: RecommendationKind;
+  status: RecommendationStatus;
+  title: string;
+  rationale: string;
+  estimatedImpactCents: number | null;
+  expiresAt: string | null;
+  createdAt: string;
+}
+
+export interface RecommendationsFeedResponse {
+  summary: { anomaliesToday: number; roiProjectedCents: number; appliedCount: number };
+  recommendations: RecommendationDTO[];
+}
+
 // ─── PROVEEDORES ────────────────────────────────────────────
 
 export interface SupplierDTO {

@@ -554,9 +554,150 @@ async function main() {
     });
   }
 
+  console.log("[seed] creando recetas, facturas, anomalías y recomendaciones...");
+  // Lookups sobre lo ya sembrado.
+  const ingRows = await prisma.ingredient.findMany({
+    where: { tenantId: tenant.id },
+    select: { id: true, sku: true, baseUnit: true, costPerUnitCents: true },
+  });
+  const ingBySku = Object.fromEntries(ingRows.map((i) => [i.sku, i]));
+  const menuRows = await prisma.menuItem.findMany({
+    where: { tenantId: tenant.id },
+    select: { id: true, sku: true },
+  });
+  const menuBySku = Object.fromEntries(menuRows.map((m) => [m.sku, m]));
+
+  // ─── Recetas + food cost (cost por línea = qty * costPerUnitCents del kg) ───
+  const recipeDefs: { sku: string; lines: [string, number][] }[] = [
+    { sku: "GUACAMOLE-MOLCAJETE", lines: [["AVO-001", 0.2], ["ONI-014", 0.03], ["CHI-007", 0.01], ["LIM-019", 0.02], ["TOM-002", 0.05]] },
+    { sku: "TACOS-PASTOR", lines: [["ARR-001", 0.18], ["TOR-024", 0.15], ["ONI-014", 0.03], ["CHI-007", 0.01]] },
+    { sku: "ESQUITES-TRUFA", lines: [["CHE-010", 0.03], ["ONI-014", 0.02], ["CHI-007", 0.01]] },
+    { sku: "BOWL-ANCESTRAL", lines: [["AVO-001", 0.1], ["TOM-002", 0.05], ["ONI-014", 0.02]] },
+    { sku: "RIBEYE-PASTOR", lines: [["ARR-001", 0.25], ["TOR-024", 0.12], ["ONI-014", 0.03]] },
+  ];
+  let recipeCount = 0;
+  for (const rd of recipeDefs) {
+    const mi = menuBySku[rd.sku];
+    if (!mi) continue;
+    const lines = rd.lines
+      .map(([sku, qty]) => {
+        const ing = ingBySku[sku];
+        if (!ing) return null;
+        return { ingredientId: ing.id, qty, unit: ing.baseUnit, cost: Math.round(qty * (ing.costPerUnitCents ?? 0)) };
+      })
+      .filter((l): l is NonNullable<typeof l> => l !== null);
+    const foodCostCents = lines.reduce((a, l) => a + l.cost, 0);
+    const recipe = await prisma.recipe.upsert({
+      where: { menuItemId: mi.id },
+      update: { foodCostCents },
+      create: { tenantId: tenant.id, menuItemId: mi.id, yieldQty: 1, yieldUnit: "pza", foodCostCents },
+    });
+    await prisma.recipeLine.deleteMany({ where: { recipeId: recipe.id } });
+    await prisma.recipeLine.createMany({
+      data: lines.map((l) => ({ recipeId: recipe.id, ingredientId: l.ingredientId, qty: l.qty, unit: l.unit })),
+    });
+    recipeCount += 1;
+  }
+
+  // ─── Facturas + líneas (OCR demo) ───
+  const supRows = await prisma.supplier.findMany({ where: { tenantId: tenant.id }, select: { id: true, name: true } });
+  const supByName = Object.fromEntries(supRows.map((s) => [s.name, s.id]));
+  const invoiceDefs: {
+    ref: string;
+    supplier: string;
+    daysAgo: number;
+    status: "OCR_DONE" | "RECEIVED" | "NORMALIZED";
+    lines: [string, number, number][]; // [descripcion, qtyKg, unitCostCents]
+  }[] = [
+    { ref: "INV-2023-098", supplier: "Sigma Alimentos", daysAgo: 1, status: "OCR_DONE", lines: [["Jamón pechuga de pavo", 20, 18000], ["Aguacate Hass", 30, 6500], ["Cebolla blanca", 15, 3200]] },
+    { ref: "LP-8821", supplier: "Lacteos Polanco", daysAgo: 2, status: "RECEIVED", lines: [["Queso Cotija", 10, 12500], ["Crema ácida", 8, 4800]] },
+    { ref: "VMX-2299", supplier: "Verduras MX", daysAgo: 3, status: "RECEIVED", lines: [["Tomate Saladette", 25, 2800], ["Chile Serrano", 6, 4200], ["Limón Colima", 12, 3600]] },
+    { ref: "FS-0078", supplier: "Frutas Selectas", daysAgo: 4, status: "NORMALIZED", lines: [["Mango Ataulfo", 20, 3900]] },
+  ];
+  for (const inv of invoiceDefs) {
+    const supplierId = supByName[inv.supplier] ?? null;
+    if (!supplierId) continue;
+    const id = `inv-${tenant.id.slice(0, 8)}-${inv.ref}`;
+    const lineData = inv.lines.map(([description, qty, unitCostCents]) => ({
+      description,
+      qty,
+      unit: "kg",
+      unitCostCents,
+      totalCents: qty * unitCostCents,
+    }));
+    const totalCents = lineData.reduce((a, l) => a + l.totalCents, 0);
+    await prisma.invoice.upsert({
+      where: { id },
+      update: { totalCents, status: inv.status, invoicedAt: daysAgo(inv.daysAgo) },
+      create: {
+        id,
+        locationId: location.id,
+        supplierId,
+        fileUrl: `https://example.com/facturas/${inv.ref}.pdf`,
+        totalCents,
+        invoicedAt: daysAgo(inv.daysAgo),
+        status: inv.status,
+      },
+    });
+    await prisma.invoiceLine.deleteMany({ where: { invoiceId: id } });
+    await prisma.invoiceLine.createMany({ data: lineData.map((l) => ({ invoiceId: id, ...l })) });
+  }
+
+  // ─── Anomalías + Recomendaciones (feed de la vista Anomalías) ───
+  const anomalyDefs: { key: string; kind: "VOID_SPIKE" | "DISCOUNT_SPIKE" | "FOOD_COST_DRIFT"; severity: number; payload: object }[] = [
+    { key: "voids", kind: "VOID_SPIKE", severity: 5, payload: { table: "Mesa 4", count: 3, windowMin: 15 } },
+    { key: "discount", kind: "DISCOUNT_SPIKE", severity: 3, payload: { pct: 22 } },
+    { key: "foodcost", kind: "FOOD_COST_DRIFT", severity: 4, payload: { item: "Guacamole", driftPct: 8 } },
+  ];
+  for (const a of anomalyDefs) {
+    const id = `anom-${tenant.id.slice(0, 8)}-${a.key}`;
+    await prisma.anomaly.upsert({
+      where: { id },
+      update: { severity: a.severity, payload: a.payload },
+      create: { id, locationId: location.id, kind: a.kind, severity: a.severity, payload: a.payload },
+    });
+  }
+
+  const in2h = new Date(TODAY);
+  in2h.setUTCHours(in2h.getUTCHours() + 2);
+  const recDefs: {
+    key: string;
+    kind: "MENU_PROMOTE" | "ANOMALY_TRIAGE" | "GUEST_CAMPAIGN" | "PAR_LEVEL_ADJUST";
+    status: "PENDING" | "EXECUTED";
+    title: string;
+    rationale: string;
+    impact: number | null;
+    expiresAt?: Date;
+  }[] = [
+    { key: "promo", kind: "MENU_PROMOTE", status: "PENDING", title: "Promo flash: agua de tomate cortesía", rationale: "Exceso de inventario de tomate cherry detectado. Incrementa lealtad en mesas de +4 personas.", impact: 284000, expiresAt: in2h },
+    { key: "voids", kind: "ANOMALY_TRIAGE", status: "PENDING", title: "Spike de voids en mesa 4", rationale: "3 cancelaciones consecutivas en los últimos 15 min. Posible problema en cocina o error de sistema.", impact: null },
+    { key: "churn", kind: "GUEST_CAMPAIGN", status: "PENDING", title: "Huéspedes en riesgo de churn", rationale: "Clientes frecuentes sin visita en más de 21 días. Se sugiere campaña de re-engagement.", impact: 96000 },
+    { key: "parlevel", kind: "PAR_LEVEL_ADJUST", status: "EXECUTED", title: "Subir par level aguacate", rationale: "Ajustado a 45kg/día basado en pronóstico de fin de semana largo.", impact: 150000 },
+  ];
+  for (const r of recDefs) {
+    const id = `rec-${tenant.id.slice(0, 8)}-${r.key}`;
+    await prisma.recommendation.upsert({
+      where: { id },
+      update: { status: r.status, estimatedImpactCents: r.impact, title: r.title, rationale: r.rationale },
+      create: {
+        id,
+        tenantId: tenant.id,
+        locationId: location.id,
+        kind: r.kind,
+        status: r.status,
+        title: r.title,
+        rationale: r.rationale,
+        estimatedImpactCents: r.impact,
+        expiresAt: r.expiresAt ?? null,
+        payload: {},
+      },
+    });
+  }
+
   console.log("[seed] listo. Login: dueno@copiloto.mx / password123");
   console.log(`[seed] tenant slug: ${tenant.slug} · location: ${location.slug}`);
   console.log(`[seed] CRM: ${guestDefs.length} huéspedes en ${segmentDefs.length} segmentos`);
+  console.log(`[seed] recetas: ${recipeCount} · facturas: ${invoiceDefs.length} · recomendaciones: ${recDefs.length}`);
   console.log(`[seed] ingredientes: ${ingredients.length} · suppliers: ${suppliers.length}`);
   console.log(`[seed] menú: ${menuItems.length} platillos en ${categories.length} categorías`);
   console.log(`[seed] 🍽️  Menú del cliente: /menu/${location.id}`);
