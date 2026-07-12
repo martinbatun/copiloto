@@ -12,9 +12,15 @@ import {
 const ACCESS_TOKEN = process.env.MERCADO_PAGO_TOKEN;
 const WEBHOOK_SECRET = process.env.MERCADO_PAGO_WEBHOOK_SECRET;
 
-/** ¿Está configurada la pasarela? Si no, el caller usa el modo simulado. */
+/**
+ * ¿Está la pasarela COMPLETAMENTE configurada para cobrar en línea? Exige el
+ * token Y el webhook secret: sin el secret, validateWebhookSignature siempre
+ * lanza y ningún pago se confirma (el cliente pagaría pero el pedido nunca
+ * entraría a cocina). Si devuelve false, el caller NO debe iniciar pago en
+ * línea (ver la lógica fail-closed en routes/orders.ts).
+ */
 export function isMpEnabled(): boolean {
-  return Boolean(ACCESS_TOKEN);
+  return Boolean(ACCESS_TOKEN && WEBHOOK_SECRET);
 }
 
 function client(): MercadoPagoConfig {
@@ -71,9 +77,14 @@ export async function createCheckoutPreference(args: {
 export async function getPayment(paymentId: string): Promise<{
   status: string | undefined;
   externalReference: string | undefined;
+  transactionAmount: number | undefined; // monto cobrado, en pesos (no centavos)
 }> {
   const p = await new Payment(client()).get({ id: paymentId });
-  return { status: p.status, externalReference: p.external_reference };
+  return {
+    status: p.status,
+    externalReference: p.external_reference,
+    transactionAmount: p.transaction_amount,
+  };
 }
 
 /**

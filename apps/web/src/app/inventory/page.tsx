@@ -3,15 +3,18 @@
 import { AppShell } from "@/components/AppShell";
 import { useAuth } from "@/components/AuthProvider";
 import { useInventory } from "@/lib/hooks/useInventory";
+import { useRecommendationsFeed } from "@/lib/hooks/useOpsData";
 import type {
   InventoryItem,
   InventoryListResponse,
   InventoryStatus,
+  RecommendationDTO,
 } from "@copiloto/shared";
 
 export default function Page() {
   const { currentLocation } = useAuth();
   const inventory = useInventory(currentLocation?.id);
+  const feed = useRecommendationsFeed(currentLocation?.id);
 
   const data = inventory.data;
   const loading = inventory.isLoading;
@@ -128,40 +131,17 @@ export default function Page() {
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
-          {/* Insights aun mockeados — el motor de recomendaciones se conecta
-              despues, cuando este lista la vertical de anomalies. */}
-          <InsightCard
-            icon="trending_down"
-            tint="secondary"
-            title="Aguacate corto 13–15h"
-            body="Demanda proyectada supera stock actual por 2.4kg"
-            cta={{ label: "Pedir refuerzo", variant: "primary" }}
-            borderColor="border-l-secondary"
-          />
-          <InsightCard
-            icon="event_busy"
-            tint="error"
-            title="Mango caduca 2 días"
-            body="Lote #MAN-008 tiene riesgo de merma inminente"
-            cta={{ label: "Crear especial", variant: "secondary" }}
-            borderColor="border-l-error"
-          />
-          <InsightCard
-            icon="inventory"
-            tint="secondary"
-            title="Tomate excedente (112%)"
-            body="Sobre-inventariado. Recomendable detener órdenes"
-            cta={{ label: "Ajustar par", variant: "outline" }}
-            borderColor="border-l-secondary"
-          />
-          <InsightCard
-            icon="payments"
-            tint="primary"
-            title="Cebolla subió precio 8%"
-            body="Impacto estimado en costo de platillo: $1.20 MXN"
-            cta={{ label: "Ver proveedores", variant: "primary" }}
-            borderColor="border-l-primary"
-          />
+          {feed.isLoading || !feed.data ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-24 bg-surface-container-high/60 rounded-xl animate-pulse" />
+            ))
+          ) : feed.data.recommendations.length === 0 ? (
+            <div className="md:col-span-2 bg-white border border-outline-variant card-shadow rounded-xl p-lg text-center text-on-surface-variant">
+              Sin recomendaciones activas. El motor no detectó anomalías que requieran acción.
+            </div>
+          ) : (
+            feed.data.recommendations.slice(0, 4).map((rec) => <InsightCard key={rec.id} rec={rec} />)
+          )}
         </div>
       </section>
     </AppShell>
@@ -367,50 +347,51 @@ function KpiCard({
   );
 }
 
-function InsightCard({
-  icon,
-  tint,
-  title,
-  body,
-  cta,
-  borderColor,
-}: {
-  icon: string;
-  tint: "primary" | "secondary" | "error";
-  title: string;
-  body: string;
-  cta: { label: string; variant: "primary" | "secondary" | "outline" };
-  borderColor: string;
-}) {
+// Ícono y color por tipo de recomendación (fallback seguro si aparece un kind
+// nuevo). Los datos vienen del feed real (/api/recommendations/feed).
+const REC_ICON: Record<string, { icon: string; tint: "primary" | "secondary" | "error"; border: string }> = {
+  PAR_LEVEL_ADJUST: { icon: "inventory", tint: "secondary", border: "border-l-secondary" },
+  WASTE_ALERT: { icon: "event_busy", tint: "error", border: "border-l-error" },
+  MENU_REPRICE: { icon: "payments", tint: "primary", border: "border-l-primary" },
+  MENU_PROMOTE: { icon: "campaign", tint: "primary", border: "border-l-primary" },
+  DISCOUNT_REVIEW: { icon: "sell", tint: "secondary", border: "border-l-secondary" },
+  PREP_LIST: { icon: "checklist", tint: "secondary", border: "border-l-secondary" },
+  STAFFING_ADJUST: { icon: "groups", tint: "secondary", border: "border-l-secondary" },
+  GUEST_CAMPAIGN: { icon: "mail", tint: "primary", border: "border-l-primary" },
+  ANOMALY_TRIAGE: { icon: "warning", tint: "error", border: "border-l-error" },
+  RECIPE_REFORMULATE: { icon: "restaurant", tint: "secondary", border: "border-l-secondary" },
+};
+const REC_FALLBACK = { icon: "auto_awesome", tint: "secondary" as const, border: "border-l-secondary" };
+
+function InsightCard({ rec }: { rec: RecommendationDTO }) {
   const tintMap = {
     primary: "bg-primary/10 text-primary",
     secondary: "bg-secondary/10 text-secondary",
     error: "bg-error/10 text-error",
   };
-  const btn =
-    cta.variant === "primary"
-      ? "bg-primary text-white"
-      : cta.variant === "secondary"
-      ? "bg-secondary text-on-secondary"
-      : "border border-secondary text-secondary";
+  const style = REC_ICON[rec.kind] ?? REC_FALLBACK;
+  const impact =
+    rec.estimatedImpactCents != null
+      ? `$${(rec.estimatedImpactCents / 100).toLocaleString("es-MX", { maximumFractionDigits: 0 })}`
+      : null;
   return (
     <div
-      className={`bg-white border border-outline-variant card-shadow rounded-xl p-md flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center hover:-translate-y-0.5 transition-all border-l-4 ${borderColor}`}
+      className={`bg-white border border-outline-variant card-shadow rounded-xl p-md flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center hover:-translate-y-0.5 transition-all border-l-4 ${style.border}`}
     >
       <div className="flex items-center gap-md">
-        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${tintMap[tint]}`}>
-          <span className="material-symbols-outlined text-[24px]">{icon}</span>
+        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${tintMap[style.tint]}`}>
+          <span className="material-symbols-outlined text-[24px]">{style.icon}</span>
         </div>
         <div>
-          <h4 className="font-bold text-on-surface">{title}</h4>
-          <p className="text-body-sm text-on-surface-variant">{body}</p>
+          <h4 className="font-bold text-on-surface">{rec.title}</h4>
+          <p className="text-body-sm text-on-surface-variant">{rec.rationale}</p>
         </div>
       </div>
-      <button
-        className={`px-4 py-2 rounded-lg font-label-md text-xs hover:brightness-110 active:scale-95 transition-all ${btn}`}
-      >
-        {cta.label}
-      </button>
+      {impact && (
+        <span className={`shrink-0 px-3 py-1 rounded-full font-label-md text-xs whitespace-nowrap ${tintMap[style.tint]}`}>
+          impacto {impact}
+        </span>
+      )}
     </div>
   );
 }
