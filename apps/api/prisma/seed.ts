@@ -813,24 +813,35 @@ async function main() {
     where: { locationId: location.id, source: "seed" },
   });
   const resGuests = [
-    ["Lucía Robles", 6, 20, "CONFIRMED"],
-    ["Carlos Slim", 2, 19, "CONFIRMED"],
-    ["Marta Gómez", 4, 21, "CONFIRMED"],
-    ["Raúl Jiménez", 3, 20, "SEATED"],
-    ["Ana Paula", 2, 20, "NO_SHOW"],
-    ["Gaby Torres", 4, 22, "PENDING"],
+    ["Marcela Díaz", 2, 13, 30, "COMPLETED", "+525511100011", "Mesa junto a ventana"],
+    ["Grupo Innovatech", 8, 14, 0, "COMPLETED", "+525511100012", "Comida de empresa"],
+    ["Raúl Jiménez", 3, 19, 0, "SEATED", "+525511100013", null],
+    ["Carlos Slim", 2, 19, 30, "CONFIRMED", "+525511100014", "Cumpleaños"],
+    ["Lucía Robles", 6, 20, 0, "CONFIRMED", "+525511100015", "Alergia a nueces"],
+    ["Ana Paula", 2, 20, 0, "NO_SHOW", "+525511100016", null],
+    ["Marta Gómez", 4, 21, 0, "CONFIRMED", "+525511100017", null],
+    ["Gaby Torres", 4, 22, 0, "PENDING", "+525511100018", "Confirmar por WhatsApp"],
+    ["Familia Herrera", 5, 21, 30, "WAITLIST", "+525511100019", "Avisar si se libera mesa"],
+    ["Diego Nava", 2, 20, 30, "WAITLIST", "+525511100020", null],
   ] as const;
-  for (const [name, party, hour, status] of resGuests) {
+  for (const [name, party, hour, minute, status, phone, notes] of resGuests) {
     const reservedAt = new Date(TODAY);
-    reservedAt.setUTCHours(hour as number, 0, 0, 0);
+    reservedAt.setUTCHours(hour as number, minute as number, 0, 0);
     await prisma.reservation.create({
       data: {
         locationId: location.id,
         guestName: name as string,
-        guestPhone: "+525500000000",
+        guestPhone: phone as string,
         partySize: party as number,
         reservedAt,
-        status: status as "CONFIRMED" | "SEATED" | "NO_SHOW" | "PENDING",
+        status: status as
+          | "CONFIRMED"
+          | "SEATED"
+          | "NO_SHOW"
+          | "PENDING"
+          | "COMPLETED"
+          | "WAITLIST",
+        notes: notes as string | null,
         source: "seed",
       },
     });

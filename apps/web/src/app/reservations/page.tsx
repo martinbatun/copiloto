@@ -1,207 +1,140 @@
+"use client";
+
+import type { ReservationDTO, ReservationStatus } from "@copiloto/shared";
 import { AppShell } from "@/components/AppShell";
+import { useAuth } from "@/components/AuthProvider";
+import { useReservations } from "@/lib/hooks/useOpsData";
 
-const TABLES = ["Mesa 10", "Mesa 11", "Mesa 12", "Mesa 14", "Mesa 15", "Mesa 16", "Mesa 17", "Mesa 18"];
-const SLOTS = ["19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"];
-
-type Booking = {
-  table: number;
-  slot: number;
-  span: number;
-  name: string;
-  meta: string;
-  variant: "primary" | "vip" | "filled" | "pending";
-  badge?: string;
+const STATUS_META: Record<
+  ReservationStatus,
+  { label: string; badge: string; dot: string }
+> = {
+  CONFIRMED: { label: "Confirmada", badge: "bg-primary-container text-on-primary-container", dot: "bg-primary" },
+  SEATED: { label: "En mesa", badge: "bg-emerald-100 text-emerald-800", dot: "bg-emerald-500" },
+  COMPLETED: { label: "Completada", badge: "bg-surface-container-high text-on-surface-variant", dot: "bg-outline" },
+  PENDING: { label: "Pendiente", badge: "bg-amber-100 text-amber-800", dot: "bg-amber-500" },
+  NO_SHOW: { label: "No llegó", badge: "bg-error-container text-on-error-container", dot: "bg-error" },
+  CANCELLED: { label: "Cancelada", badge: "bg-surface-container-high text-on-surface-variant line-through", dot: "bg-outline" },
+  WAITLIST: { label: "En espera", badge: "bg-secondary-container text-on-secondary-container", dot: "bg-secondary" },
 };
 
-const BOOKINGS: Booking[] = [
-  { table: 0, slot: 0, span: 2, name: "Carlos Slim", meta: "2 personas · 19:15", variant: "primary" },
-  { table: 1, slot: 6, span: 2, name: "Marta Gomez", meta: "2 personas · 22:15", variant: "pending" },
-  { table: 2, slot: 2, span: 3, name: "Lucia Robles", meta: "6 personas · 20:00–21:45", variant: "vip", badge: "VIP 🎂" },
-  { table: 3, slot: 4, span: 2, name: "Raul Jimenez", meta: "4 personas · 21:00", variant: "filled" },
-];
+const DATE_FMT = new Intl.DateTimeFormat("es-MX", {
+  weekday: "long", day: "numeric", month: "long", timeZone: "UTC",
+});
 
 export default function Page() {
+  const { currentLocation } = useAuth();
+  const { data, isLoading, error } = useReservations(currentLocation?.id);
+
+  const prettyDate = data
+    ? DATE_FMT.format(new Date(`${data.date}T12:00:00Z`))
+    : "";
+
   return (
     <AppShell>
       <header className="flex flex-col sm:flex-row justify-between sm:items-end gap-3">
         <div>
           <h1 className="font-headline-lg text-headline-lg text-on-surface">
-            Reservaciones — Roma Norte
+            Reservas{data ? ` — ${data.locationName}` : ""}
           </h1>
-          <p className="font-body-md text-on-surface-variant">Viernes, 24 de Mayo · Turno Cena</p>
-        </div>
-        <div className="flex gap-xs">
-          <button className="px-md py-sm bg-white border border-outline-variant rounded-full font-label-md flex items-center gap-xs hover:bg-surface-container-low">
-            <span className="material-symbols-outlined text-[18px]">calendar_today</span>
-            Calendario
-          </button>
-          <button className="px-md py-sm bg-primary text-white rounded-full font-label-md flex items-center gap-xs shadow-md">
-            <span className="material-symbols-outlined text-[18px]">add</span>
-            Nueva reserva
-          </button>
+          <p className="font-body-md text-on-surface-variant capitalize">
+            {prettyDate || "Agenda del día"}
+          </p>
         </div>
       </header>
 
+      {error && (
+        <div className="bg-error-container/40 border border-error/30 text-on-error-container rounded-xl p-4">
+          <p className="font-bold">No pudimos cargar las reservas</p>
+          <p className="text-sm">{String((error as Error).message)}</p>
+        </div>
+      )}
+
+      {/* Resumen */}
+      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-gutter">
+        {isLoading || !data ? (
+          Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-24 bg-surface-container-high/70 rounded-xl animate-pulse" />
+          ))
+        ) : (
+          <>
+            <KpiCard label="Reservas" value={String(data.summary.total)} accent="border-l-primary" />
+            <KpiCard label="Comensales" value={String(data.summary.covers)} accent="border-l-secondary" />
+            <KpiCard label="Confirmadas" value={String(data.summary.confirmed)} accent="border-l-primary-container" />
+            <KpiCard label="En mesa" value={String(data.summary.seated)} accent="border-l-tertiary" tone="ok" />
+            <KpiCard label="No llegaron" value={String(data.summary.noShow)} accent="border-l-error" tone={data.summary.noShow > 0 ? "bad" : undefined} />
+            <KpiCard label="En espera" value={String(data.summary.waitlist)} accent="border-l-secondary-container" />
+          </>
+        )}
+      </section>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-        {/* Timeline */}
+        {/* Agenda */}
         <div className="lg:col-span-8 bg-white border border-outline-variant rounded-xl card-shadow overflow-hidden flex flex-col">
-          <div className="p-md border-b border-outline-variant flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center bg-surface-container-lowest">
+          <div className="p-md border-b border-outline-variant bg-surface-container-lowest">
             <h2 className="font-headline-sm text-headline-sm flex items-center gap-xs text-on-surface">
               <span className="material-symbols-outlined text-primary">schedule</span>
-              Timeline de la noche
+              Agenda del día
             </h2>
-            <div className="flex flex-wrap items-center gap-sm text-body-sm">
-              <Legend color="bg-primary-container/40" label="Confirmada" />
-              <Legend color="bg-secondary-container" label="VIP" />
-              <Legend color="bg-surface-container-highest" label="Pendiente" />
-            </div>
           </div>
-          <div className="grow overflow-auto">
-            <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm border-b border-outline-variant flex">
-              <div className="w-24 p-sm border-r border-outline-variant shrink-0 font-label-md bg-surface-container-low text-center">
-                Mesas
+          <div className="divide-y divide-outline-variant/60">
+            {isLoading || !data ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="h-20 bg-surface-container-high/50 animate-pulse" />
+              ))
+            ) : data.reservations.length === 0 ? (
+              <div className="p-xl text-center text-on-surface-variant">
+                No hay reservas agendadas para hoy.
               </div>
-              <div className="flex grow">
-                {SLOTS.map((s, i) => (
-                  <div
-                    key={s}
-                    className={`w-[100px] p-sm text-center font-label-md ${
-                      i < SLOTS.length - 1 ? "border-r border-outline-variant" : ""
-                    }`}
-                  >
-                    {s}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex min-w-max">
-              <div className="w-24 shrink-0 bg-surface-container-lowest border-r border-outline-variant">
-                {TABLES.map((t) => (
-                  <div
-                    key={t}
-                    className="h-20 border-b border-outline-variant flex items-center justify-center font-bold text-primary"
-                  >
-                    {t}
-                  </div>
-                ))}
-              </div>
-              <div className="grow relative" style={{ minWidth: SLOTS.length * 100 }}>
-                {/* Grid lines */}
-                {TABLES.map((_, ti) => (
-                  <div
-                    key={ti}
-                    className="absolute left-0 right-0 border-b border-outline-variant/40"
-                    style={{ top: ti * 80, height: 80 }}
-                  />
-                ))}
-                {/* Bookings */}
-                {BOOKINGS.map((b, i) => {
-                  const colors = {
-                    primary: "bg-primary-container/30 border-l-primary text-primary",
-                    vip: "bg-secondary-container border-l-primary text-on-secondary-container shadow-md",
-                    filled: "bg-primary-container border-l-white/40 text-white",
-                    pending: "bg-surface-container-highest/60 border-l-outline text-on-surface",
-                  }[b.variant];
-                  return (
-                    <div
-                      key={i}
-                      className={`absolute h-16 rounded-lg p-xs flex flex-col justify-center border-l-4 ${colors} cursor-pointer hover:scale-[1.02] transition-transform`}
-                      style={{
-                        top: b.table * 80 + 8,
-                        left: b.slot * 100 + 6,
-                        width: b.span * 100 - 12,
-                      }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="font-label-md">{b.name}</span>
-                        {b.badge && (
-                          <span className="text-[10px] font-bold opacity-80">{b.badge}</span>
-                        )}
-                      </div>
-                      <span className="text-[11px] opacity-80">{b.meta}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            ) : (
+              data.reservations.map((r) => <AgendaRow key={r.id} r={r} />)
+            )}
           </div>
         </div>
 
-        {/* Right side stack */}
+        {/* Lista de espera */}
         <div className="lg:col-span-4 flex flex-col gap-gutter">
           <div className="bg-white border border-outline-variant rounded-xl card-shadow p-md border-l-4 border-secondary">
             <div className="flex justify-between items-center mb-md">
               <h3 className="font-headline-sm text-headline-sm flex items-center gap-xs text-on-surface">
                 <span className="material-symbols-outlined text-secondary">hourglass_top</span>
-                Waitlist
+                Lista de espera
               </h3>
-              <span className="bg-secondary-fixed text-on-secondary-fixed-variant px-sm py-xs rounded-full font-label-md">
-                3 esperando
-              </span>
-            </div>
-            <div className="flex flex-col gap-sm">
-              <WaitRow name="M. Perez (4p)" wait="15 min" active />
-              <WaitRow name="J. Herrera (2p)" wait="8 min" />
-              <WaitRow name="L. Vargas (3p)" wait="4 min" />
-            </div>
-          </div>
-
-          <div className="bg-white border border-outline-variant rounded-xl card-shadow p-md border-l-4 border-error">
-            <h3 className="font-headline-sm text-headline-sm flex items-center gap-xs mb-md text-on-surface">
-              <span className="material-symbols-outlined text-error">event_busy</span>
-              No-shows
-            </h3>
-            <div className="flex items-center gap-md p-sm bg-error-container/20 rounded-lg mb-sm">
-              <div className="flex-1">
-                <p className="font-label-md text-on-error-container">Ana Paula (20:30)</p>
-                <p className="text-body-sm text-on-surface-variant">No llegó. Mesa liberada.</p>
-              </div>
-              <button className="bg-primary text-white py-xs rounded-full flex items-center gap-xs text-[12px] px-sm">
-                <span className="material-symbols-outlined text-[16px]">send</span> Recovery
-              </button>
-            </div>
-            <p className="text-[12px] text-on-surface-variant italic">
-              IA enviará recordatorio de penalización vía WhatsApp.
-            </p>
-          </div>
-
-          <div
-            className="text-white rounded-xl shadow-lg p-md relative overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #B9532A 0%, #9A3412 100%)" }}
-          >
-            <div className="flex items-center gap-sm mb-md">
-              <div className="w-10 h-10 bg-secondary-container rounded-full flex items-center justify-center shadow-inner">
-                <span
-                  className="material-symbols-outlined text-on-secondary-container"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  smart_toy
+              {data && (
+                <span className="bg-secondary-container text-on-secondary-container px-sm py-xs rounded-full font-label-md text-sm">
+                  {data.summary.waitlist} esperando
                 </span>
-              </div>
-              <div>
-                <h3 className="font-label-md">Copiloto FOH</h3>
-                <p className="text-[11px] opacity-80">Agente de Reservas Activo</p>
-              </div>
-              <span className="ml-auto w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+              )}
             </div>
             <div className="flex flex-col gap-sm">
-              <div className="bg-white/10 backdrop-blur-md p-sm rounded-lg border border-white/20 -translate-x-2">
-                <p className="text-[12px] italic">
-                  &ldquo;¡Hola! ¿Aún tienen mesa para 4 a las 9pm?&rdquo;
-                </p>
-                <p className="text-[10px] opacity-60 mt-xs text-right">Gaby T. · Hace 1m</p>
-              </div>
-              <div className="bg-primary-container p-sm rounded-lg self-end border border-white/20 translate-x-2">
-                <p className="text-[12px]">
-                  &ldquo;¡Hola Gaby! Sí, solo nos queda en Terraza. ¿Te la reservo?&rdquo;
-                </p>
-                <p className="text-[10px] opacity-60 mt-xs">Copiloto AI</p>
-              </div>
+              {isLoading || !data ? (
+                Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="h-14 bg-surface-container-high/50 rounded-lg animate-pulse" />
+                ))
+              ) : data.waitlist.length === 0 ? (
+                <p className="text-body-sm text-on-surface-variant py-sm">Sin lista de espera.</p>
+              ) : (
+                data.waitlist.map((r) => (
+                  <div key={r.id} className="flex justify-between items-center p-sm bg-surface-container-low rounded-lg">
+                    <div className="flex flex-col">
+                      <span className="font-label-md text-on-surface">{r.guestName} · {r.partySize}p</span>
+                      {r.notes && <span className="text-body-sm text-on-surface-variant">{r.notes}</span>}
+                    </div>
+                    <a href={`tel:${r.guestPhone}`} className="material-symbols-outlined text-secondary" aria-label="Llamar">
+                      call
+                    </a>
+                  </div>
+                ))
+              )}
             </div>
-            <div className="mt-md pt-sm border-t border-white/20 flex justify-between items-center">
-              <span className="text-body-sm">4 conversaciones activas</span>
-              <button className="text-[12px] font-bold underline">Ver todas</button>
-            </div>
+          </div>
+
+          <div className="bg-surface-container-low border border-outline-variant rounded-xl p-md text-body-sm text-on-surface-variant flex gap-sm items-start">
+            <span className="material-symbols-outlined text-primary text-[20px]">info</span>
+            <p>
+              Las reservas llegan por WhatsApp, web o walk-in. Los estados
+              (confirmada, en mesa, no llegó) se actualizan desde el flujo del anfitrión.
+            </p>
           </div>
         </div>
       </div>
@@ -209,28 +142,40 @@ export default function Page() {
   );
 }
 
-function Legend({ color, label }: { color: string; label: string }) {
+function AgendaRow({ r }: { r: ReservationDTO }) {
+  const meta = STATUS_META[r.status];
   return (
-    <span className="flex items-center gap-xs">
-      <span className={`w-3 h-3 rounded-full ${color}`} />
-      {label}
-    </span>
+    <div className="flex items-center gap-md p-md hover:bg-surface-container-lowest">
+      <div className="w-14 shrink-0 text-center">
+        <div className="font-numeral-xl text-headline-sm text-on-surface">{r.time}</div>
+      </div>
+      <div className="w-px self-stretch bg-outline-variant/60" />
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-label-md text-on-surface font-bold">{r.guestName}</span>
+          <span className="text-body-sm text-on-surface-variant">· {r.partySize} personas</span>
+        </div>
+        {r.notes && <p className="text-body-sm text-on-surface-variant truncate">{r.notes}</p>}
+      </div>
+      <div className="flex items-center gap-sm shrink-0">
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-md text-xs ${meta.badge}`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${meta.dot}`} />
+          {meta.label}
+        </span>
+        <a href={`tel:${r.guestPhone}`} className="material-symbols-outlined text-outline hover:text-primary text-[20px]" aria-label="Llamar">
+          call
+        </a>
+      </div>
+    </div>
   );
 }
 
-function WaitRow({ name, wait, active }: { name: string; wait: string; active?: boolean }) {
+function KpiCard({ label, value, accent, tone }: { label: string; value: string; accent: string; tone?: "ok" | "bad" }) {
+  const color = tone === "ok" ? "text-emerald-600" : tone === "bad" ? "text-error" : "text-on-surface";
   return (
-    <div className="flex justify-between items-center p-sm bg-surface-container-low rounded-lg">
-      <div className="flex flex-col">
-        <span className="font-label-md text-on-surface">{name}</span>
-        <span className="text-body-sm text-on-surface-variant">Espera: {wait}</span>
-      </div>
-      <button
-        className={`material-symbols-outlined ${active ? "text-secondary" : "text-outline"}`}
-        aria-label="Notificar"
-      >
-        {active ? "notifications_active" : "notifications"}
-      </button>
+    <div className={`bg-white p-md rounded-xl border border-outline-variant card-shadow border-l-4 ${accent}`}>
+      <p className="font-label-md text-on-surface-variant">{label}</p>
+      <p className={`font-numeral-xl text-numeral-xl mt-xs ${color}`}>{value}</p>
     </div>
   );
 }

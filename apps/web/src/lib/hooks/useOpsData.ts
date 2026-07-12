@@ -8,6 +8,7 @@ import type {
   KpiSummaryResponse,
   RecipesResponse,
   RecommendationsFeedResponse,
+  ReservationsResponse,
   ReviewsResponse,
   ScheduleResponse,
 } from "@copiloto/shared";
@@ -27,6 +28,15 @@ export function useCampaigns() {
   return useQuery({
     queryKey: ["campaigns"],
     queryFn: () => api<CampaignsResponse>("/api/campaigns"),
+  });
+}
+
+/** Agenda de reservas del día de una sucursal (+ lista de espera). */
+export function useReservations(locationId: string | undefined) {
+  return useQuery({
+    queryKey: ["reservations", locationId],
+    queryFn: () => api<ReservationsResponse>(`/api/reservations/${locationId}`),
+    enabled: Boolean(locationId),
   });
 }
 
