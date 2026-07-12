@@ -182,6 +182,40 @@ export interface PublicMenuResponse {
   categories: MenuCategoryPublic[];
 }
 
+// ─── KPIs / TABLERO (agregados sobre ventas) ────────────────
+
+export interface KpiTrendPoint {
+  date: string; // YYYY-MM-DD
+  revenueCents: number;
+}
+
+export interface KpiMenuMixItem {
+  name: string;
+  qty: number;
+  revenueCents: number;
+}
+
+export interface KpiSummaryResponse {
+  today: {
+    revenueCents: number;
+    tickets: number;
+    covers: number;
+    avgTicketCents: number;
+  };
+  yesterdayRevenueCents: number;
+  revenueDeltaPct: number; // hoy vs ayer
+  foodCostPct: number; // promedio de recetas (0..100)
+  forecastCoversToday: number;
+  trend: KpiTrendPoint[]; // últimos 14 días
+  menuMix: KpiMenuMixItem[]; // top por ingreso (30 días)
+  counts: {
+    ordersActive: number;
+    recommendationsPending: number;
+    anomaliesToday: number;
+    reservationsToday: number;
+  };
+}
+
 // ─── RECETAS (costeo dinámico) ──────────────────────────────
 
 export interface RecipeIngredientDTO {

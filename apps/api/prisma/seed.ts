@@ -649,12 +649,16 @@ async function main() {
     { key: "discount", kind: "DISCOUNT_SPIKE", severity: 3, payload: { pct: 22 } },
     { key: "foodcost", kind: "FOOD_COST_DRIFT", severity: 4, payload: { item: "Guacamole", driftPct: 8 } },
   ];
+  // detectedAt = hoy (temprano) para que "anomalías de hoy" tenga sentido; el
+  // upsert lo re-estampa en cada corrida (si no, quedaría fijo en la 1a).
+  const detectedToday = new Date(TODAY);
+  detectedToday.setUTCHours(9, 0, 0, 0);
   for (const a of anomalyDefs) {
     const id = `anom-${tenant.id.slice(0, 8)}-${a.key}`;
     await prisma.anomaly.upsert({
       where: { id },
-      update: { severity: a.severity, payload: a.payload },
-      create: { id, locationId: location.id, kind: a.kind, severity: a.severity, payload: a.payload },
+      update: { severity: a.severity, payload: a.payload, detectedAt: detectedToday, resolvedAt: null },
+      create: { id, locationId: location.id, kind: a.kind, severity: a.severity, payload: a.payload, detectedAt: detectedToday },
     });
   }
 
@@ -694,10 +698,140 @@ async function main() {
     });
   }
 
+  console.log("[seed] creando ventas históricas (45 días), forecast y reservas...");
+  // RNG determinístico (mulberry32) para que el dataset sea estable entre corridas.
+  function rng(seed: number) {
+    let a = seed >>> 0;
+    return () => {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  const sellable = await prisma.menuItem.findMany({
+    where: { tenantId: tenant.id, active: true },
+    select: { id: true, priceCents: true, taxRate: true },
+  });
+
+  // Limpia ventas previas del seed (cascade borra líneas y pagos) e inserta fresco.
+  await prisma.salesEvent.deleteMany({
+    where: { locationId: location.id, posExternalId: { startsWith: "seed-sale-" } },
+  });
+
+  const DAYS = 45;
+  const CHANNELS = ["DINE_IN", "DINE_IN", "DINE_IN", "TAKEOUT", "DELIVERY"] as const;
+  const PAY = ["CARD_CREDIT", "CARD_DEBIT", "CASH", "SPEI"];
+  let salesCount = 0;
+  for (let d = 0; d < DAYS; d++) {
+    const day = new Date(TODAY);
+    day.setUTCDate(day.getUTCDate() - d);
+    const weekday = day.getUTCDay(); // 0=dom .. 6=sáb
+    // Más tickets viernes/sábado; menos lunes/martes.
+    const weekendBoost = weekday === 5 || weekday === 6 ? 1.6 : weekday === 0 ? 1.2 : 1;
+    const rand = rng(d + 1);
+    const tickets = Math.round((10 + rand() * 8) * weekendBoost);
+    for (let i = 0; i < tickets; i++) {
+      const r = rng((d + 1) * 1000 + i);
+      const nLines = 1 + Math.floor(r() * 3); // 1..3
+      const lines: { menuItemId: string; description: string; qty: number; unitCents: number; totalCents: number }[] = [];
+      let subtotal = 0;
+      let tax = 0;
+      for (let l = 0; l < nLines; l++) {
+        const mi = sellable[Math.floor(r() * sellable.length)]!;
+        const qty = 1 + Math.floor(r() * 2); // 1..2
+        const lineTotal = mi.priceCents * qty;
+        subtotal += lineTotal;
+        tax += Math.round(lineTotal * Number(mi.taxRate ?? 0.16));
+        lines.push({ menuItemId: mi.id, description: "", qty, unitCents: mi.priceCents, totalCents: lineTotal });
+      }
+      const total = subtotal + tax;
+      const hour = 12 + Math.floor(r() * 10); // 12–21h
+      const openedAt = new Date(day);
+      openedAt.setUTCHours(hour, Math.floor(r() * 60), 0, 0);
+      const channel = CHANNELS[Math.floor(r() * CHANNELS.length)]!;
+      await prisma.salesEvent.create({
+        data: {
+          locationId: location.id,
+          posExternalId: `seed-sale-${d}-${i}`,
+          channel,
+          openedAt,
+          closedAt: openedAt,
+          totalCents: total,
+          taxCents: tax,
+          tipCents: Math.round(subtotal * 0.1 * r()),
+          covers: 1 + Math.floor(r() * 4),
+          lines: { create: lines },
+          payments: { create: [{ method: PAY[Math.floor(r() * PAY.length)]!, amountCents: total }] },
+        },
+      });
+      salesCount += 1;
+    }
+  }
+
+  // Forecast de hoy por daypart (para el pronóstico de tickets del tablero).
+  const dayparts = ["LUNCH", "AFTERNOON", "DINNER"] as const;
+  for (const dp of dayparts) {
+    const expectedCovers = dp === "DINNER" ? 120 : dp === "LUNCH" ? 90 : 40;
+    await prisma.forecastBucket.upsert({
+      where: {
+        locationId_date_daypart_channel: {
+          locationId: location.id,
+          date: TODAY,
+          daypart: dp,
+          channel: "DINE_IN",
+        },
+      },
+      update: { expectedCovers },
+      create: {
+        locationId: location.id,
+        date: TODAY,
+        daypart: dp,
+        channel: "DINE_IN",
+        expectedCovers,
+        expectedRevenue: expectedCovers * 28500,
+        confidenceLow: expectedCovers * 25000,
+        confidenceHigh: expectedCovers * 32000,
+        modelVersion: "seed-v1",
+      },
+    });
+  }
+
+  // Reservas de hoy (para el chip "reservas confirmadas").
+  await prisma.reservation.deleteMany({
+    where: { locationId: location.id, source: "seed" },
+  });
+  const resGuests = [
+    ["Lucía Robles", 6, 20, "CONFIRMED"],
+    ["Carlos Slim", 2, 19, "CONFIRMED"],
+    ["Marta Gómez", 4, 21, "CONFIRMED"],
+    ["Raúl Jiménez", 3, 20, "SEATED"],
+    ["Ana Paula", 2, 20, "NO_SHOW"],
+    ["Gaby Torres", 4, 22, "PENDING"],
+  ] as const;
+  for (const [name, party, hour, status] of resGuests) {
+    const reservedAt = new Date(TODAY);
+    reservedAt.setUTCHours(hour as number, 0, 0, 0);
+    await prisma.reservation.create({
+      data: {
+        locationId: location.id,
+        guestName: name as string,
+        guestPhone: "+525500000000",
+        partySize: party as number,
+        reservedAt,
+        status: status as "CONFIRMED" | "SEATED" | "NO_SHOW" | "PENDING",
+        source: "seed",
+      },
+    });
+  }
+
   console.log("[seed] listo. Login: dueno@copiloto.mx / password123");
   console.log(`[seed] tenant slug: ${tenant.slug} · location: ${location.slug}`);
   console.log(`[seed] CRM: ${guestDefs.length} huéspedes en ${segmentDefs.length} segmentos`);
   console.log(`[seed] recetas: ${recipeCount} · facturas: ${invoiceDefs.length} · recomendaciones: ${recDefs.length}`);
+  console.log(`[seed] ventas: ${salesCount} tickets en ${DAYS} días · reservas hoy: ${resGuests.length}`);
   console.log(`[seed] ingredientes: ${ingredients.length} · suppliers: ${suppliers.length}`);
   console.log(`[seed] menú: ${menuItems.length} platillos en ${categories.length} categorías`);
   console.log(`[seed] 🍽️  Menú del cliente: /menu/${location.id}`);
