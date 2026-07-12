@@ -94,8 +94,11 @@ function toDTO(order: {
  * recalculan en el server leyendo el MenuItem real — nunca confiamos en los
  * montos que manda el cliente. El IVA se aplica por item según su taxRate.
  *
- * Pago: MOBILE se marca PAID (pasarela simulada por ahora); CASHIER queda
- * PENDING (paga en caja). En ambos casos el pedido entra a cocina (PLACED).
+ * Pago: MOBILE con Mercado Pago configurado → AWAITING_PAYMENT (no entra a
+ * cocina hasta que el webhook confirme el cobro del total con IVA). MOBILE sin
+ * pasarela → 503 en producción (fail-closed, nunca se marca PAID sin cobro);
+ * solo se simula PAID en desarrollo o con ALLOW_SIMULATED_PAYMENTS=true.
+ * CASHIER → PLACED + PENDING (cobra en caja).
  */
 router.post("/public", async (req, res) => {
   const parsed = CreateOrderSchema.safeParse(req.body);
@@ -144,12 +147,24 @@ router.post("/public", async (req, res) => {
   );
 
   // Pago en línea real solo si es MOBILE y la pasarela está configurada.
-  // Sin pasarela, MOBILE cae al modo simulado (PAID inmediato) para no romper
-  // dev/staging. CASHIER siempre entra a cocina y se cobra en caja.
+  // FAIL-CLOSED por defecto: NUNCA marcamos PAID sin evidencia de cobro. El
+  // modo simulado (PAID inmediato) es OPT-IN explícito y solo para dev/staging:
+  // requiere NODE_ENV=development o ALLOW_SIMULATED_PAYMENTS=true. Así, si un
+  // deploy productivo olvida NODE_ENV o la pasarela, un pago móvil se rechaza
+  // (503) en vez de regalar comida. CASHIER siempre entra a cocina y cobra en caja.
+  const allowSimulatedPay =
+    process.env.NODE_ENV === "development" || process.env.ALLOW_SIMULATED_PAYMENTS === "true";
+  if (paymentMethod === "MOBILE" && !isMpEnabled() && !allowSimulatedPay) {
+    res.status(503).json({
+      error: "El pago en línea no está disponible por ahora. Elige pagar en caja.",
+      code: "ONLINE_PAYMENT_UNAVAILABLE",
+    });
+    return;
+  }
   const payOnline = paymentMethod === "MOBILE" && isMpEnabled();
+  const simulatedPaid = paymentMethod === "MOBILE" && !isMpEnabled() && allowSimulatedPay;
   const initialStatus = payOnline ? "AWAITING_PAYMENT" : "PLACED";
-  const paymentStatus =
-    paymentMethod === "MOBILE" && !isMpEnabled() ? "PAID" : "PENDING";
+  const paymentStatus = simulatedPaid ? "PAID" : "PENDING";
 
   // Crea el pedido; reintenta si el code corto colisiona (raro).
   let created;
@@ -194,15 +209,22 @@ router.post("/public", async (req, res) => {
   // Si MP falla, cancelamos el pedido (quedó en AWAITING_PAYMENT) y avisamos.
   if (payOnline) {
     try {
+      // Líneas de la preferencia = items + una línea de IVA, para que MP cobre
+      // el TOTAL (subtotal + impuestos). Sin la línea de IVA, MP cobraría solo
+      // el subtotal y el webhook (que compara contra totalCents) lo rechazaría.
+      const prefItems = created!.items.map((it) => ({
+        id: it.menuItemId ?? it.id,
+        title: it.name,
+        quantity: it.qty,
+        unitCents: it.unitCents,
+      }));
+      if (created!.taxCents > 0) {
+        prefItems.push({ id: "tax", title: "Impuestos (IVA)", quantity: 1, unitCents: created!.taxCents });
+      }
       const { preferenceId, checkoutUrl } = await createCheckoutPreference({
         orderId: created!.id,
         currency: location.tenant.currency,
-        items: created!.items.map((it) => ({
-          id: it.menuItemId ?? it.id,
-          title: it.name,
-          quantity: it.qty,
-          unitCents: it.unitCents,
-        })),
+        items: prefItems,
         backUrl: `${PUBLIC_WEB_URL}/menu/${location.id}/confirmacion/${created!.id}`,
         notificationUrl: `${PUBLIC_API_URL}/api/orders/webhook/mp`,
       });
@@ -266,13 +288,51 @@ router.post("/webhook/mp", async (req, res) => {
       return;
     }
 
-    // 4. Solo confirmamos si está aprobado e idempotente (no re-confirmar).
+    // 4. Trae el pedido para validar estado y monto antes de tocar nada.
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      select: { id: true, status: true, totalCents: true },
+    });
+    if (!order) {
+      res.status(200).json({ ignored: "pedido no encontrado" });
+      return;
+    }
+
     if (payment.status === "approved") {
+      // Verifica que el monto cobrado coincida con el total del pedido. Si no,
+      // NO confirmamos automáticamente: se marca para revisión manual (posible
+      // fraude/manipulación o preferencia obsoleta).
+      const paidCents = Math.round((payment.transactionAmount ?? 0) * 100);
+      if (paidCents !== order.totalCents) {
+        console.warn(
+          `[orders] webhook monto no coincide: pagó ${paidCents}¢ vs total ${order.totalCents}¢ (order ${orderId}, payment ${paymentId})`
+        );
+        res.status(200).json({ ok: true, flagged: "monto no coincide" });
+        return;
+      }
+      // Solo transiciona pedidos que SIGUEN esperando pago. Excluye CANCELLED
+      // (no revivir un pedido cancelado) y ya-PLACED (idempotencia).
       await prisma.order.updateMany({
-        where: { id: orderId, paymentStatus: { not: "PAID" } },
+        where: { id: orderId, status: "AWAITING_PAYMENT" },
         data: { status: "PLACED", paymentStatus: "PAID", paymentRef: String(paymentId) },
       });
+    } else if (["rejected", "cancelled", "refunded", "charged_back"].includes(payment.status ?? "")) {
+      if (order.status === "AWAITING_PAYMENT") {
+        // Pago fallido antes de confirmar: cancela para que el front corte el
+        // polling y no quede atascado en AWAITING_PAYMENT.
+        await prisma.order.updateMany({
+          where: { id: orderId, status: "AWAITING_PAYMENT" },
+          data: { status: "CANCELLED" },
+        });
+      } else {
+        // Reembolso/contracargo sobre un pedido ya en cocina/servido: no lo
+        // revertimos automáticamente; queda para revisión manual de operaciones.
+        console.warn(
+          `[orders] pago '${payment.status}' sobre pedido ${orderId} en estado ${order.status} — requiere revisión manual (reembolso/contracargo)`
+        );
+      }
     }
+    // pending / in_process: no-op (esperamos otra notificación).
     res.status(200).json({ ok: true });
   } catch (err) {
     console.error("[orders] webhook procesamiento falló", err);

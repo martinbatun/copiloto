@@ -9,6 +9,26 @@ import { registerRoutes } from "./routes.js";
 import { makeIsAllowedOrigin } from "./lib/cors.js";
 import { initSentry, setupSentryErrorHandler } from "./lib/sentry.js";
 
+// Fail-fast: valida secretos requeridos ANTES de levantar el server. Sin esto,
+// un JWT_SECRET/DATABASE_URL ausente dejaría el server "arriba" (health 200)
+// pero con auth o DB rotas — un outage silencioso enmascarado por el healthcheck.
+function assertRequiredEnv(): void {
+  const required = ["JWT_SECRET", "DATABASE_URL"];
+  const missing = required.filter((k) => !process.env[k]);
+  if (missing.length > 0) {
+    console.error(
+      `[boot] Faltan variables de entorno requeridas: ${missing.join(", ")}. Abortando.`
+    );
+    process.exit(1);
+  }
+  if (process.env.NODE_ENV === "production" && !process.env.CORS_ORIGIN) {
+    console.warn(
+      "[boot] CORS_ORIGIN no está seteado en producción: el navegador bloqueará el frontend."
+    );
+  }
+}
+assertRequiredEnv();
+
 // Lo antes posible: inicializa Sentry si hay SENTRY_DSN (no-op si no).
 initSentry();
 

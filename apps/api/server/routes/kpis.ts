@@ -41,6 +41,8 @@ router.get("/:locationId/summary", requireAuth, async (req, res) => {
   start14.setUTCDate(start14.getUTCDate() - 13);
   const start30 = new Date(startToday);
   start30.setUTCDate(start30.getUTCDate() - 29);
+  const startTomorrow = new Date(startToday);
+  startTomorrow.setUTCDate(startTomorrow.getUTCDate() + 1);
 
   const [
     salesToday,
@@ -82,7 +84,11 @@ router.get("/:locationId/summary", requireAuth, async (req, res) => {
     prisma.recommendation.count({ where: { tenantId, locationId, status: "PENDING" } }),
     prisma.anomaly.count({ where: { locationId, detectedAt: { gte: startToday } } }),
     prisma.reservation.count({
-      where: { locationId, reservedAt: { gte: startToday }, status: { in: ["CONFIRMED", "SEATED", "PENDING"] } },
+      where: {
+        locationId,
+        reservedAt: { gte: startToday, lt: startTomorrow },
+        status: { in: ["CONFIRMED", "SEATED", "PENDING"] },
+      },
     }),
   ]);
 
