@@ -323,6 +323,33 @@ export interface CopilotChatResponse {
   contextAt: string; // ISO — momento del snapshot de datos usado como contexto
 }
 
+// ─── ADMIN (panel de plataforma, rol ADMIN) ─────────────────
+
+export interface AdminTenantDTO {
+  id: string;
+  name: string;
+  slug: string;
+  country: string;
+  currency: string;
+  createdAt: string;
+  locations: number;
+  users: number;
+  orders: number; // total histórico
+  monthRevenueCents: number; // ventas del mes en curso
+  lastActivityAt: string | null; // ISO — última venta o pedido
+}
+
+export interface AdminTenantsResponse {
+  summary: {
+    tenants: number;
+    locations: number;
+    users: number;
+    orders: number;
+    monthRevenueCents: number;
+  };
+  tenants: AdminTenantDTO[];
+}
+
 // ─── FORECAST (motor de demanda) ────────────────────────────
 
 export interface ForecastDayDTO {

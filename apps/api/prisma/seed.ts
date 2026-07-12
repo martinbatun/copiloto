@@ -70,6 +70,19 @@ async function main() {
     },
   });
 
+  // Staff de Copiloto (rol ADMIN) — accede al panel de plataforma (/admin).
+  await prisma.user.upsert({
+    where: { email: "soporte@copiloto.mx" },
+    update: { role: "ADMIN" },
+    create: {
+      tenantId: tenant.id,
+      email: "soporte@copiloto.mx",
+      name: "Soporte Copiloto",
+      passwordHash,
+      role: "ADMIN",
+    },
+  });
+
   console.log("[seed] creando location Roma Norte...");
   const location = await prisma.location.upsert({
     where: { tenantId_slug: { tenantId: tenant.id, slug: "roma-norte" } },

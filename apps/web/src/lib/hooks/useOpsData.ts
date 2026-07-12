@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type {
+  AdminTenantsResponse,
   CampaignsResponse,
   ForecastResponse,
   InvoicesResponse,
@@ -28,6 +29,15 @@ export function useCampaigns() {
   return useQuery({
     queryKey: ["campaigns"],
     queryFn: () => api<CampaignsResponse>("/api/campaigns"),
+  });
+}
+
+/** Panel de plataforma (rol ADMIN): tenants con métricas. 403 si no es ADMIN. */
+export function useAdminTenants() {
+  return useQuery({
+    queryKey: ["admin-tenants"],
+    queryFn: () => api<AdminTenantsResponse>("/api/admin/tenants"),
+    retry: false, // no reintentar el 403
   });
 }
 

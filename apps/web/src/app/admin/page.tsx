@@ -1,259 +1,137 @@
-import { AppShell } from "@/components/AppShell";
+"use client";
 
-const CHATS = [
-  { initials: "AH", name: "Adriana Hidalgo", last: "Perfecto, confírmame para 4 personas a las 8pm.", time: "AHORA", active: true, color: "bg-primary-fixed text-primary" },
-  { initials: "RN", name: "Roberto Nájera", last: "¿Tienen opciones veganas en el menú?", time: "10:45 AM", color: "bg-surface-container-high text-on-surface-variant" },
-  { initials: "SC", name: "Sofía Castillo", last: "Gracias por la atención.", time: "Ayer", muted: true, color: "bg-surface-container-high text-on-surface-variant" },
-  { initials: "MR", name: "Mauricio Reyes", last: "¿Hay estacionamiento cerca?", time: "Ayer", muted: true, color: "bg-surface-container-high text-on-surface-variant" },
-  { initials: "LV", name: "Lorena Vidal", last: "Quiero reservar para 6.", time: "Lun", muted: true, color: "bg-surface-container-high text-on-surface-variant" },
-];
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
+import type { AdminTenantDTO } from "@copiloto/shared";
+import { AppShell } from "@/components/AppShell";
+import { useAdminTenants } from "@/lib/hooks/useOpsData";
+import { ApiError } from "@/lib/api";
+import { formatMoney } from "@/lib/format";
 
 export default function Page() {
+  const { data, isLoading, error } = useAdminTenants();
+  const forbidden = error instanceof ApiError && error.status === 403;
+
   return (
     <AppShell>
       <header>
-        <h1 className="font-headline-lg text-headline-lg text-on-surface">
-          Agente WhatsApp · Copiloto FOH
-        </h1>
+        <h1 className="font-headline-lg text-headline-lg text-on-surface">Panel de plataforma</h1>
         <p className="text-on-surface-variant font-body-md">
-          Conversaciones en curso, intervención humana y flujos del bot de reservas.
+          Cuentas (tenants) de Copiloto y su actividad. Solo staff de Copiloto (rol ADMIN).
         </p>
       </header>
 
-      <section className="bg-white border border-outline-variant card-shadow rounded-xl p-md flex flex-wrap items-center gap-xl">
-        <KpiInline icon="forum" tint="emerald" label="Conversaciones hoy" value="84" />
-        <KpiInline icon="timer" tint="primary" label="Tiempo respuesta" value="1.8s" />
-        <KpiInline icon="check_circle" tint="secondary" label="Auto-resueltas" value="78%" />
-        <span className="ml-auto px-sm py-1 bg-emerald-600 text-white rounded-full text-[12px] font-bold flex items-center gap-1">
-          <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          Agente Online
-        </span>
-      </section>
+      {forbidden ? (
+        <div className="bg-amber-50 border border-amber-300 text-amber-900 rounded-xl p-6">
+          <p className="font-bold flex items-center gap-2">
+            <span className="material-symbols-outlined">lock</span>
+            Acceso restringido
+          </p>
+          <p className="text-sm mt-1">
+            Este panel es solo para staff de Copiloto (rol <code className="font-mono">ADMIN</code>). Tu
+            usuario no tiene ese rol. Para verlo en el demo, inicia sesión como{" "}
+            <code className="font-mono">soporte@copiloto.mx</code>.
+          </p>
+        </div>
+      ) : error ? (
+        <div className="bg-error-container/40 border border-error/30 text-on-error-container rounded-xl p-4">
+          <p className="font-bold">No pudimos cargar el panel</p>
+          <p className="text-sm">{String((error as Error).message)}</p>
+        </div>
+      ) : (
+        <>
+          {/* Resumen */}
+          <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-gutter">
+            {isLoading || !data ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="h-24 bg-surface-container-high/70 rounded-xl animate-pulse" />
+              ))
+            ) : (
+              <>
+                <Kpi label="Cuentas" value={String(data.summary.tenants)} accent="border-l-primary" />
+                <Kpi label="Sucursales" value={String(data.summary.locations)} accent="border-l-secondary" />
+                <Kpi label="Usuarios" value={String(data.summary.users)} accent="border-l-tertiary" />
+                <Kpi label="Pedidos" value={String(data.summary.orders)} accent="border-l-primary-container" />
+                <Kpi label="Ventas del mes" value={formatMoney(data.summary.monthRevenueCents)} accent="border-l-primary" />
+              </>
+            )}
+          </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-        {/* Chat list */}
-        <aside className="lg:col-span-4 bg-white border border-outline-variant rounded-xl card-shadow overflow-hidden flex flex-col min-h-[640px]">
-          <div className="p-md border-b border-outline-variant">
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">
-                search
-              </span>
-              <input
-                type="text"
-                placeholder="Buscar conversaciones…"
-                className="w-full pl-10 pr-4 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-body-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-              />
+          {/* Tabla de tenants */}
+          <div className="bg-white border border-outline-variant rounded-xl card-shadow overflow-hidden">
+            <div className="p-md border-b border-outline-variant bg-surface-container-lowest">
+              <h2 className="font-headline-sm text-headline-sm flex items-center gap-xs text-on-surface">
+                <span className="material-symbols-outlined text-primary">apartment</span>
+                Cuentas
+              </h2>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-on-surface-variant border-b border-outline-variant">
+                    <th className="p-md font-label-md">Cuenta</th>
+                    <th className="p-md font-label-md text-center">Sucursales</th>
+                    <th className="p-md font-label-md text-center">Usuarios</th>
+                    <th className="p-md font-label-md text-center">Pedidos</th>
+                    <th className="p-md font-label-md text-right">Ventas del mes</th>
+                    <th className="p-md font-label-md text-right">Última actividad</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {isLoading || !data ? (
+                    Array.from({ length: 3 }).map((_, i) => (
+                      <tr key={i} className="border-b border-outline-variant/50">
+                        <td colSpan={6} className="p-md">
+                          <div className="h-6 bg-surface-container-high/50 rounded animate-pulse" />
+                        </td>
+                      </tr>
+                    ))
+                  ) : data.tenants.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-xl text-center text-on-surface-variant">
+                        Sin cuentas registradas.
+                      </td>
+                    </tr>
+                  ) : (
+                    data.tenants.map((t) => <TenantRow key={t.id} t={t} />)
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto">
-            {CHATS.map((c) => (
-              <div
-                key={c.name}
-                className={`p-md border-b border-outline-variant flex gap-md cursor-pointer transition-all ${
-                  c.active ? "bg-surface-container border-l-4 border-l-primary" : "hover:bg-surface-container-low"
-                } ${c.muted ? "opacity-60" : ""}`}
-              >
-                <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${c.color}`}
-                >
-                  {c.initials}
-                </div>
-                <div className="flex-1 overflow-hidden">
-                  <div className="flex justify-between items-center mb-1">
-                    <h4 className="font-bold font-label-md truncate text-on-surface">{c.name}</h4>
-                    <span
-                      className={`text-[10px] font-bold ${
-                        c.active ? "text-primary" : "text-on-surface-variant/60"
-                      }`}
-                    >
-                      {c.time}
-                    </span>
-                  </div>
-                  <p className="text-body-sm text-on-surface-variant truncate">{c.last}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </aside>
-
-        {/* Chat detail */}
-        <section className="lg:col-span-8 flex flex-col bg-white border border-outline-variant rounded-xl card-shadow overflow-hidden relative min-h-[640px]">
-          <header className="h-16 flex items-center px-md bg-white/80 backdrop-blur-md border-b border-outline-variant z-10">
-            <div className="w-10 h-10 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-bold mr-md">
-              AH
-            </div>
-            <div>
-              <h3 className="font-bold font-label-md text-on-surface">Adriana Hidalgo</h3>
-              <p className="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
-                <span className="material-symbols-outlined text-[14px]">smartphone</span> +52 55 1234
-                5678
-              </p>
-            </div>
-            <div className="ml-auto flex gap-xs">
-              <button className="p-xs text-on-surface-variant hover:bg-surface-container rounded-lg">
-                <span className="material-symbols-outlined">call</span>
-              </button>
-              <button className="p-xs text-on-surface-variant hover:bg-surface-container rounded-lg">
-                <span className="material-symbols-outlined">more_vert</span>
-              </button>
-            </div>
-          </header>
-
-          <div className="flex-1 overflow-y-auto p-lg flex flex-col gap-md bg-surface-container-low">
-            <div className="self-center bg-white/80 backdrop-blur px-md py-xs rounded-full text-[11px] font-bold text-on-surface-variant shadow-sm">
-              HOY
-            </div>
-            <ChatMsg from="client" body="Hola, me gustaría reservar una mesa para esta noche." time="12:15 PM" />
-            <ChatMsg
-              from="bot"
-              body="¡Claro que sí, Adriana! Con gusto te ayudo. ¿Para cuántas personas y a qué hora te gustaría?"
-              time="12:15 PM"
-            />
-            <ChatMsg from="client" body="Somos 4 personas, a las 8:00 PM por favor." time="12:16 PM" />
-            <ChatMsg
-              from="bot"
-              body="Revisando disponibilidad… ¡Tenemos mesa! Confírmame para 4 personas a las 8pm y queda lista tu reserva."
-              time="12:16 PM"
-            />
-            <ChatMsg from="client" body="Perfecto, confírmame para 4 personas a las 8pm." time="12:17 PM" />
-          </div>
-
-          {/* Flow overlay */}
-          <div className="absolute bottom-24 left-1/2 -translate-x-1/2 w-[92%] bg-white/95 backdrop-blur-xl border border-primary/20 rounded-2xl shadow-2xl p-md flex flex-col xl:flex-row items-start xl:items-center gap-3">
-            <div className="flex-1">
-              <p className="text-[10px] font-bold text-primary uppercase mb-2 tracking-widest">
-                Estado del flow · Reserva en curso
-              </p>
-              <div className="flex items-center gap-xs flex-wrap">
-                <FlowStep n={1} label="Intención" done />
-                <FlowConnector done />
-                <FlowStep n={2} label="Datos" done />
-                <FlowConnector done />
-                <FlowStep n={3} label="Confirmación" active />
-                <FlowConnector />
-                <FlowStep n={4} label="Finalizar" />
-              </div>
-            </div>
-            <div className="flex gap-sm shrink-0">
-              <button className="px-md py-2 border border-primary text-primary rounded-lg font-label-md hover:bg-primary/5 transition-colors">
-                Intervenir
-              </button>
-              <button className="px-md py-2 bg-primary text-white rounded-lg font-label-md shadow-md">
-                Confirmar por bot
-              </button>
-            </div>
-          </div>
-
-          <footer className="p-md bg-white border-t border-outline-variant flex items-center gap-md">
-            <button className="p-xs text-on-surface-variant">
-              <span className="material-symbols-outlined">add</span>
-            </button>
-            <div className="flex-1 bg-surface-container-low rounded-xl px-md py-2 flex items-center">
-              <input
-                type="text"
-                placeholder="Escribe un mensaje…"
-                className="flex-1 bg-transparent border-none focus:ring-0 outline-none text-body-sm"
-              />
-              <button className="text-on-surface-variant ml-2">
-                <span className="material-symbols-outlined">mood</span>
-              </button>
-            </div>
-            <button className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg transition-transform active:scale-95">
-              <span
-                className="material-symbols-outlined"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                send
-              </span>
-            </button>
-          </footer>
-        </section>
-      </div>
+        </>
+      )}
     </AppShell>
   );
 }
 
-function KpiInline({
-  icon,
-  tint,
-  label,
-  value,
-}: {
-  icon: string;
-  tint: "emerald" | "primary" | "secondary";
-  label: string;
-  value: string;
-}) {
-  const tintMap = {
-    emerald: "bg-emerald-100 text-emerald-600",
-    primary: "bg-primary/10 text-primary",
-    secondary: "bg-secondary/10 text-secondary",
-  };
+function TenantRow({ t }: { t: AdminTenantDTO }) {
   return (
-    <div className="flex items-center gap-sm">
-      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tintMap[tint]}`}>
-        <span className="material-symbols-outlined">{icon}</span>
-      </div>
-      <div>
-        <p className="text-[10px] uppercase font-bold text-on-surface-variant">{label}</p>
-        <p className="font-numeral-xl text-numeral-xl leading-none text-on-surface">{value}</p>
-      </div>
-    </div>
-  );
-}
-
-function ChatMsg({
-  from,
-  body,
-  time,
-}: {
-  from: "client" | "bot";
-  body: string;
-  time: string;
-}) {
-  if (from === "bot") {
-    return (
-      <div className="flex flex-col items-end max-w-[70%] self-end">
-        <div
-          className="p-md rounded-2xl rounded-tr-none shadow-sm text-body-sm relative border border-emerald-200"
-          style={{ backgroundColor: "#dcf8c6" }}
-        >
-          <div className="flex items-center gap-xs mb-1 text-[10px] font-bold text-primary">
-            <span className="material-symbols-outlined text-[14px]">smart_toy</span> COPILOTO AI
-          </div>
-          {body}
-          <span className="block mt-1 text-right text-[10px] text-on-surface-variant/60">{time}</span>
+    <tr className="border-b border-outline-variant/50 hover:bg-surface-container-lowest">
+      <td className="p-md">
+        <div className="font-bold text-on-surface">{t.name}</div>
+        <div className="text-xs text-on-surface-variant">
+          {t.slug} · {t.country} · {t.currency}
         </div>
-      </div>
-    );
-  }
-  return (
-    <div className="flex flex-col items-start max-w-[70%]">
-      <div className="bg-white p-md rounded-2xl rounded-tl-none shadow-sm text-body-sm">
-        {body}
-        <span className="block mt-1 text-right text-[10px] text-on-surface-variant/60">{time}</span>
-      </div>
-    </div>
+      </td>
+      <td className="p-md text-center text-on-surface">{t.locations}</td>
+      <td className="p-md text-center text-on-surface">{t.users}</td>
+      <td className="p-md text-center text-on-surface">{t.orders}</td>
+      <td className="p-md text-right font-numeral-xl text-on-surface">{formatMoney(t.monthRevenueCents)}</td>
+      <td className="p-md text-right text-on-surface-variant">
+        {t.lastActivityAt
+          ? formatDistanceToNow(new Date(t.lastActivityAt), { addSuffix: true, locale: es })
+          : "—"}
+      </td>
+    </tr>
   );
 }
 
-function FlowStep({ n, label, done, active }: { n: number; label: string; done?: boolean; active?: boolean }) {
-  const dot = done
-    ? "bg-emerald-600 text-white"
-    : active
-    ? "bg-primary text-white animate-pulse"
-    : "bg-surface-variant text-on-surface-variant/40";
-  const labelClass = active ? "text-primary" : done ? "text-on-surface" : "text-on-surface-variant/60";
+function Kpi({ label, value, accent }: { label: string; value: string; accent: string }) {
   return (
-    <div className="flex items-center gap-xs">
-      <span className={`w-6 h-6 rounded-full text-[10px] flex items-center justify-center font-bold ${dot}`}>
-        {n}
-      </span>
-      <span className={`text-[11px] font-bold ${labelClass}`}>{label}</span>
+    <div className={`bg-white p-md rounded-xl border border-outline-variant card-shadow border-l-4 ${accent}`}>
+      <p className="font-label-md text-on-surface-variant">{label}</p>
+      <p className="font-numeral-xl text-numeral-xl mt-xs text-on-surface">{value}</p>
     </div>
   );
-}
-
-function FlowConnector({ done }: { done?: boolean }) {
-  return <div className={`h-[2px] w-8 ${done ? "bg-emerald-600" : "bg-surface-variant"}`} />;
 }
