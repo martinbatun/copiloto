@@ -8,7 +8,7 @@
 // futuro documentado en routes/copilot.ts.
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const DEFAULT_MODEL = "anthropic/claude-3.5-sonnet";
+const DEFAULT_MODEL = "minimax/minimax-m2.7";
 
 /** Se lanza cuando falta OPENROUTER_API_KEY — la ruta la mapea a 503. */
 export class CopilotNotConfiguredError extends Error {
