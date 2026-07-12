@@ -3,10 +3,20 @@
 import { useQuery } from "@tanstack/react-query";
 import type {
   InvoicesResponse,
+  KpiSummaryResponse,
   RecipesResponse,
   RecommendationsFeedResponse,
 } from "@copiloto/shared";
 import { api } from "@/lib/api";
+
+/** Resumen de KPIs del tablero (ventas, ticket, tendencia, menu-mix, conteos). */
+export function useKpiSummary(locationId: string | undefined) {
+  return useQuery({
+    queryKey: ["kpi-summary", locationId],
+    queryFn: () => api<KpiSummaryResponse>(`/api/kpis/${locationId}/summary`),
+    enabled: Boolean(locationId),
+  });
+}
 
 /** Recetas del tenant con food cost calculado. */
 export function useRecipes() {
