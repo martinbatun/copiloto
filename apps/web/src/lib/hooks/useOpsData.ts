@@ -2,12 +2,22 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type {
+  ForecastResponse,
   InvoicesResponse,
   KpiSummaryResponse,
   RecipesResponse,
   RecommendationsFeedResponse,
 } from "@copiloto/shared";
 import { api } from "@/lib/api";
+
+/** Pronóstico de demanda (7 días) de una sucursal. */
+export function useForecast(locationId: string | undefined) {
+  return useQuery({
+    queryKey: ["forecast", locationId],
+    queryFn: () => api<ForecastResponse>(`/api/forecast/${locationId}`),
+    enabled: Boolean(locationId),
+  });
+}
 
 /** Resumen de KPIs del tablero (ventas, ticket, tendencia, menu-mix, conteos). */
 export function useKpiSummary(locationId: string | undefined) {

@@ -771,32 +771,41 @@ async function main() {
     }
   }
 
-  // Forecast de hoy por daypart (para el pronóstico de tickets del tablero).
+  // Forecast de los próximos 7 días por daypart (motor de demanda + tablero).
   const dayparts = ["LUNCH", "AFTERNOON", "DINNER"] as const;
-  for (const dp of dayparts) {
-    const expectedCovers = dp === "DINNER" ? 120 : dp === "LUNCH" ? 90 : 40;
-    await prisma.forecastBucket.upsert({
-      where: {
-        locationId_date_daypart_channel: {
+  const baseCovers: Record<string, number> = { LUNCH: 90, AFTERNOON: 40, DINNER: 120 };
+  for (let d = 0; d < 7; d++) {
+    const fdate = new Date(TODAY);
+    fdate.setUTCDate(fdate.getUTCDate() + d);
+    const wd = fdate.getUTCDay();
+    const boost = wd === 5 || wd === 6 ? 1.5 : wd === 0 ? 1.2 : 1; // finde arriba
+    for (const dp of dayparts) {
+      const expectedCovers = Math.round(baseCovers[dp]! * boost);
+      await prisma.forecastBucket.upsert({
+        where: {
+          locationId_date_daypart_channel: { locationId: location.id, date: fdate, daypart: dp, channel: "DINE_IN" },
+        },
+        update: {
+          expectedCovers,
+          expectedRevenue: expectedCovers * 28500,
+          confidenceLow: expectedCovers * 25000,
+          confidenceHigh: expectedCovers * 32000,
+          mape: 0.084,
+        },
+        create: {
           locationId: location.id,
-          date: TODAY,
+          date: fdate,
           daypart: dp,
           channel: "DINE_IN",
+          expectedCovers,
+          expectedRevenue: expectedCovers * 28500,
+          confidenceLow: expectedCovers * 25000,
+          confidenceHigh: expectedCovers * 32000,
+          mape: 0.084,
+          modelVersion: "seed-v1",
         },
-      },
-      update: { expectedCovers },
-      create: {
-        locationId: location.id,
-        date: TODAY,
-        daypart: dp,
-        channel: "DINE_IN",
-        expectedCovers,
-        expectedRevenue: expectedCovers * 28500,
-        confidenceLow: expectedCovers * 25000,
-        confidenceHigh: expectedCovers * 32000,
-        modelVersion: "seed-v1",
-      },
-    });
+      });
+    }
   }
 
   // Reservas de hoy (para el chip "reservas confirmadas").

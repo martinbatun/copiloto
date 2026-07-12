@@ -216,6 +216,33 @@ export interface KpiSummaryResponse {
   };
 }
 
+// ─── FORECAST (motor de demanda) ────────────────────────────
+
+export interface ForecastDayDTO {
+  date: string; // YYYY-MM-DD
+  covers: number;
+  revenueCents: number;
+  confidenceLowCents: number;
+  confidenceHighCents: number;
+}
+
+export interface ForecastDaypartDTO {
+  daypart: string; // LUNCH | AFTERNOON | DINNER | ...
+  covers: number;
+  revenueCents: number;
+}
+
+export interface ForecastResponse {
+  summary: {
+    mapePct: number;
+    covers7d: number;
+    revenue7dCents: number;
+    avgConfidencePct: number;
+  };
+  days: ForecastDayDTO[];
+  peakDay: { date: string; dayparts: ForecastDaypartDTO[] } | null;
+}
+
 // ─── RECETAS (costeo dinámico) ──────────────────────────────
 
 export interface RecipeIngredientDTO {
