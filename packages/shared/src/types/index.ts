@@ -279,6 +279,37 @@ export interface ReviewsResponse {
   reviews: ReviewDTO[];
 }
 
+// ─── RESERVAS (agenda del día) ──────────────────────────────
+
+export interface ReservationDTO {
+  id: string;
+  guestName: string;
+  guestPhone: string;
+  partySize: number;
+  reservedAt: string; // ISO
+  time: string; // HH:mm (hora local MX ya formateada por el server)
+  status: ReservationStatus;
+  notes: string | null;
+  source: string;
+}
+
+export interface ReservationsResponse {
+  date: string; // YYYY-MM-DD
+  locationName: string;
+  summary: {
+    total: number; // reservas agendadas (excluye waitlist)
+    covers: number; // comensales esperados (activas + sentadas + completadas)
+    confirmed: number;
+    seated: number;
+    completed: number;
+    pending: number;
+    noShow: number;
+    waitlist: number;
+  };
+  reservations: ReservationDTO[]; // agendadas, ordenadas por hora
+  waitlist: ReservationDTO[]; // lista de espera
+}
+
 // ─── FORECAST (motor de demanda) ────────────────────────────
 
 export interface ForecastDayDTO {
