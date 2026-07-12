@@ -31,6 +31,7 @@ const MORE_NAV: NavItem[] = [
   { href: "/guests", label: "Huéspedes", icon: "groups" },
   { href: "/reservations", label: "Reservas", icon: "event_available" },
   { href: "/campaigns", label: "Campañas", icon: "campaign" },
+  { href: "/reviews", label: "Reseñas", icon: "reviews" },
   { href: "/invoices", label: "Facturas", icon: "receipt_long" },
   { href: "/suppliers", label: "Proveedores", icon: "store" },
   { href: "/simulator", label: "Simulador", icon: "tune" },

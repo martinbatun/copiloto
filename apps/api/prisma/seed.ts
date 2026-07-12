@@ -836,9 +836,106 @@ async function main() {
     });
   }
 
+  console.log("[seed] creando staffing, campañas y reseñas...");
+  // ─── Staffing (Shift) de hoy por daypart × rol ───
+  const shiftDefs = [
+    { daypart: "LUNCH" as const, role: "mesero", needed: 4, suggested: 4, actual: 4 },
+    { daypart: "LUNCH" as const, role: "cocinero_caliente", needed: 3, suggested: 3, actual: 3 },
+    { daypart: "LUNCH" as const, role: "bartender", needed: 1, suggested: 1, actual: 1 },
+    { daypart: "DINNER" as const, role: "mesero", needed: 6, suggested: 6, actual: 5 },
+    { daypart: "DINNER" as const, role: "cocinero_caliente", needed: 4, suggested: 4, actual: 4 },
+    { daypart: "DINNER" as const, role: "bartender", needed: 2, suggested: 2, actual: 2 },
+    { daypart: "DINNER" as const, role: "lavaloza", needed: 2, suggested: 1, actual: 1 },
+  ];
+  for (const s of shiftDefs) {
+    await prisma.shift.upsert({
+      where: {
+        locationId_date_daypart_role: { locationId: location.id, date: TODAY, daypart: s.daypart, role: s.role },
+      },
+      update: { staffNeeded: s.needed, staffSuggested: s.suggested, staffActual: s.actual },
+      create: {
+        locationId: location.id,
+        date: TODAY,
+        daypart: s.daypart,
+        role: s.role,
+        staffNeeded: s.needed,
+        staffSuggested: s.suggested,
+        staffActual: s.actual,
+        source: "forecast",
+      },
+    });
+  }
+
+  // ─── Campañas (Campaign + CampaignSend) ───
+  const guestRows = await prisma.guest.findMany({ where: { tenantId: tenant.id }, select: { id: true } });
+  const campaignDefs = [
+    { key: "birthday", segKey: "vip", template: "birthday_dineout", status: "SENDING" as const, sendCount: 10, readRate: 0.9, respRate: 0.3, convCents: 120000 },
+    { key: "newmenu", segKey: "foodie", template: "new_menu_alert", status: "SENT" as const, sendCount: 12, readRate: 0.8, respRate: 0.16, convCents: 210000 },
+    { key: "churn", segKey: "riesgo", template: "churn_recover", status: "SCHEDULED" as const, sendCount: 0, readRate: 0, respRate: 0, convCents: 0 },
+  ];
+  for (const c of campaignDefs) {
+    const id = `camp-${tenant.id.slice(0, 8)}-${c.key}`;
+    await prisma.campaign.upsert({
+      where: { id },
+      update: { status: c.status },
+      create: {
+        id,
+        tenantId: tenant.id,
+        segmentId: segmentByKey[c.segKey]!,
+        channel: "WHATSAPP",
+        templateId: c.template,
+        status: c.status,
+        sentAt: c.status === "SCHEDULED" ? null : daysAgo(1),
+      },
+    });
+    await prisma.campaignSend.deleteMany({ where: { campaignId: id } });
+    if (c.sendCount > 0) {
+      const sends = guestRows.slice(0, c.sendCount).map((g, i) => {
+        const frac = i / c.sendCount;
+        const responded = frac < c.respRate;
+        return {
+          campaignId: id,
+          guestId: g.id,
+          delivered: true,
+          read: frac < c.readRate,
+          responded,
+          conversionCents: responded ? c.convCents : null,
+        };
+      });
+      await prisma.campaignSend.createMany({ data: sends });
+    }
+  }
+
+  // ─── Reseñas (Review) ───
+  await prisma.review.deleteMany({ where: { locationId: location.id } });
+  const reviewDefs = [
+    { source: "google", rating: 5, text: "Los tacos al pastor increíbles, servicio rapidísimo.", sentiment: 0.9, topics: ["comida", "servicio"], days: 1 },
+    { source: "google", rating: 4, text: "Muy rico todo, aunque tardó un poco la cuenta.", sentiment: 0.4, topics: ["comida", "servicio_lento"], days: 2 },
+    { source: "tripadvisor", rating: 5, text: "Ambiente espectacular, la mezcalita de maracuyá es un must.", sentiment: 0.95, topics: ["ambiente", "bebidas"], days: 3 },
+    { source: "google", rating: 2, text: "La comida llegó fría y el lugar estaba muy lleno.", sentiment: -0.6, topics: ["comida_fria", "saturacion"], days: 4 },
+    { source: "whatsapp", rating: 5, text: "Excelente atención, volveré con la familia.", sentiment: 0.85, topics: ["servicio"], days: 5 },
+    { source: "google", rating: 3, text: "Buena comida pero los precios subieron bastante.", sentiment: 0.0, topics: ["precio"], days: 6 },
+    { source: "tripadvisor", rating: 4, text: "El guacamole en molcajete vale toda la pena.", sentiment: 0.7, topics: ["comida"], days: 7 },
+    { source: "google", rating: 5, text: "Mi lugar favorito en la Roma, siempre consistente.", sentiment: 0.9, topics: ["comida", "ambiente"], days: 9 },
+    { source: "google", rating: 1, text: "Esperé 40 minutos por una mesa con reservación.", sentiment: -0.8, topics: ["servicio_lento", "reservas"], days: 11 },
+    { source: "whatsapp", rating: 4, text: "Rico y buena porción, repetiré.", sentiment: 0.6, topics: ["comida"], days: 13 },
+  ];
+  await prisma.review.createMany({
+    data: reviewDefs.map((r) => ({
+      locationId: location.id,
+      source: r.source,
+      rating: r.rating,
+      text: r.text,
+      sentiment: r.sentiment,
+      topics: r.topics,
+      createdAt: daysAgo(r.days),
+    })),
+  });
+
   console.log("[seed] listo. Login: dueno@copiloto.mx / password123");
   console.log(`[seed] tenant slug: ${tenant.slug} · location: ${location.slug}`);
   console.log(`[seed] CRM: ${guestDefs.length} huéspedes en ${segmentDefs.length} segmentos`);
+  console.log(`[seed] staffing: ${shiftDefs.length} turnos · campañas: ${campaignDefs.length} · reseñas: ${reviewDefs.length}`);
   console.log(`[seed] recetas: ${recipeCount} · facturas: ${invoiceDefs.length} · recomendaciones: ${recDefs.length}`);
   console.log(`[seed] ventas: ${salesCount} tickets en ${DAYS} días · reservas hoy: ${resGuests.length}`);
   console.log(`[seed] ingredientes: ${ingredients.length} · suppliers: ${suppliers.length}`);
