@@ -2,13 +2,42 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type {
+  CampaignsResponse,
   ForecastResponse,
   InvoicesResponse,
   KpiSummaryResponse,
   RecipesResponse,
   RecommendationsFeedResponse,
+  ReviewsResponse,
+  ScheduleResponse,
 } from "@copiloto/shared";
 import { api } from "@/lib/api";
+
+/** Staffing del día de una sucursal (por daypart × rol). */
+export function useSchedule(locationId: string | undefined) {
+  return useQuery({
+    queryKey: ["schedule", locationId],
+    queryFn: () => api<ScheduleResponse>(`/api/schedules/${locationId}`),
+    enabled: Boolean(locationId),
+  });
+}
+
+/** Campañas del tenant con métricas. */
+export function useCampaigns() {
+  return useQuery({
+    queryKey: ["campaigns"],
+    queryFn: () => api<CampaignsResponse>("/api/campaigns"),
+  });
+}
+
+/** Reseñas de una sucursal + resumen. */
+export function useReviews(locationId: string | undefined) {
+  return useQuery({
+    queryKey: ["reviews", locationId],
+    queryFn: () => api<ReviewsResponse>(`/api/reviews/${locationId}`),
+    enabled: Boolean(locationId),
+  });
+}
 
 /** Pronóstico de demanda (7 días) de una sucursal. */
 export function useForecast(locationId: string | undefined) {

@@ -216,6 +216,69 @@ export interface KpiSummaryResponse {
   };
 }
 
+// ─── SCHEDULE (staffing por daypart/rol) ────────────────────
+
+export interface ScheduleRoleDTO {
+  role: string;
+  needed: number;
+  suggested: number;
+  actual: number;
+}
+
+export interface ScheduleDaypartDTO {
+  daypart: string;
+  roles: ScheduleRoleDTO[];
+  neededTotal: number;
+  actualTotal: number;
+}
+
+export interface ScheduleResponse {
+  date: string;
+  dayparts: ScheduleDaypartDTO[];
+  summary: { neededTotal: number; suggestedTotal: number; actualTotal: number; coveragePct: number };
+}
+
+// ─── CAMPAÑAS (WhatsApp) ────────────────────────────────────
+
+export interface CampaignDTO {
+  id: string;
+  templateId: string;
+  segmentName: string | null;
+  channel: string;
+  status: string;
+  sends: number;
+  openRatePct: number;
+  responseRatePct: number;
+  conversionCents: number;
+}
+
+export interface CampaignsResponse {
+  campaigns: CampaignDTO[];
+}
+
+// ─── RESEÑAS ────────────────────────────────────────────────
+
+export interface ReviewDTO {
+  id: string;
+  source: string;
+  rating: number;
+  text: string | null;
+  sentiment: number | null;
+  topics: string[];
+  createdAt: string;
+}
+
+export interface ReviewTopicDTO {
+  topic: string;
+  count: number;
+}
+
+export interface ReviewsResponse {
+  summary: { avgRating: number; count: number; avgSentiment: number; positivePct: number };
+  topics: ReviewTopicDTO[];
+  reviews: ReviewDTO[];
+}
+
 // ─── FORECAST (motor de demanda) ────────────────────────────
 
 export interface ForecastDayDTO {
