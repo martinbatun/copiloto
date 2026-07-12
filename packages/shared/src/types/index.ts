@@ -310,6 +310,19 @@ export interface ReservationsResponse {
   waitlist: ReservationDTO[]; // lista de espera
 }
 
+// ─── CO-PILOTO (chat fundamentado en datos reales) ──────────
+
+export interface CopilotChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface CopilotChatResponse {
+  message: string; // respuesta del asistente
+  model: string; // modelo que respondió (p.ej. anthropic/claude-3.5-sonnet)
+  contextAt: string; // ISO — momento del snapshot de datos usado como contexto
+}
+
 // ─── FORECAST (motor de demanda) ────────────────────────────
 
 export interface ForecastDayDTO {
