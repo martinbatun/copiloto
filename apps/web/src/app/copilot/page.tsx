@@ -1,157 +1,217 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import type { CopilotChatMessage, CopilotChatResponse } from "@copiloto/shared";
 import { AppShell } from "@/components/AppShell";
+import { useAuth } from "@/components/AuthProvider";
+import { api, ApiError } from "@/lib/api";
+
+const SUGGESTIONS = [
+  "¿Por qué cambió mi ticket promedio hoy?",
+  "¿Qué anomalías debo atender primero?",
+  "¿Cómo se ve el pronóstico de esta semana?",
+  "¿Qué insumos están por debajo del par?",
+];
 
 export default function Page() {
+  const { currentLocation } = useAuth();
+  const [messages, setMessages] = useState<CopilotChatMessage[]>([]);
+  const [input, setInput] = useState("");
+  const [notConfigured, setNotConfigured] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [meta, setMeta] = useState<{ model: string; contextAt: string } | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const chat = useMutation({
+    mutationFn: (history: CopilotChatMessage[]) =>
+      api<CopilotChatResponse>("/api/copilot/chat", {
+        method: "POST",
+        body: JSON.stringify({ locationId: currentLocation?.id, messages: history }),
+      }),
+    onSuccess: (res) => {
+      setMessages((prev) => [...prev, { role: "assistant", content: res.message }]);
+      setMeta({ model: res.model, contextAt: res.contextAt });
+    },
+    onError: (err) => {
+      if (err instanceof ApiError && err.status === 503) {
+        setNotConfigured(true);
+      } else {
+        setErrorMsg(err instanceof Error ? err.message : "Error al consultar al co-piloto");
+      }
+      // Revertir el mensaje del usuario que no obtuvo respuesta.
+      setMessages((prev) => (prev[prev.length - 1]?.role === "user" ? prev.slice(0, -1) : prev));
+    },
+  });
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, chat.isPending]);
+
+  function send(text: string) {
+    const content = text.trim();
+    if (!content || chat.isPending || !currentLocation?.id) return;
+    setErrorMsg(null);
+    const next: CopilotChatMessage[] = [...messages, { role: "user", content }];
+    setMessages(next);
+    setInput("");
+    chat.mutate(next);
+  }
+
+  const empty = messages.length === 0;
+
   return (
     <AppShell>
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
         {/* Conversación */}
-        <div className="lg:col-span-8 bg-white rounded-[20px] border border-outline-variant card-shadow flex flex-col min-h-[640px]">
-          <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-6 border-b border-outline-variant/60">
-            <div>
-              <h1 className="font-display-md text-[20px] font-bold text-on-surface">
-                Co-piloto del turno · Roma Norte
-              </h1>
-              <p className="text-sm text-on-surface-variant">
-                Asistente conversacional con acciones ejecutables y human-in-the-loop.
-              </p>
-            </div>
-            <div className="flex items-center gap-xs">
-              <button className="px-3 py-1.5 rounded-full border border-outline-variant text-sm font-semibold text-on-surface-variant hover:bg-surface-container-low">
-                Chat
-              </button>
-              <button className="px-3 py-1.5 rounded-full text-sm font-semibold tab-active">
-                Action Ledger
-              </button>
-              <button className="px-3 py-1.5 rounded-full border border-outline-variant text-sm font-semibold text-on-surface-variant hover:bg-surface-container-low">
-                Recomendaciones
-              </button>
-            </div>
+        <div className="lg:col-span-8 bg-white rounded-[20px] border border-outline-variant card-shadow flex flex-col min-h-[640px] max-h-[calc(100vh-140px)]">
+          <header className="flex flex-col gap-1 p-6 border-b border-outline-variant/60">
+            <h1 className="font-display-md text-[20px] font-bold text-on-surface flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+                auto_awesome
+              </span>
+              Co-piloto del turno{currentLocation ? ` · ${currentLocation.name}` : ""}
+            </h1>
+            <p className="text-sm text-on-surface-variant">
+              Chat fundamentado en tus datos reales (KPIs, anomalías, pronóstico, inventario). Solo lectura.
+            </p>
           </header>
 
-          <div className="flex-1 p-6 flex flex-col gap-5 overflow-y-auto">
-            <Message
-              role="assistant"
-              icon="auto_awesome"
-              variant="insight"
-              title="Acción ejecutada · Aguacate par level 12 → 18kg"
-              body={
-                <ul className="mt-2 space-y-1 text-sm text-on-surface-variant">
-                  <li>· Notificado a Chef Eduardo vía WhatsApp (entregado 16:02)</li>
-                  <li>· Pedido de reposición creado a Sigma Alimentos (orden #SA-8627)</li>
-                  <li>· Entrega ETA: 16:45 — costo $1,480 MXN</li>
-                  <li>· Acción en Action Ledger por Monica Salinas</li>
-                </ul>
-              }
-              footer={
-                <div className="flex gap-2 mt-3">
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-full">
-                    APROBADO POR HUMANO
-                  </span>
-                  <span className="px-2 py-0.5 bg-surface-container-high text-on-surface-variant text-[11px] font-bold rounded-full">
-                    TRAZABLE
+          <div ref={scrollRef} className="flex-1 p-6 flex flex-col gap-5 overflow-y-auto">
+            {notConfigured && (
+              <div className="bg-amber-50 border border-amber-300 text-amber-900 rounded-xl p-4">
+                <p className="font-bold flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[20px]">key_off</span>
+                  Co-piloto no configurado
+                </p>
+                <p className="text-sm mt-1">
+                  Falta <code className="font-mono">OPENROUTER_API_KEY</code> en el backend. Agrégala en{" "}
+                  <code className="font-mono">apps/api/.env</code> y reinicia la API para activar el chat. El
+                  resto del sistema arma el contexto correctamente.
+                </p>
+              </div>
+            )}
+
+            {errorMsg && (
+              <div className="bg-error-container/40 border border-error/30 text-on-error-container rounded-xl p-3 text-sm">
+                {errorMsg}
+              </div>
+            )}
+
+            {empty && !notConfigured ? (
+              <div className="flex flex-col items-center justify-center text-center gap-5 flex-1 py-10">
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white" style={{ background: "linear-gradient(135deg, #B9532A 0%, #9A3412 100%)" }}>
+                  <span className="material-symbols-outlined text-[32px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    auto_awesome
                   </span>
                 </div>
-              }
-            />
-
-            <Message
-              role="user"
-              body="Para el plato del día son las 14:25, ¿algo más?"
-            />
-
-            <Message
-              role="assistant"
-              icon="smart_toy"
-              variant="default"
-              body={
-                <>
-                  Mientras tanto: ya saliste el ticket de Lucia Robles, ¿quieres que envíe un saludo
-                  de cumpleaños con cortesía de postre por WhatsApp?
-                  <div className="flex gap-2 mt-3">
-                    <button className="px-3 py-1.5 bg-primary text-white rounded-lg text-sm font-bold">
-                      Sí, postre cortesía
+                <div>
+                  <p className="font-headline-sm text-headline-sm text-on-surface">¿En qué te ayudo con el turno?</p>
+                  <p className="text-sm text-on-surface-variant mt-1">Pregúntame sobre tus ventas, costos, anomalías o pronóstico.</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-xl">
+                  {SUGGESTIONS.map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => send(s)}
+                      className="text-left px-4 py-3 rounded-xl border border-outline-variant hover:bg-surface-container-low text-sm text-on-surface"
+                    >
+                      {s}
                     </button>
-                    <button className="px-3 py-1.5 bg-white border border-outline-variant rounded-lg text-sm font-semibold">
-                      Sí, pero sin postre
-                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              messages.map((m, i) =>
+                m.role === "user" ? (
+                  <div key={i} className="self-end max-w-[80%] bg-primary-container text-on-primary-container rounded-2xl rounded-br-md px-4 py-3">
+                    <p className="text-sm whitespace-pre-wrap">{m.content}</p>
                   </div>
-                </>
-              }
-            />
+                ) : (
+                  <div key={i} className="flex gap-3 max-w-[85%]">
+                    <div className="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-on-secondary-container text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        auto_awesome
+                      </span>
+                    </div>
+                    <div className="bg-surface-container-low rounded-2xl rounded-tl-md px-4 py-3">
+                      <p className="text-sm text-on-surface whitespace-pre-wrap leading-relaxed">{m.content}</p>
+                    </div>
+                  </div>
+                )
+              )
+            )}
+
+            {chat.isPending && (
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-on-secondary-container text-[18px]">auto_awesome</span>
+                </div>
+                <div className="bg-surface-container-low rounded-2xl rounded-tl-md px-4 py-3 flex gap-1 items-center">
+                  <Dot /> <Dot delay="0.15s" /> <Dot delay="0.3s" />
+                </div>
+              </div>
+            )}
           </div>
 
-          <footer className="p-4 border-t border-outline-variant/60 flex items-center gap-3">
-            <button
-              type="button"
-              className="w-9 h-9 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center"
+          <footer className="p-4 border-t border-outline-variant/60">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                send(input);
+              }}
+              className="flex items-center gap-3"
             >
-              <span className="material-symbols-outlined text-on-surface-variant text-[18px]">
-                attach_file
-              </span>
-            </button>
-            <input
-              type="text"
-              placeholder="Pregunta o pide una acción al co-piloto…"
-              className="flex-1 px-4 py-2.5 rounded-full border border-outline-variant focus:ring-2 focus:ring-primary-container focus:border-primary outline-none bg-surface-container-lowest"
-            />
-            <button
-              type="button"
-              className="px-5 py-2.5 btn-terracota-gradient rounded-full text-sm font-bold"
-            >
-              Enviar
-            </button>
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                disabled={notConfigured}
+                placeholder={notConfigured ? "Configura OPENROUTER_API_KEY para activar" : "Pregunta al co-piloto…"}
+                className="flex-1 px-4 py-2.5 rounded-full border border-outline-variant focus:ring-2 focus:ring-primary-container focus:border-primary outline-none bg-surface-container-lowest disabled:opacity-60"
+              />
+              <button
+                type="submit"
+                disabled={chat.isPending || notConfigured || !input.trim()}
+                className="px-5 py-2.5 btn-terracota-gradient rounded-full text-sm font-bold text-white disabled:opacity-50 flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined text-[18px]">send</span>
+                Enviar
+              </button>
+            </form>
+            {meta && (
+              <p className="text-[11px] text-on-surface-variant mt-2 text-center">
+                Respondido por {meta.model} · datos al {new Date(meta.contextAt).toLocaleString("es-MX")}
+              </p>
+            )}
           </footer>
         </div>
 
-        {/* Sidebar: contexto + ledger + recos */}
+        {/* Panel lateral */}
         <aside className="lg:col-span-4 flex flex-col gap-gutter">
-          <div className="bg-white rounded-[20px] border border-outline-variant card-shadow p-6">
-            <h2 className="font-display-md text-[16px] font-bold text-on-surface mb-3">
-              Lo que el co-piloto sabe
-            </h2>
-            <dl className="grid grid-cols-2 gap-3 text-sm">
-              <Fact label="Sucursal" value="Roma Norte" />
-              <Fact label="Turno actual" value="Comida (12:00–17:00)" />
-              <Fact label="Pronóstico" value="284 tickets · +12%" />
-              <Fact label="Riesgos hoy" value="2 anomalías" />
-              <Fact label="Reservaciones" value="8 confirmadas / 1 walk-in" />
-            </dl>
+          <div className="bg-white border border-outline-variant rounded-xl card-shadow p-md">
+            <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">tips_and_updates</span>
+              Qué puedo responder
+            </h3>
+            <ul className="text-sm text-on-surface-variant space-y-2">
+              <li>· Ventas de hoy vs ayer y ticket promedio</li>
+              <li>· Food cost y platillos más caros de producir</li>
+              <li>· Más y menos vendidos (30 días)</li>
+              <li>· Pronóstico de comensales e ingreso</li>
+              <li>· Anomalías abiertas y recomendaciones</li>
+              <li>· Insumos por debajo del nivel par</li>
+            </ul>
           </div>
 
-          <div className="bg-white rounded-[20px] border border-outline-variant card-shadow p-6">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="font-display-md text-[16px] font-bold text-on-surface">
-                Hoy · 4 acciones
-              </h2>
-              <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">
-                APROBADAS
-              </span>
-            </div>
-            <ul className="space-y-3 text-sm">
-              <LedgerRow time="16:02" title="Subir par level aguacate — aprobado por Monica" tag="ROI · $480" />
-              <LedgerRow time="15:38" title="Cerrar plato del día — aprobado, sin impacto" tag="" />
-              <LedgerRow time="14:18" title="Reasignar staff Sara → Cocina · rotación B" tag="esperando aprobación" />
-              <LedgerRow time="13:50" title="Subir prep de guacamole 8 → 14kg" tag="ROI · $260" />
-              <LedgerRow
-                time="13:30"
-                title="Rechazado: ofrecer postre cortesía a cumpleaños"
-                tag="razón: contexto"
-                muted
-              />
-            </ul>
-            <button className="mt-4 text-sm font-bold text-primary hover:underline">
-              Ver ledger completo →
-            </button>
-          </div>
-
-          <div className="bg-white rounded-[20px] border border-outline-variant card-shadow p-6">
-            <h2 className="font-display-md text-[16px] font-bold text-on-surface mb-3">
-              Recomendaciones pendientes
-            </h2>
-            <ul className="space-y-3 text-sm">
-              <RecRow icon="restaurant" title="Pre-comprar mango -16%" />
-              <RecRow icon="schedule" title="Reasignar staff 4 a Caliente" />
-            </ul>
+          <div className="bg-surface-container-low border border-outline-variant rounded-xl p-md text-sm text-on-surface-variant flex gap-sm items-start">
+            <span className="material-symbols-outlined text-primary text-[20px]">shield</span>
+            <p>
+              El co-piloto es de <strong>solo lectura</strong>: responde sobre tus datos pero no
+              ejecuta cambios. Las acciones con aprobación humana (Action Ledger) llegan en una
+              próxima versión.
+            </p>
           </div>
         </aside>
       </section>
@@ -159,98 +219,11 @@ export default function Page() {
   );
 }
 
-function Message({
-  role,
-  icon,
-  variant,
-  title,
-  body,
-  footer,
-}: {
-  role: "user" | "assistant";
-  icon?: string;
-  variant?: "default" | "insight";
-  title?: string;
-  body: React.ReactNode;
-  footer?: React.ReactNode;
-}) {
-  if (role === "user") {
-    return (
-      <div className="flex justify-end">
-        <div className="max-w-[80%] bg-primary text-white rounded-2xl rounded-tr-md px-4 py-2.5 text-sm font-semibold shadow-sm">
-          {body}
-        </div>
-      </div>
-    );
-  }
-  const wrap =
-    variant === "insight"
-      ? "border-l-4 border-primary ai-insight-bg"
-      : "border border-outline-variant bg-surface-container-lowest";
+function Dot({ delay = "0s" }: { delay?: string }) {
   return (
-    <div className="flex gap-3">
-      <div className="w-9 h-9 shrink-0 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
-        <span
-          className="material-symbols-outlined text-white text-[18px]"
-          style={{ fontVariationSettings: "'FILL' 1" }}
-        >
-          {icon ?? "auto_awesome"}
-        </span>
-      </div>
-      <div className={`flex-1 rounded-2xl ${wrap} p-4`}>
-        {title && <p className="font-bold text-on-surface mb-1">{title}</p>}
-        <div className="text-sm text-on-surface">{body}</div>
-        {footer}
-      </div>
-    </div>
-  );
-}
-
-function Fact({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
-        {label}
-      </dt>
-      <dd className="font-semibold text-on-surface">{value}</dd>
-    </div>
-  );
-}
-
-function LedgerRow({
-  time,
-  title,
-  tag,
-  muted,
-}: {
-  time: string;
-  title: string;
-  tag: string;
-  muted?: boolean;
-}) {
-  return (
-    <li className={`flex items-start gap-2 ${muted ? "opacity-50" : ""}`}>
-      <span className="text-[11px] font-bold text-on-surface-variant w-10 shrink-0">{time}</span>
-      <span className="flex-1 text-on-surface">{title}</span>
-      {tag && (
-        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant whitespace-nowrap">
-          {tag}
-        </span>
-      )}
-    </li>
-  );
-}
-
-function RecRow({ icon, title }: { icon: string; title: string }) {
-  return (
-    <li className="flex items-center justify-between gap-2 p-3 bg-surface-container-low rounded-xl">
-      <div className="flex items-center gap-2">
-        <span className="material-symbols-outlined text-primary text-[18px]">{icon}</span>
-        <span className="font-semibold text-on-surface">{title}</span>
-      </div>
-      <button type="button" className="text-sm font-bold text-primary hover:underline">
-        Aplicar
-      </button>
-    </li>
+    <span
+      className="w-1.5 h-1.5 rounded-full bg-on-surface-variant/60 animate-bounce"
+      style={{ animationDelay: delay }}
+    />
   );
 }
