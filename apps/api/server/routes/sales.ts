@@ -10,8 +10,4 @@ const router = Router();
 // TODO: GET  /api/sales/aggregate             — ?by=daypart|channel|menuItem ?from=&to=
 // TODO: GET  /api/sales/voids                 — ventas con voidedCents>0 (auditoria)
 
-router.get("/__stub", (_req, res) => {
-  res.json({ module: "sales", status: "scaffold" });
-});
-
 export default router;

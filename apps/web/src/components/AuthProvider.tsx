@@ -32,7 +32,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 // Rutas que son accesibles sin sesion. Cualquier otra ruta dentro del
 // AppShell asume que ya hay user y arranca una redireccion a /login si no.
-const PUBLIC_ROUTES = new Set(["/", "/login", "/demo"]);
+const PUBLIC_ROUTES = new Set(["/", "/login"]);
 // Prefijos públicos: superficies del cliente final (menú digital / QR en mesa)
 // que viven fuera del AppShell y nunca deben redirigir a /login.
 const PUBLIC_PREFIXES = ["/menu"];

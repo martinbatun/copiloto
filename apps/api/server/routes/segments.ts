@@ -12,8 +12,4 @@ const router = Router();
 // TODO: POST   /api/segments/:id/recompute      — re-evalua rules contra Guest table
 // TODO: GET    /api/segments/:id/guests         — paginado (preview para campana)
 
-router.get("/__stub", (_req, res) => {
-  res.json({ module: "segments", status: "scaffold" });
-});
-
 export default router;

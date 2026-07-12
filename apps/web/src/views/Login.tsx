@@ -10,7 +10,7 @@ export default function Login() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, refreshAuth } = useAuth();
-  const [email, setEmail] = useState("dueno@copiloto.mx");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);

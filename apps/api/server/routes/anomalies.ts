@@ -19,8 +19,4 @@ const router = Router();
 //   REFUND_BURST           — > N refunds en ventana de 30 min
 //   INGREDIENT_PRICE_JUMP  — proveedor subio precio > Z% vs ultima factura
 
-router.get("/__stub", (_req, res) => {
-  res.json({ module: "anomalies", status: "scaffold" });
-});
-
 export default router;

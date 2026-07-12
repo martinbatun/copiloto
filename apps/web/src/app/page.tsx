@@ -56,7 +56,7 @@ export default function HomePage() {
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Link
-              href="/demo"
+              href="/login"
               className="px-6 py-3 btn-terracota-gradient rounded-full font-bold tracking-wide uppercase"
             >
               Agendar demo

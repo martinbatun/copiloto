@@ -155,8 +155,4 @@ router.get("/:locationId", requireAuth, async (req, res) => {
   res.json(payload);
 });
 
-router.get("/__stub", (_req, res) => {
-  res.json({ module: "inventory", status: "live" });
-});
-
 export default router;
