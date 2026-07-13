@@ -9,8 +9,4 @@ const router = Router();
 // TODO: POST /api/prep/:locationId/regenerate
 // TODO: POST /api/prep/:id/check               — chef marca lineas hechas (para audit)
 
-router.get("/__stub", (_req, res) => {
-  res.json({ module: "prep", status: "scaffold" });
-});
-
 export default router;

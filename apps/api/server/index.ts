@@ -76,7 +76,11 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json({ limit: "10mb" })); // facturas OCR'd vienen pesadas
+// Límite ajustado: el mayor body JSON es el chat del co-piloto (texto, bajo 1mb).
+// El upload de facturas usa multipart (multer), no express.json, así que no
+// necesita el límite alto. Un límite bajo reduce superficie de abuso en los
+// endpoints públicos.
+app.use(express.json({ limit: "1mb" }));
 
 // Rate limit como backstop anti-DoS. Ceiling generoso porque los comensales de
 // un restaurante comparten un mismo IP (NAT del WiFi): un límite agresivo por

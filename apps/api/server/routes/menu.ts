@@ -391,8 +391,4 @@ router.post("/upload", requireAuth, canEditMenu, upload.single("file"), async (r
   }
 });
 
-router.get("/__stub", (_req, res) => {
-  res.json({ module: "menu", status: "live" });
-});
-
 export default router;

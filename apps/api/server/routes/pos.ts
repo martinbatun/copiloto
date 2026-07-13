@@ -10,8 +10,4 @@ const router = Router();
 // TODO: POST /api/pos/webhook/:provider       — recibe webhook (idempotente via posExternalId)
 // TODO: GET  /api/pos/health/:locationId      — last sync, errores recientes, drift de schema
 
-router.get("/__stub", (_req, res) => {
-  res.json({ module: "pos", status: "scaffold" });
-});
-
 export default router;

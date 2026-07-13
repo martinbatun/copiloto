@@ -11,8 +11,4 @@ const router = Router();
 //                                                  (usa LLM + embeddings; "Coca-Cola 600ml" -> ingrediente refresco_600)
 // TODO: GET    /api/ingredients/:id/price-history — historial de precio por unidad (de InvoiceLine)
 
-router.get("/__stub", (_req, res) => {
-  res.json({ module: "ingredients", status: "scaffold" });
-});
-
 export default router;
